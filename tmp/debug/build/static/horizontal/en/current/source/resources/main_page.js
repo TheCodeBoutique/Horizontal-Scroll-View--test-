@@ -18,7 +18,8 @@ Horizontal.mainPage = SC.Page.design({
 		
  		scrollView: SC.ScrollView.design({
        layout: { top: 0, bottom: 0, left: 0, width: 250 },
- 			contentView: SC.ListView.design({
+ 			 contentView: SC.ListView.design({
+				layoutDirection: SC.LAYOUT_HORIZONTAL,
  				contentValueKey: "name",
  				contentBinding: "Horizontal.appsController.arrangedObjects",
  				selectionBinding: "Horizontal.appsController.selection",
