@@ -1,0 +1,3 @@
+config :offaxis, :css_theme => 'ace.offaxis'
+
+

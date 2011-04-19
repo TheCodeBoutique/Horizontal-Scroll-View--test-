@@ -1,0 +1,22 @@
+                       /* ==========================================================================
+*  Project:   Offaxis Theme Styles
+*  Copyright: ©2011 My Company, Inc.
+*  ==========================================================================
+*/
+/* 
+  Place any styles you want to define in this file.  You can also break your
+  styles into multiple files.  Just add them to your resources or .lrpoj
+  directories to be included in the build.
+*/
+/* line 15, ././tmp/chance/Users/ceubanks/personal_sproutcore/horizontal/tmp/debug/staging/static/offaxis/en/current/resources/theme_styles.css.scss */
+.base-view {
+  background-image: -webkit-gradient(radial, center bottom, 0, center bottom, 800, from(gray), to(#262629));
+  background-image: -moz-radial-gradient(bottom, circle, gray 0px, #262629 800px);
+}
+
+/* line 21, ././tmp/chance/Users/ceubanks/personal_sproutcore/horizontal/tmp/debug/staging/static/offaxis/en/current/resources/theme_styles.css.scss */
+.horizontal {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+}
+
