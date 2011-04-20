@@ -1,45 +1,16 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-
 /**
-  Renders and updates the HTML representation of a button.
+  Renders and updates the HTML representation of SC.ButtonView.
 */
 SC.BaseTheme.buttonRenderDelegate = SC.RenderDelegate.create({
   name: 'button',
-
-  //
-  // SIZE DEFINITIONS
-  //
-  'sc-small-size': {
-    height: 18,
-    autoResizePadding: 15
-  },
-
-  'sc-regular-size': {
-    height: 24,
-    autoResizePadding: 20
-  },
-
-  'sc-huge-size': {
-    height: 30,
-    autoResizePadding: 30
-  },
-
-  'sc-jumbo-size': {
-    height: 44,
-    autoResizePadding: 50
-  },
-
-
-  //
-  // RENDERING LOGIC
-  //
-
+  
   /**
     Called when we need to create the HTML that represents the button.
 
@@ -47,43 +18,55 @@ SC.BaseTheme.buttonRenderDelegate = SC.RenderDelegate.create({
     @param {SC.RenderContext} context the render context instance
   */
   render: function(dataSource, context) {
-    this.addSizeClassName(dataSource, context);
+    var theme             = dataSource.get('theme'),
+        minWidth          = dataSource.get('titleMinWidth'),
+        toolTip           = dataSource.get('displayToolTip'),
+        view              = dataSource.get('view'),
+        isSelected        = dataSource.get('isSelected'),
+        isActive          = dataSource.get('isActive'),
+        isPopUpButton     = NO,
+        menu              = view.get('menu');
 
-    var labelContent,
-        toolTip     = dataSource.get('toolTip'),
-        isSelected  = dataSource.get('isSelected') || NO,
-        isActive    = dataSource.get('isActive') || NO,
-        labelId     = SC.guidFor(dataSource) + '-label';
+        if(menu) {
+          isPopUpButton = YES;
+        }
 
-    context.setClass({
-      'icon': !!dataSource.get('icon') || NO,
-      'def': dataSource.get('isDefault'),
-      'cancel': dataSource.get('isCancel'),
-      'active': isActive,
-      'sel': isSelected
-    });
+    var labelContent;
 
+    context.setClass('icon', !!dataSource.get('icon') || 0);    
+    context.setClass('def', dataSource.get('isDefault') || 0);
+    context.setClass('cancel', dataSource.get('isCancel') || 0);
+    
     if (toolTip) {
       context.attr('title', toolTip);
       context.attr('alt', toolTip);
     }
 
-    this.includeSlices(dataSource, context, SC.THREE_SLICE);
-
-    // accessibility
-    context.attr('aria-pressed', isActive.toString());
-    context.attr('aria-labelledby', labelId);
+    // addressing accessibility
+    context.attr('aria-pressed', isActive);
+    if(isPopUpButton) {
+      context.attr('aria-haspopup', isPopUpButton.toString());
+    }
+    
+    // Specify a minimum width for the inner part of the button.
+    minWidth = (minWidth ? "style='min-width: " + minWidth + "px'" : '');
+    context = context.push("<span class='sc-button-inner' " + minWidth + ">");
 
     // Create the inner label element that contains the text and, optionally,
     // an icon.
-    context = context.begin('label').addClass('sc-button-label').id(labelId);
-    dataSource.get('theme').labelRenderDelegate.render(dataSource, context);
+    context = context.begin('label').addClass('sc-button-label');
+    
+    // NOTE: we don't add the label class names because button styles its own label.
+    theme.labelRenderDelegate.render(dataSource, context);
     context = context.end();
+    
+    context.push("</span>");
 
     if (dataSource.get('supportFocusRing')) {
-      context = context.begin('div').addClass('focus-ring');
-      this.includeSlices(dataSource, context, SC.THREE_SLICE);
-      context = context.end();
+      context.push('<div class="focus-ring">',
+                    '<div class="focus-left"></div>',
+                    '<div class="focus-middle"></div>',
+                    '<div class="focus-right"></div></div>');
     }
   },
 
@@ -95,18 +78,28 @@ SC.BaseTheme.buttonRenderDelegate = SC.RenderDelegate.create({
     @param {SC.RenderContext} jquery the jQuery object representing the HTML representation of the button
   */
   update: function(dataSource, jquery) {
-    this.updateSizeClassName(dataSource, jquery);
+    var theme         = dataSource.get('theme'),
+        isSelected    = dataSource.get('isSelected'),
+        isActive      = dataSource.get('isActive'),
+        view          = dataSource.get('view'),
+        menu          = view.get('menu'),
+        isPopUpButton = NO;
 
-    if (dataSource.get('isActive')) {
-      jquery.addClass('active');
+        if(menu) {
+          isPopUpButton = YES;
+        }
+
+    if (dataSource.get('isActive')) jquery.addClass('active');
+    if (dataSource.get('isDefault')) jquery.addClass('default');
+    if (dataSource.get('isCancel')) jquery.addClass('cancel');
+    if (dataSource.get('icon')) jquery.addClass('icon');
+
+    // addressing accessibility
+    jquery.attr('aria-pressed', isActive);
+    if(isPopUpButton) {
+      jquery.attr('aria-haspopup', isPopUpButton.toString());
     }
-
-    jquery.attr('aria-pressed', dataSource.get('isActive').toString());
-
-    jquery.setClass('icon', !!dataSource.get('icon') || NO);
-    jquery.setClass('def', dataSource.get('isDefault') || NO);
-    jquery.setClass('cancel', dataSource.get('isCancel') || NO);
-
-    dataSource.get('theme').labelRenderDelegate.update(dataSource, jquery.find('label'));
+    theme.labelRenderDelegate.update(dataSource, jquery.find('label'));
   }
+  
 });

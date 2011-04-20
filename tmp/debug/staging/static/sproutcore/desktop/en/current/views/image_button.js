@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -15,25 +15,23 @@
 
   For example:
 
-      SC.ImageButtonView.create({
-        action: 'imageButtonWasClicked',
+  SC.ImageButtonView.create({
+    action: 'imageButtonWasClicked',
 
-        image: 'my-image-button-icon'
-      });
+    image: 'image-button-icon'
+  });
 
   You could then add some CSS rule for a normal state:
 
-      $theme.image-button .my-image-button-icon {
-        @include slice('my-image-button-image.png');
+    .sc-image-button-view .image-button-icon {
+      background: '';
+    }
 
-        // and an active state:
-        &.active {
-          @include slice('my-image-button-image-active.png');
-        }
-      }
+  And an active state:
 
-  Note: in addition to using SCSS and the Chance directives shown above, you
-  can use normal CSS syntax and sc_static.
+    .sc-image-button-view.active .image-button-icon {
+      background: '';
+    }
 
   @extends SC.View
   @extends SC.Control

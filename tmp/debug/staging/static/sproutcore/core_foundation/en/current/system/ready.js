@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -13,22 +13,7 @@ sc_require('system/event') ;
 
 SC.mixin({
   isReady: NO,
-  
-  /**
-    Allows apps to avoid automatically attach the ready handlers if they
-    want to by setting this flag to YES
-    
-    @property {Boolean}
-  */
-  suppressOnReady: SC.suppressOnReady ? YES : NO,
-  
-  /**
-    Allows apps to avoid automatically invoking main() when onReady is called
-    
-    @property {Boolean}
-  */
-  suppressMain: SC.suppressMain ? YES : NO,
-  
+
   /**
     Add the passed target and method to the queue of methods to invoke when
     the document is ready.  These methods will be called after the document
@@ -44,8 +29,8 @@ SC.mixin({
     @returns {SC}
   */
   ready: function(target, method) {
-    var queue = SC._readyQueue;
-    
+    var queue = this._readyQueue;
+
     // normalize
     if (method === undefined) {
       method = target; target = null ;
@@ -53,49 +38,38 @@ SC.mixin({
       method = target[method] ;
     }
 
-    if(SC.isReady) {
-      jQuery(document).ready(function() { method.call(target); });
-    }
-    else {
-      if(!queue) SC._readyQueue = [];
-      SC._readyQueue.push(function() { method.call(target); });
-    }
-    
+    jQuery(document).ready(function() { method.call(target); });
+
     return this ;
   },
 
   onReady: {
-    done: function() {
-      if(SC.isReady) return;
-      SC.isReady = true;
-      
+    startRunLoop: function() {
       SC.RunLoop.begin();
-      
+    },
+    setupLocales: function() {
       SC.Locale.createCurrentLocale();
       jQuery("body").addClass(SC.Locale.currentLanguage.toLowerCase());
-      
+    },
+    removeLoading: function() {
       jQuery("#loading").remove();
-      
-      var queue = SC._readyQueue, idx, len;
-      
-      if(queue) {
-        for(idx=0,len=queue.length;idx<len;idx++) {
-          queue[idx].call();
-        }
-        SC._readyQueue = null;
-      }
-      
-      if(window.main && !SC.suppressMain && (SC.mode === SC.APP_MODE)) { window.main(); }
+    },
+    done: function() {
+      SC.isReady = true;
+      if(window.main && !SC.suppressMain && (SC.mode === SC.APP_MODE)) { main(); }
       SC.RunLoop.end();
     }
   }
 
 }) ;
 
-// let apps ignore the regular onReady handling if they need to
-if(!SC.suppressOnReady) {
-  jQuery.event.special.ready._default = SC.onReady.done;
-}
+jQuery(document)
+  .ready(SC.onReady.startRunLoop)
+  .ready(SC.onReady.setupLocales)
+  .ready(SC.onReady.removeLoading);
+jQuery.event.special.ready._default = SC.onReady.done;
+
+SC.removeLoading = YES;
 
 // default to app mode.  When loading unit tests, this will run in test mode
 SC.APP_MODE = "APP_MODE";

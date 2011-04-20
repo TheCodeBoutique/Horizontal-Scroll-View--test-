@@ -1,3 +1,5 @@
+/* >>>>>>>>>> BEGIN __sc_chance.js */
+
 /* >>>>>>>>>> BEGIN source/handlebars.js */
 // lib/handlebars/parser.js
 /* Jison generated parser */
@@ -439,7 +441,9 @@ parser.lexer = lexer;
 return parser;
 })();
 // lib/handlebars/base.js
-var Handlebars = {};
+
+// Support for node.js and Spade
+var Handlebars = (typeof exports !== 'undefined') ? exports : {};
 
 Handlebars.Parser = handlebars;
 
@@ -479,14 +483,6 @@ Handlebars.registerHelper = function(name, fn, inverse) {
 Handlebars.registerPartial = function(name, str) {
   this.partials[name] = str;
 };
-
-Handlebars.registerHelper('helperMissing', function(arg) {
-  if(arguments.length === 2) {
-    return undefined;
-  } else {
-    throw new Error("Could not find property '" + arg + "'");
-  }
-});
 
 Handlebars.registerHelper('blockHelperMissing', function(context, fn, inverse) {
   inverse = inverse || function() {};
@@ -540,7 +536,7 @@ Handlebars.registerHelper('if', function(context, fn, inverse) {
 });
 
 Handlebars.registerHelper('unless', function(context, fn, inverse) {
-  return Handlebars.helpers['if'].call(this, context, inverse, fn);
+  Handlebars.helpers['if'].call(this, context, inverse, fn);
 });
 
 Handlebars.registerHelper('with', function(context, fn) {
@@ -616,7 +612,7 @@ Handlebars.log = function(level, str) { Handlebars.logger.log(level, str); };
 
   Handlebars.AST.IdNode = function(parts) {
     this.type = "ID";
-    this.original = parts.join(".");
+    this.original = parts.join("/");
 
     var dig = [], depth = 0;
 
@@ -629,7 +625,6 @@ Handlebars.log = function(level, str) { Handlebars.logger.log(level, str); };
     }
 
     this.parts    = dig;
-    this.string   = dig.join('.');
     this.depth    = depth;
     this.isSimple = (dig.length === 1) && (depth === 0);
   };
@@ -728,8 +723,7 @@ Handlebars.JavaScriptCompiler = function() {};
     invokePartial: 12,
     push: 13,
     invokeInverse: 14,
-    assignToHash: 15,
-    pushStringParam: 16
+    assignToHash: 15
   };
 
   Compiler.MULTI_PARAM_OPCODES = {
@@ -745,8 +739,7 @@ Handlebars.JavaScriptCompiler = function() {};
     invokePartial: 1,
     push: 1,
     invokeInverse: 1,
-    assignToHash: 1,
-    pushStringParam: 1
+    assignToHash: 1
   };
 
   Compiler.DISASSEMBLE_MAP = {};
@@ -761,8 +754,6 @@ Handlebars.JavaScriptCompiler = function() {};
   };
 
   Compiler.prototype = {
-    compiler: Compiler,
-
     disassemble: function() {
       var opcodes = this.opcodes, opcode, nextCode;
       var out = [], str, name, value;
@@ -801,10 +792,9 @@ Handlebars.JavaScriptCompiler = function() {};
 
     guid: 0,
 
-    compile: function(program, options) {
+    compile: function(program) {
       this.children = [];
       this.depths = {list: []};
-      this.options = options || {};
       return this.program(program);
     },
 
@@ -829,7 +819,7 @@ Handlebars.JavaScriptCompiler = function() {};
     },
 
     compileProgram: function(program) {
-      var result = new this.compiler().compile(program, this.options);
+      var result = new Compiler().compile(program);
       var guid = this.guid++;
 
       this.usePartial = this.usePartial || result.usePartial;
@@ -940,17 +930,7 @@ Handlebars.JavaScriptCompiler = function() {};
 
       while(i--) {
         param = params[i];
-
-        if(this.options.stringParams) {
-          if(param.depth) {
-            this.addDepth(param.depth);
-          }
-
-          this.opcode('getContext', param.depth || 0);
-          this.opcode('pushStringParam', param.string);
-        } else {
-          this[param.type](param);
-        }
+        this[param.type](param);
       }
     },
 
@@ -1012,9 +992,9 @@ Handlebars.JavaScriptCompiler = function() {};
     },
     // END PUBLIC API
 
-    compile: function(environment, options) {
+    compile: function(environment, data) {
       this.environment = environment;
-      this.options = options || {};
+      this.data = data;
 
       this.preamble();
 
@@ -1022,7 +1002,7 @@ Handlebars.JavaScriptCompiler = function() {};
       this.stackVars = [];
       this.registers = {list: []};
 
-      this.compileChildren(environment, options);
+      this.compileChildren(environment, data);
 
       Handlebars.log(Handlebars.logger.DEBUG, environment.disassemble() + "\n\n");
 
@@ -1116,11 +1096,12 @@ Handlebars.JavaScriptCompiler = function() {};
 
       var params = ["Handlebars", "context", "helpers", "partials"];
 
-      if(this.options.data) { params.push("data"); }
+      if(this.data) { params.push("data"); }
 
       for(var i=0, l=this.environment.depths.list.length; i<l; i++) {
         params.push("depth" + this.environment.depths.list[i]);
       }
+
 
       if(params.length === 4 && !this.environment.usePartial) { params.pop(); }
 
@@ -1199,11 +1180,6 @@ Handlebars.JavaScriptCompiler = function() {};
       this.source.push(topStack + " = " + this.nameLookup(topStack, name, 'context') + ";");
     },
 
-    pushStringParam: function(string) {
-      this.pushStack("currentContext");
-      this.pushString(string);
-    },
-
     pushString: function(string) {
       this.pushStack(this.quotedString(string));
     },
@@ -1230,32 +1206,24 @@ Handlebars.JavaScriptCompiler = function() {};
 
     populateParams: function(paramSize, helperId, program, inverse, fn) {
       var id = this.popStack(), nextStack;
-      var params = [], param, stringParam;
+      var params = [];
 
       var hash = this.popStack();
 
+      for(var i=0; i<paramSize; i++) {
+        var param = this.popStack();
+        params.push(param);
+      }
+
       this.register('tmp1', program);
       this.source.push('tmp1.hash = ' + hash + ';');
-
-      if(this.options.stringParams) {
-        this.source.push('tmp1.contexts = [];');
-      }
-
-      for(var i=0; i<paramSize; i++) {
-        param = this.popStack();
-        params.push(param);
-
-        if(this.options.stringParams) {
-          this.source.push('tmp1.contexts.push(' + this.popStack() + ');');
-        }
-      }
 
       if(inverse) {
         this.source.push('tmp1.fn = tmp1;');
         this.source.push('tmp1.inverse = ' + inverse + ';');
       }
 
-      if(this.options.data) {
+      if(this.data) {
         this.source.push('tmp1.data = data;');
       }
 
@@ -1301,7 +1269,7 @@ Handlebars.JavaScriptCompiler = function() {};
 
     compiler: JavaScriptCompiler,
 
-    compileChildren: function(environment, options) {
+    compileChildren: function(environment, data) {
       var children = environment.children, child, compiler;
       var compiled = [];
 
@@ -1309,7 +1277,7 @@ Handlebars.JavaScriptCompiler = function() {};
         child = children[i];
         compiler = new this.compiler();
 
-        compiled[i] = compiler.compile(child, options);
+        compiled[i] = compiler.compile(child, data);
       }
 
       environment.rawChildren = children;
@@ -1323,7 +1291,7 @@ Handlebars.JavaScriptCompiler = function() {};
 
       var depths = this.environment.rawChildren[guid].depths.list;
 
-      if(this.options.data) { programParams.push("data"); }
+      if(this.data) { programParams.push("data"); }
 
       for(var i=0, l = depths.length; i<l; i++) {
         depth = depths[i];
@@ -1416,10 +1384,10 @@ Handlebars.VM = {
     };
   },
   noop: function() { return ""; },
-  compile: function(string, options) {
+  compile: function(string, data) {
     var ast = Handlebars.parse(string);
-    var environment = new Handlebars.Compiler().compile(ast, options);
-    return new Handlebars.JavaScriptCompiler().compile(environment, options);
+    var environment = new Handlebars.Compiler().compile(ast);
+    return new Handlebars.JavaScriptCompiler().compile(environment, data);
   },
   invokePartial: function(partial, name, context, helpers, partials) {
     if(partial === undefined) {
@@ -1433,7 +1401,7 @@ Handlebars.VM = {
   }
 };
 
-Handlebars.compile = Handlebars.VM.compile;;
+Handlebars.compile = Handlebars.VM.compile;
 
 /* >>>>>>>>>> BEGIN source/extensions.js */
 sc_require("handlebars");
@@ -1463,10 +1431,6 @@ sc_require("handlebars");
 
 SC.Handlebars = {};
 
-SC.Handlebars.Compiler = function() {};
-SC.Handlebars.Compiler.prototype = SC.beget(Handlebars.Compiler.prototype);
-SC.Handlebars.Compiler.prototype.compiler = SC.Handlebars.Compiler;
-
 SC.Handlebars.JavaScriptCompiler = function() {};
 SC.Handlebars.JavaScriptCompiler.prototype = SC.beget(Handlebars.JavaScriptCompiler.prototype);
 SC.Handlebars.JavaScriptCompiler.prototype.compiler = SC.Handlebars.JavaScriptCompiler;
@@ -1479,92 +1443,10 @@ SC.Handlebars.JavaScriptCompiler.prototype.nameLookup = function(parent, name, t
   }
 };
 
-SC.Handlebars.Compiler.prototype.mustache = function(mustache) {
-  if (mustache.params.length || mustache.hash) {
-    return Handlebars.Compiler.prototype.mustache.call(this, mustache);
-  } else {
-    var id = new Handlebars.AST.IdNode(['bind']);
-    mustache = new Handlebars.AST.MustacheNode([id].concat([mustache.id]), mustache.hash, !mustache.escaped);
-    return Handlebars.Compiler.prototype.mustache.call(this, mustache);
-  }
-};
-
 SC.Handlebars.compile = function(string) {
   var ast = Handlebars.parse(string);
-  var environment = new SC.Handlebars.Compiler().compile(ast, {data: true, stringParams: true});
-  var ret = new SC.Handlebars.JavaScriptCompiler().compile(environment, {data: true, stringParams: true});
-  ret.rawTemplate = string;
-  return ret;
-};
-
-/**
-  Registers a helper in Handlebars that will be called if no property with the
-  given name can be found on the current context object, and no helper with
-  that name is registered.
-
-  This throws an exception with a more helpful error message so the user can
-  track down where the problem is happening.
-*/
-Handlebars.registerHelper('helperMissing', function(path, options) {
-  var error;
-
-  error = "%@ Handlebars error: Could not find property '%@' on object %@.";
-  throw error.fmt(options.data.view, path, this);
-});
-
-/**
-  Determines the classes to add based on an array of bindings (provided as strings),
-  as well as adding observers to make sure the classes are up-to-date.
-
-  @param {SC.View} view The view at add the classes to
-  @param {String} classBindings A string, space-separated, of class bindings to use
-  @param {String|Number} id Optional id to scope the observers/jQuery element to
-  @returns {Array} An array of class names to add
-*/
-SC.Handlebars.bindClasses = function(view, classBindings, id) {
-  if (!view._classObservers) view._classObservers = {};
-  id = id || '_default';
-  var classObservers = view._classObservers[id],
-      ret = [];
-
-  // Teardown any existing observers on the view.
-  if (classObservers) {
-    for (var prop in classObservers) {
-      if (classObservers.hasOwnProperty(prop)) {
-        view.removeObserver(prop, classObservers[prop]);
-      }
-    }
-  }
-
-  classObservers = view._classObservers[id] = {};
-
-  // For each property passed, loop through and setup
-  // an observer.
-  classBindings.split(' ').forEach(function(property) {
-    // Normalize property path to be suitable for use
-    // as a class name. For exaple, content.foo.barBaz
-    // becomes bar-baz.
-
-    var dasherizedProperty = property.split('.').get('lastObject').dasherize();
-
-    // Set up an observer on the view. If the bound property
-    // changes, toggle the class name
-    var observer = (classObservers[property] = function() {
-      var shouldDisplay = view.getPath(property);
-      var elem = id !== '_default' ? view.$("[data-handlebars-id='" + id + "']") : view.$();
-
-      if (elem.length === 0) {
-        view.removeObserver(property, observer);
-      } else {
-        elem.toggleClass(dasherizedProperty, shouldDisplay);
-      }
-    });
-
-    view.addObserver(property, observer);
-    if (view.getPath(property)) ret.push(dasherizedProperty);
-  });
-
-  return ret;
+  var environment = new Handlebars.Compiler().compile(ast);
+  return new SC.Handlebars.JavaScriptCompiler().compile(environment, true);
 };
 
 /* >>>>>>>>>> BEGIN source/extensions/bind.js */
@@ -1601,52 +1483,52 @@ sc_require('extensions');
         {{content.title}}
       {{/boundIf}}
 */
+
 (function() {
-  // Binds a property into the DOM. This will create a hook in DOM that the
-  // KVO system will look for and upate if the property changes.
   var bind = function(property, options, preserveContext, shouldDisplay) {
-    var data    = options.data,
-        fn      = options.fn,
-        inverse = options.inverse,
-        view    = data.view;
+    var data = options.data;
+    var view = data.view;
+    var fn = options.fn;
 
-    // Set up observers for observable objects
-    if (this.isObservable) {
-      // Create the view that will wrap the output of this template/property and
-      // add it to the nearest view's childViews array.
-      // See the documentation of SC._BindableSpan for more.
-      var bindView = view.createChildView(SC._BindableSpan, {
-        preserveContext: preserveContext,
-        shouldDisplayFunc: shouldDisplay,
-        displayTemplate: fn,
-        inverseTemplate: inverse,
-        property: property,
-        previousContext: this
-      });
+    var spanId = "handlebars-bound-" + jQuery.uuid++;
+    var result = this.getPath(property);
 
-      view.get('childViews').push(bindView);
+    var self = this, renderContext = SC.RenderContext('span').id(spanId);
 
-      // Observe the given property on the context and
-      // tells the SC._BindableSpan to re-render.
-      this.addObserver(property, this, function observer() {
-        if (bindView.get('layer')) {
-          bindView.rerender();
+    this.addObserver(property, function observer() {
+      var result = self.getPath(property);
+      var span = view.$("#" + spanId);
+
+      if(span.length === 0) {
+        self.removeObserver(property, observer);
+        return;
+      }
+
+      if (fn && shouldDisplay(result)) {
+        var renderContext = SC.RenderContext('span').id(spanId);
+        renderContext.push(fn(self.get(property)));
+        var element = renderContext.element();
+        span.replaceWith(element);
+      } else if (shouldDisplay(result)) {
+        span.html(Handlebars.Utils.escapeExpression(result));
+      } else {
+        span.html("");
+      }
+    });
+
+    if (shouldDisplay(result)) {
+      if (preserveContext) {
+        renderContext.push(fn(this));
+      } else {
+        if (fn) {
+          renderContext.push(fn(result));
         } else {
-          // If no layer can be found, we can assume somewhere
-          // above it has been re-rendered, so remove the
-          // observer.
-          this.removeObserver(property, this, observer);
+          renderContext.push(Handlebars.Utils.escapeExpression(result));
         }
-      });
-
-      var context = bindView.renderContext(bindView.get('tagName'));
-      bindView.renderToContext(context);
-      return new Handlebars.SafeString(context.join());
-    } else {
-      // The object is not observable, so just render it out and
-      // be done with it.
-      return SC.getPath(this, property);
+      }
     }
+
+    return new Handlebars.SafeString(renderContext.join());
   };
 
   Handlebars.registerHelper('bind', function(property, fn) {
@@ -1655,39 +1537,15 @@ sc_require('extensions');
 
   Handlebars.registerHelper('boundIf', function(property, fn) {
     if(fn) {
-      return bind.call(this, property, fn, true, function(result) {
-        if (SC.typeOf(result) === SC.T_ARRAY) {
-          if (result.length !== 0) { return true; }
-          return false;
-        } else {
-          return !!result;
-        }
-      } );
+      return bind.call(this, property, fn, true, function(result) { return !!result; } );
     } else {
       throw "Cannot use boundIf helper without a block.";
     }
   });
 })();
 
-Handlebars.registerHelper('with', function(context, options) {
-  return Handlebars.helpers.bind.call(options.contexts[0], context, options);
-});
-
-Handlebars.registerHelper('if', function(context, options) {
-  return Handlebars.helpers.boundIf.call(options.contexts[0], context, options);
-});
-
-Handlebars.registerHelper('unless', function(context, options) {
-  var fn = options.fn, inverse = options.inverse;
-
-  options.fn = inverse;
-  options.inverse = fn;
-
-  return Handlebars.helpers.boundIf.call(options.contexts[0], context, options);
-});
-
 Handlebars.registerHelper('bindAttr', function(options) {
-  var attrs = options.hash;
+  var attrs = options.hash, attrKeys = SC.keys(options.hash);
   var view = options.data.view;
   var ret = [];
 
@@ -1696,21 +1554,10 @@ Handlebars.registerHelper('bindAttr', function(options) {
   // the bound property changes.
   var dataId = jQuery.uuid++;
 
-  // Handle classes differently, as we can bind multiple classes
-  var classBindings = attrs['class'];
-  if (classBindings != null) {
-    var classResults = SC.Handlebars.bindClasses(view, classBindings, dataId);
-    ret.push('class="'+classResults.join(' ')+'"');
-    delete attrs['class'];
-  }
-
-  var attrKeys = SC.keys(attrs);
-
   // For each attribute passed, create an observer and emit the
   // current value of the property as an attribute.
   attrKeys.forEach(function(attr) {
     var property = attrs[attr];
-    var value = view.getPath(property);
 
     // Add an observer to the view for when the property changes.
     // When the observer fires, find the element using the
@@ -1728,30 +1575,11 @@ Handlebars.registerHelper('bindAttr', function(options) {
         return;
       }
 
-      // A false result will remove the attribute from the element. This is
-      // to support attributes such as disabled, whose presence is meaningful.
-      if (result === NO) {
-        elem.removeAttr(attr);
-
-      // Likewise, a true result will set the attribute's name as the value.
-      } else if (result === YES) {
-        elem.attr(attr, attr);
-
-      } else {
-        elem.attr(attr, result);
-      }
+      elem.attr(attr, result);
     });
 
-    // Use the attribute's name as the value when it is YES
-    if (value === YES) {
-      value = attr;
-    }
-
-    // Do not add the attribute when the value is false
-    if (value !== NO) {
-      // Return the current value, in the form src="foo.jpg"
-      ret.push(attr+'="'+value+'"');
-    }
+    // Return the current value, in the form src="foo.jpg"
+    ret.push(attr+'="'+view.getPath(property)+'"');
   });
 
   // Add the unique identifier
@@ -1762,18 +1590,20 @@ Handlebars.registerHelper('bindAttr', function(options) {
 /* >>>>>>>>>> BEGIN source/extensions/collection.js */
 sc_require('extensions');
 
-Handlebars.registerHelper('collection', function(path, options) {
-  var fn = options.fn;
-  var data = options.data;
-  var inverse = options.inverse;
-  var collectionClass, collectionObject;
+Handlebars.registerHelper('collection', function(path, fn, inverse) {
+  var data = fn.data;
+  var collectionClass;
 
-  collectionClass = path ? SC.objectForPropertyPath(path) : SC.TemplateCollectionView;
-  //@ if (debug)
-  if (!collectionClass) {
-    throw "%@ #collection: Could not find %@".fmt(data.view, path);
+  if(!data) {
+    data = fn;
+    fn = null;
   }
-  //@ endif
+
+  if(typeof path === "string") {
+    collectionClass = SC.objectForPropertyPath(path) || SC.TemplateCollectionView;
+  } else {
+    collectionClass = path;
+  }
 
   var hash = fn.hash, itemHash = {}, match;
 
@@ -1789,10 +1619,10 @@ Handlebars.registerHelper('collection', function(path, options) {
   }
 
   if(fn) {
-    if(collectionClass.isClass) {
-      collectionObject = collectionClass.create();
-    } else {
-      collectionObject = collectionClass;
+    var collectionObject = collectionClass;
+
+    if(collectionObject.isClass) {
+      collectionObject = collectionObject.prototype;
     }
 
     collectionObject.itemViewTemplate = fn;
@@ -1800,15 +1630,38 @@ Handlebars.registerHelper('collection', function(path, options) {
     collectionObject.itemViewOptions = itemHash;
   }
 
-  options.fn = function() { return ""; };
+  var noop = function() { return ""; };
 
-  return Handlebars.helpers.view.call(this, collectionObject, options);
+  noop.data = fn.data;
+  noop.hash = fn.hash;
+  noop.fn = noop;
+
+  return Handlebars.helpers.view.call(this, collectionClass, noop);
 });
 
-Handlebars.registerHelper('each', function(path, options) {
-  options.hash.content = SC.getPath(this, path);
-  options.hash.itemContextProperty = 'content';
-  return Handlebars.helpers.collection.call(this, null, options);
+Handlebars.registerHelper('bindCollection', function(path, bindingString, fn) {
+  var data = fn.data;
+  var inverse = fn.data;
+  var collectionClass = SC.objectForPropertyPath(path) || SC.TemplateCollectionView;
+  var binding = SC.Binding.from(bindingString, this);
+
+  if(!data) {
+    data = fn;
+    fn = null;
+  }
+
+  if(fn) {
+    // attach the function to the original class so it can be used recursively
+    collectionClass.prototype.itemViewTemplate = fn;
+  }
+
+  if(collectionClass.isClass) {
+    collectionClass = collectionClass.extend({ contentBinding: binding });
+  } else {
+    collectionClass.bindings.push( binding.to('content', collectionClass) );
+  }
+
+  return Handlebars.helpers.collection.call(this, collectionClass, fn);
 });
 
 /* >>>>>>>>>> BEGIN source/extensions/localization.js */
@@ -1827,41 +1680,22 @@ SC.Handlebars.ViewHelper = SC.Object.create({
     var data = options.data;
     var view = data.view;
     var fn = options.fn;
-    var hash = options.hash;
 
     var newView;
     if (path.isClass || path.isObject) {
-      newView = path;
-      if (!newView) {
-        throw "Null or undefined object was passed to the #view helper. Did you mean to pass a property path string?";
-      }
+     newView = path;
+     if (!newView) {
+      throw "Null or undefined object was passed to the #view helper. Did you mean to pass a property path string?";
+     }
     } else {
       // Path is relative, look it up with this view as the root
       if (path.charAt(0) === '.') {
         newView = SC.objectForPropertyPath(path.slice(1), view);
       } else {
         // Path is absolute, look up path on global (window) object
-        newView = SC.getPath(thisContext, path);
-        if (!newView) {
-          newView = SC.getPath(path);
-        }
+        newView = SC.objectForPropertyPath(path);
       }
       if (!newView) { throw "Unable to find view at path '" + path + "'"; }
-    }
-
-    var contextOptions = {
-      'id': hash.id,
-      'class': hash['class'],
-      'classBinding': hash.classBinding
-    };
-    delete hash.id;
-    delete hash['class'];
-    delete hash.classBinding;
-
-    if (newView.isClass) {
-      newView = newView.extend(hash);
-    } else {
-      SC.mixin(newView, hash);
     }
 
     var currentView = data.view;
@@ -1878,9 +1712,11 @@ SC.Handlebars.ViewHelper = SC.Object.create({
     var context = SC.RenderContext(childView.get('tagName'));
 
     // Add id and class names passed to view helper
-    this.applyAttributes(contextOptions, childView, context);
+    this.applyAttributes(options.hash, childView, context);
 
     childView.applyAttributesToContext(context);
+
+
     // tomdale wants to make SproutCore slow
     childView.render(context, YES);
 
@@ -1902,10 +1738,48 @@ SC.Handlebars.ViewHelper = SC.Object.create({
 
     var classBindings = options.classBinding;
     if (classBindings) {
-      SC.Handlebars.bindClasses(childView, classBindings).forEach(function(className) {
-        context.setClass(className, YES);
-      });
+      this.addClassBindings(classBindings, childView, context);
     }
+  },
+
+  addClassBindings: function(classBindings, view, context) {
+    var classObservers = view._classObservers;
+
+    // Teardown any existing observers on the view.
+    if (classObservers) {
+      for (var prop in classObservers) {
+        if (classObservers.hasOwnProperty(prop)) {
+          view.removeObserver(prop, classObservers[prop]);
+        }
+      }
+    }
+
+    classObservers = view._classObservers = {};
+
+    // For each property passed, loop through and setup
+    // an observer.
+    classBindings.split(' ').forEach(function(property) {
+      // Normalize property path to be suitable for use
+      // as a class name. For exaple, content.foo.barBaz
+      // becomes bar-baz.
+
+      var dasherizedProperty = property.split('.').get('lastObject');
+      dasherizedProperty = dasherizedProperty.dasherize();
+
+      // Set up an observer on the view. If the bound property
+      // changes, toggle the class name
+      var observer = classObservers[property] = function() {
+        var shouldDisplay = view.getPath(property);
+        var elem = view.$();
+
+        elem.toggleClass(dasherizedProperty, shouldDisplay);
+      };
+
+      view.addObserver(property, observer);
+
+      // Add the class name to the view
+      context.setClass(dasherizedProperty, view.getPath(property));
+    });
   }
 });
 

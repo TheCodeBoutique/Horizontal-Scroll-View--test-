@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 /** @class
@@ -250,9 +250,6 @@ SC.RadioView = SC.View.extend(SC.Control,
         title = value = icon = null;
         isEnabled = NO;
       }
-
-      // it can only be enabled if the radio view itself is enabled
-      isEnabled = isEnabled && this.get('isEnabled');
       
       if (item) {
         sel = (isArray) ? (viewValue.indexOf(value) >= 0) : (viewValue === value);
@@ -267,18 +264,20 @@ SC.RadioView = SC.View.extend(SC.Control,
         icon: icon,
         width: width,
         value: value,
-
+        
         isEnabled: isEnabled,
         isSelected: (isArray && viewValue.indexOf(value) >= 0 && viewValue.length === 1) || (viewValue === value),
         isMixed: (isArray && viewValue.indexOf(value) >= 0),
         isActive: this._activeRadioButton === idx,
+        ariaLabeledBy: ariaLabeledBy,
+        ariaLabel: ariaLabel,
         theme: this.get('theme'),
         renderState: {}
       }));
     }
 
     return ret; // done!
-  }.property('isEnabled', 'value', 'items', 'itemTitleKey', 'itemWidthKey', 'itemValueKey', 'itemIsEnabledKey', 'localize', 'itemIconKey','itemAriaLabeledByKey', 'itemAriaLabelKey').cacheable(),
+  }.property('value', 'items', 'itemTitleKey', 'itemWidthKey', 'itemValueKey', 'itemIsEnabledKey', 'localize', 'itemIconKey','itemAriaLabeledByKey', 'itemAriaLabelKey').cacheable(),
 
 
   acceptsFirstResponder: function() {

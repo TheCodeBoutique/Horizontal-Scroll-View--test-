@@ -1,10 +1,3 @@
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
 SC.mixin( /** @scope SC */ {
   _downloadFrames: 0, // count of download frames inserted into document
 
@@ -118,41 +111,27 @@ SC.mixin( /** @scope SC */ {
       height = elem.innerHeight();
 
       // Adjust offset to account for top & left borders
-      offset.x += window.parseInt(elem.css('border-top-width').replace('px', ''));
-      offset.y += window.parseInt(elem.css('border-left-width').replace('px', ''));
+      offset.top += window.parseInt(elem.css('border-top-width').replace('px', ''));
+      offset.left += window.parseInt(elem.css('border-left-width').replace('px', ''));
     } else {
       width = elem.outerWidth(includeFlag === 'margin');
       height = elem.outerHeight(includeFlag === 'margin');
 
       if (includeFlag === 'margin') {
         // Adjust offset to account for top & left margins
-        offset.x -= window.parseInt(elem.css('margin-top').replace('px', ''));
-        offset.y -= window.parseInt(elem.css('margin-left').replace('px', ''));
+        offset.top -= window.parseInt(elem.css('margin-top').replace('px', ''));
+        offset.left -= window.parseInt(elem.css('margin-left').replace('px', ''));
       }
     }
 
     rect = {
-      x: offset.x,
-      y: offset.y,
+      x: offset.left,
+      y: offset.top,
       width: width,
       height: height
     };
 
     return SC.pointInRect(point, rect);
-  },
-  
-  
-  /**
-    Switch the scale of your app. Useful when vizualizing apps not designed
-    for iphone.
-  */
-  switchScale: function() {
-    $('head meta[name=viewport]').remove();
-    if(window.innerWidth === window.screen.width){
-      $('head').prepend('<meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5, user-scalable=0" />');
-    }else{
-      $('head').prepend('<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=0" />');
-    }
-  },
+  }
 
 });

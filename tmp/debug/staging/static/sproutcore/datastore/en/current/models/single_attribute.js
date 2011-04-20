@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -15,12 +15,14 @@ sc_require('models/record_attribute');
 
   There are many ways you can configure a SingleAttribute:
   
-      group: SC.Record.toOne('MyApp.Group', { 
-        inverse: 'contacts', // set the key used to represent the inverse 
-        isMaster: YES|NO, // indicate whether changing this should dirty
-        transform: function(), // transforms value <=> storeKey,
-        isEditable: YES|NO, make editable or not
-      });
+  {{{
+    group: SC.Record.toOne('MyApp.Group', { 
+      inverse: 'contacts', // set the key used to represent the inverse 
+      isMaster: YES|NO, // indicate whether changing this should dirty
+      transform: function(), // transforms value <=> storeKey,
+      isEditable: YES|NO, make editable or not
+    });
+  }}}
   
   @extends SC.RecordAttribute
   @since SproutCore 1.0
@@ -33,8 +35,7 @@ SC.SingleAttribute = SC.RecordAttribute.extend(
     of the current relationship.  If set, then modifying this relationship
     will also alter the opposite side of the relationship.
     
-    @type String
-    @default null
+    @property {String}
   */
   inverse: null,
   
@@ -42,8 +43,7 @@ SC.SingleAttribute = SC.RecordAttribute.extend(
     If set, determines that when an inverse relationship changes whether this
     record should become dirty also or not.
     
-    @type Boolean
-    @default YES
+    @property {Boolean}
   */
   isMaster: YES,
   
@@ -101,10 +101,11 @@ SC.SingleAttribute = SC.RecordAttribute.extend(
     of the relationship.  If this matches the inverse setting of the attribute
     then it will update itself accordingly.
     
-    @param {SC.Record} record the record owning this attribute
+    @param {SC.Record} the record owning this attribute
     @param {String} key the key for this attribute
     @param {SC.Record} inverseRecord record that was removed from inverse
-    @param {String} inverseKey key on inverse that was modified
+    @param {String} key key on inverse that was modified
+    @returns {void}
   */
   inverseDidRemoveRecord: function(record, key, inverseRecord, inverseKey) {
 
@@ -129,10 +130,11 @@ SC.SingleAttribute = SC.RecordAttribute.extend(
     inverse relationship.  This will set the value of this inverse record to 
     the new record.
     
-    @param {SC.Record} record the record owning this attribute
+    @param {SC.Record} the record owning this attribute
     @param {String} key the key for this attribute
     @param {SC.Record} inverseRecord record that was added to inverse
-    @param {String} inverseKey key on inverse that was modified
+    @param {String} key key on inverse that was modified
+    @returns {void}
   */
   inverseDidAddRecord: function(record, key, inverseRecord, inverseKey) {
     

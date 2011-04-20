@@ -2,7 +2,7 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -203,12 +203,11 @@ SC.mixin(Function.prototype, /** @scope Function.prototype */ {
 
 /* >>>>>>>>>> BEGIN __sc_chance.js */
 if (typeof CHANCE_SLICES === 'undefined') var CHANCE_SLICES = [];CHANCE_SLICES = CHANCE_SLICES.concat([]);
-
 /* >>>>>>>>>> BEGIN source/controllers/controller.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -254,7 +253,7 @@ SC.Controller = SC.Object.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 /**
@@ -334,10 +333,11 @@ SC.SelectionSupport = {
     @property {SC.SelectionSet}
   */
   selection: function(key, value) {
+
     var old = this._scsel_selection,
     oldlen = old ? old.get('length') : 0,
+    content,
     empty,
-    arrangedObjects = this.get('arrangedObjects'),
     len;
 
     // whenever we have to recompute selection, reapply all the conditions to
@@ -362,9 +362,9 @@ SC.SelectionSupport = {
       }
     }
 
-    // if we don't allow empty selection, block that also, unless we
-    // have nothing to select.  select first selectable item if necessary.
-    if ((len === 0) && !this.get('allowsEmptySelection') && arrangedObjects && arrangedObjects.get('length') !== 0) {
+    // if we don't allow empty selection, block that also.  select first
+    // selectable item if necessary.
+    if ((len === 0) && !this.get('allowsEmptySelection')) {
       if (oldlen === 0) {
         value = this.get('firstSelectableObject');
         if (value) { value = SC.SelectionSet.create().addObject(value).freeze(); }
@@ -381,7 +381,7 @@ SC.SelectionSupport = {
     if (len === 0) { value = SC.SelectionSet.EMPTY; }
 
     // always use a frozen copy...
-    if(value !== old) value = value.frozenCopy();
+    value = value.frozenCopy();
     this._scsel_selection = value;
 
     return value;
@@ -502,12 +502,11 @@ SC.SelectionSupport = {
 };
 
 /* >>>>>>>>>> BEGIN source/controllers/array.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 sc_require('controllers/controller');
 sc_require('mixins/selection_support');
@@ -910,19 +909,14 @@ SC.ArrayController = SC.Controller.extend(SC.Array, SC.SelectionSupport,
         oldlen = this._scac_length || 0,
         func   = this._scac_rangeDidChange,
         efunc  = this._scac_enumerableDidChange,
-        cfunc  = this._scac_enumerableContentDidChange,
         sfunc  = this._scac_contentStatusDidChange,
-        ro     = this._scac_rangeObserver,
         newlen;
 
     if (last === cur) { return this; } // nothing to do
 
     // teardown old observer
     if (last) {
-      if (last.isSCArray) {
-        if (ro) { last.removeRangeObserver(ro); }
-        last.removeEnumerableObserver(this, cfunc);
-      }
+      if (ro && last.isSCArray) { last.removeRangeObserver(ro); }
       else if (last.isEnumerable) { last.removeObserver('[]', this, efunc); }
       last.removeObserver('status', this, sfunc);
     }
@@ -938,7 +932,6 @@ SC.ArrayController = SC.Controller.extend(SC.Array, SC.SelectionSupport,
     // get(length) because we want to avoid computed an ordered array.
     if (cur) {
       if (!orders && cur.isSCArray) { ro = cur.addRangeObserver(null, this, func); }
-      if (cur.isSCArray) { cur.addEnumerableObserver(this, cfunc); }
       else if (cur.isEnumerable) { cur.addObserver('[]', this, efunc); }
       newlen = cur.isEnumerable ? cur.get('length') : 1;
       cur.addObserver('status', this, sfunc);
@@ -952,7 +945,7 @@ SC.ArrayController = SC.Controller.extend(SC.Array, SC.SelectionSupport,
     // finally, notify enumerable content has changed.
     this._scac_length = newlen;
     this._scac_contentStatusDidChange();
-    this.enumerableContentDidChange(0, newlen, newlen - oldlen, this, last||[]);
+    this.enumerableContentDidChange(0, newlen, newlen - oldlen);
     this.updateSelectionAfterContentChange();
   }.observes('content'),
 
@@ -977,50 +970,6 @@ SC.ArrayController = SC.Controller.extend(SC.Array, SC.SelectionSupport,
       this.endPropertyChanges();
       this.updateSelectionAfterContentChange();
     }
-  },
-
-  /**
-    @private
-
-    Forward enumerable content observer notifications to enumerable observers
-    on the array controller.
-
-    Since our content may be bound to another object, and that binding will not
-    update until the end of the run loop, we buffer up all enumerable changes
-    and play them back at the end of the run loop, once bindings have fired.
-
-    @param {Array} addedObjects the array of objects that were added
-    @param {Array} removedObject the array of objects that were removed
-    @param {Number} start the index at which the positions occurred
-  */
-  _scac_enumerableContentDidChange: function(addedObjects, removedObjects, start) {
-    var enumerableChanges = this._scac_enumerableChanges || [];
-
-    enumerableChanges.push([addedObjects, removedObjects, start]);
-
-    this._scac_enumerableChanges = enumerableChanges;
-    this.invokeOnce(this._scac_propagateEnumerableObservers);
-
-    this.setupPropertyChainsForEnumerableContent(addedObjects, removedObjects);
-  },
-
-  /**
-    @private
-
-    At the end of the run loop, notifies enumerable observers on this array
-    controller of changes we received from the content object.
-  */
-  _scac_propagateEnumerableObservers: function() {
-    var enumerableChanges = this._scac_enumerableChanges;
-    var idx, len, change;
-
-    len = enumerableChanges.get('length');
-    for (idx = 0; idx < len; idx++) {
-      change = enumerableChanges[idx];
-      this._notifyEnumerableObservers(change[0], change[1], change[2]);
-    }
-
-    this._scac_enumerableChanges = null;
   },
 
   /** @private
@@ -1056,7 +1005,7 @@ SC.ArrayController = SC.Controller.extend(SC.Array, SC.SelectionSupport,
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -1400,7 +1349,7 @@ SC.ObjectController = SC.Controller.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -1485,7 +1434,7 @@ SC.mixin(SC.Object.prototype, /** @scope SC.Object.prototype */ {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -1648,9 +1597,9 @@ SC.RunLoop.currentRunLoop = SC.RunLoop.create();
 
 /* >>>>>>>>>> BEGIN source/mixins/delegate_support.js */
 // ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
+// Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -1762,7 +1711,7 @@ SC.DelegateSupport = {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -1888,9 +1837,10 @@ SC.Responder = SC.Object.extend( /** SC.Responder.prototype */ {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
+
 sc_require('system/responder');
 
 /** @namespace
@@ -2158,7 +2108,7 @@ SC.ResponderContext = {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -2453,7 +2403,7 @@ SC.stringsFor = function(languageCode, strings) {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -2614,87 +2564,11 @@ String.prototype.loc = SC.String.loc; // Two places define it, and we want the v
 SC.String.fmt = String.prototype.fmt; // copy from runtime
 
 
-/* >>>>>>>>>> BEGIN source/mixins/template_helpers/checkbox_support.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-/** @class */
-
-SC.CheckboxSupport = /** @scope SC.CheckboxSupport.prototype */{
-  didCreateLayer: function() {
-    this.$('input').change(jQuery.proxy(function() {
-      SC.RunLoop.begin();
-      this.notifyPropertyChange('value');
-      SC.RunLoop.end();
-    }, this));
-  },
-
-  value: function(key, value) {
-    if (value !== undefined) {
-      this.$('input').attr('checked', value);
-    } else {
-      value = this.$('input').attr('checked');
-    }
-
-    return value;
-  }.property().idempotent()
-};
-
-
-/* >>>>>>>>>> BEGIN source/mixins/template_helpers/text_field_support.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-/** @class
-
-*/
-SC.TextFieldSupport = /** @scope SC.TextFieldSupport.prototype */{
-  value: function(key, value) {
-    if (value !== undefined) {
-      this.$('input').val(value);
-    } else {
-      value = this.$('input').val();
-    }
-
-    return value;
-  }.property().idempotent(),
-
-  didCreateLayer: function() {
-    SC.Event.add(this.$('input'), 'focus', this, this.focusIn);
-    SC.Event.add(this.$('input'), 'blur', this, this.focusOut);
-  },
-
-  focusIn: function(event) {
-    this.becomeFirstResponder();
-    this.tryToPerform('focus', event);
-  },
-
-  focusOut: function(event) {
-    this.resignFirstResponder();
-    this.tryToPerform('blur', event);
-  },
-
-  keyUp: function(event) {
-    if (event.keyCode === 13) {
-      return this.tryToPerform('insertNewline', event);
-    } else if (event.keyCode === 27) {
-      return this.tryToPerform('cancel', event);
-    }
-  }
-};
-
-
 /* >>>>>>>>>> BEGIN source/system/browser.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -2732,7 +2606,7 @@ SC.mixin(SC.browser,
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -2944,7 +2818,7 @@ SC.Builder.fn = {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -3087,7 +2961,7 @@ SC.mixin(SC.$, {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -3189,7 +3063,7 @@ SC.Event = function(originalEvent) {
     // normalize wheelDelta for Firefox
     // note that we multiple the delta on FF to make it's acceleration more 
     // natural.
-    } else if (!SC.none(originalEvent.detail) && SC.browser.mozilla) {
+    } else if (!SC.none(originalEvent.detail)) {
       deltaMultiplier = 10;
       if (originalEvent.axis && (originalEvent.axis === originalEvent.HORIZONTAL_AXIS)) {
         this.wheelDeltaX = originalEvent.detail;
@@ -3589,15 +3463,14 @@ SC.mixin(SC.Event, /** @scope SC.Event */ {
     // invoke all handlers
     for (key in handlers ) {
       handler = handlers[key];
-      // handler = [target, method, context]
-      method = handler[1];
+      method = handler[1] ;
 
       // Pass in a reference to the handler function itself
       // So that we can later remove it
       event.handler = method;
       event.data = event.context = handler[2];
 
-      target = handler[0] || this;
+      target = handler[0] || this ;
       ret = method.apply( target, args );
       
       if (val !== NO) val = ret;
@@ -3828,19 +3701,12 @@ SC.mixin(SC.Event, /** @scope SC.Event */ {
 SC.Event.prototype = {
 
   /**
-    Set to YES if you have called either preventDefault() or stopPropagation().  
-    This allows a generic event handler to notice if you want to provide 
-    detailed control over how the browser handles the real event.
-    
-    @property {Boolean}
+    Set to YES if you have called either preventDefault() or stopPropagation().  This allows a generic event handler to notice if you want to provide detailed control over how the browser handles the real event.
   */
   hasCustomEventHandling: NO,
   
   /**
     Returns the touches owned by the supplied view.
-    
-    @param {SC.View}
-    @returns {Array} touches an array of SC.Touch objects
   */
   touchesForView: function(view) {
     if (this.touchContext) return this.touchContext.touchesForView(view);
@@ -3848,20 +3714,13 @@ SC.Event.prototype = {
   
   /**
     Same as touchesForView, but sounds better for responders.
-    
-    @param {SC.RootResponder}
-    @returns {Array} touches an array of SC.Touch objects
   */
   touchesForResponder: function(responder) {
     if (this.touchContext) return this.touchContext.touchesForView(responder);
   },
   
   /**
-    Returns average data--x, y, and d (distance)--for the touches owned by the 
-    supplied view.
-    
-    @param {SC.View}
-    @returns {Array} touches an array of SC.Touch objects
+    Returns average data--x, y, and d (distance)--for the touches owned by the supplied view.
   */
   averagedTouchesForView: function(view) {
     if (this.touchContext) return this.touchContext.averagedTouchesForView(view);
@@ -3920,36 +3779,23 @@ SC.Event.prototype = {
     return this.preventDefault().stopPropagation();
   },
   
-  /** 
-    Always YES to indicate the event was normalized. 
-    
-    @property {Boolean}
-  */
+  /** Always YES to indicate the event was normalized. */
   normalized: YES,
 
-  /** 
-    Returns the pressed character (found in this.which) as a string. 
-  
-    @returns {String}
-  */
+  /** Returns the pressed character (found in this.which) as a string. */
   getCharString: function() {
-    if(SC.browser.msie){
-      if(this.keyCode == 8 || this.keyCode == 9 || (this.keyCode>=37 && this.keyCode<=40)){
-        return String.fromCharCode(0);
+      if(SC.browser.msie){
+        if(this.keyCode == 8 || this.keyCode == 9 || (this.keyCode>=37 && this.keyCode<=40)){
+          return String.fromCharCode(0);
+        }else{
+          return (this.keyCode>0) ? String.fromCharCode(this.keyCode) : null;  
+        }
+      }else{
+        return (this.charCode>0) ? String.fromCharCode(this.charCode) : null;
       }
-      else {
-        return (this.keyCode>0) ? String.fromCharCode(this.keyCode) : null;  
-      }
-    }
-    else {
-      return (this.charCode>0) ? String.fromCharCode(this.charCode) : null;
-    }
   },
   
-  /** 
-    Returns character codes for the event.  The first value is the normalized 
-    code string, with any shift or ctrl characters added to the begining.  
-    The second value is the char string by itself.
+  /** Returns character codes for the event.  The first value is the normalized code string, with any shift or ctrl characters added to the begining.  The second value is the char string by itself.
   
     @returns {Array}
   */
@@ -4031,7 +3877,7 @@ SC.PRINTABLE_KEYS = {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -4164,7 +4010,7 @@ SC.Cursor.sharedStyleSheet = function() {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -4479,15 +4325,13 @@ SC.Theme.themes['sc-base'] = SC.BaseTheme;
 SC.defaultTheme = 'sc-base';
 
 /* >>>>>>>>>> BEGIN source/views/view/base.js */
-
-/** @class */
 SC.CoreView = SC.Responder.extend(SC.DelegateSupport);
 
 /* >>>>>>>>>> BEGIN source/views/view.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -4499,7 +4343,6 @@ sc_require('system/theme');
 
 sc_require('mixins/string') ;
 sc_require('views/view/base') ;
-
 
 /**
   Default property to disable or enable by default the contextMenu
@@ -4524,6 +4367,54 @@ SC.EMPTY_CHILD_VIEWS_ARRAY.needsClone = YES;
 /**
   @class
 
+  Base class for managing a view.  Views provide two functions:
+
+  1. They translate state and events into drawing instructions for the
+     web browser and
+
+  2. They act as first responders for incoming keyboard, mouse, and
+     touch events.
+
+  h2. View Initialization
+
+  When a view is setup, there are several methods you can override that
+  will be called at different times depending on how your view is created.
+  Here is a guide to which method you want to override and when:
+
+  - *init:* override this method for any general object setup (such as
+    observers, starting timers and animations, etc) that you need to happen
+    everytime the view is created, regardless of whether or not its layer
+    exists yet.
+
+  - *render:* override this method to generate or update your HTML to reflect
+    the current state of your view.  This method is called both when your view
+    is first created and later anytime it needs to be updated.
+
+  - *didCreateLayer:* the render() method is used to generate new HTML.
+    Override this method to perform any additional setup on the DOM you might
+    need to do after creating the view.  For example, if you need to listen
+    for events.
+
+  - *willDestroyLayer:* if you implement didCreateLayer() to setup event
+    listeners, you should implement this method as well to remove the same
+    just before the DOM for your view is destroyed.
+
+  - *updateLayer:* Normally, when a view needs to update its content, it will
+    re-render the view using the render() method.  If you would like to
+    override this behavior with your own custom updating code, you can
+    replace updateLayer() with your own implementation instead.
+
+  - *didAppendToDocument:* in theory all DOM setup could be done
+    in didCreateLayer() as you already have a DOM element instantiated.
+    However there is cases where the element has to be first appended to the
+    Document because there is either a bug on the browser or you are using
+    plugins which objects are not instantiated until you actually append the
+    element to the DOM. This will allow you to do things like registering
+    DOM events on flash or quicktime objects.
+
+  @extends SC.Responder
+  @extends SC.DelegateSupport
+  @since SproutCore 1.0
 */
 SC.CoreView.reopen(
 /** @scope SC.View.prototype */ {
@@ -4836,7 +4727,6 @@ SC.CoreView.reopen(
   },
 
   parentViewDidResize: function() {
-    if (!this.get('hasLayout')) { this.notifyPropertyChange('frame'); }
     this.viewDidResize();
   },
 
@@ -4889,8 +4779,7 @@ SC.CoreView.reopen(
     invokes the same on all child views.
   */
   _notifyDidCreateLayer: function() {
-    this.notifyPropertyChange('layer');
-
+    this.notifyPropertyChange("layer");
     if (this.didCreateLayer) { this.didCreateLayer() ; }
 
     // and notify others
@@ -4968,7 +4857,6 @@ SC.CoreView.reopen(
     view's layer into the layer of the new parent view.
   */
   parentViewDidChange: function() {
-    this.parentViewDidResize();
     this.updateLayerLocation();
   },
 
@@ -5122,7 +5010,7 @@ SC.CoreView.reopen(
     context.addClass(this.get('classNames'));
 
     if (this.get('isTextSelectable')) { context.addClass('allow-select'); }
-    if (!this.get('isVisible')) { context.addClass('sc-hidden'); }
+    if (!this.get('isVisible')) { context.addClass('hidden'); }
     if (this.get('isFirstResponder')) { context.addClass('focus'); }
 
     context.id(this.get('layerId'));
@@ -5189,7 +5077,6 @@ SC.CoreView.reopen(
   */
 
   _notifyDidAppendToDocument: function() {
-    if (!this.get('hasLayout')) { this.notifyPropertyChange('frame'); }
     if (this.didAppendToDocument) { this.didAppendToDocument(); }
 
     var i=0, child, childLen, children = this.get('childViews');
@@ -5244,7 +5131,7 @@ SC.CoreView.reopen(
 
     @property {Array}
   */
-  classNames: [],
+  classNames: ['sc-view'],
 
   /**
     Tool tip property that will be set to the title attribute on the HTML
@@ -5393,19 +5280,19 @@ SC.CoreView.reopen(
     Computes the frame of the view by examining the view's DOM representation.
     If no representation exists, returns null.
 
-    If the view has a parent view, the parent's bounds will be taken into account when
+    If a parent view is passed, its bounds will be taken into account when
     calculating the frame.
 
+    @param {Rect} pdim the parent view's dimensions
     @returns {Rect} the computed frame
   */
-  computeFrameWithParentFrame: function() {
-    var layer,                            // The view's layer
-        pv = this.get('parentView'),      // The view's parent view (if it exists)
-        f;                                // The layer's coordinates in the document
+  computeFrameWithParentFrame: function(pdim) {
+    var layer;
+    var pv = this.get('parentView');
 
     // need layer to be able to compute rect
     if (layer = this.get('layer')) {
-      f = SC.offset(layer); // x,y
+      f = SC.viewportOffset(layer); // x,y
       if (pv) { f = pv.convertFrameFromView(f, null); }
 
       /*
@@ -5416,13 +5303,7 @@ SC.CoreView.reopen(
       f.height = layer.offsetHeight;
       return f;
     }
-
-    // Unable to compute yet
-    if (this.get('hasLayout')) {
-      return null;
-    } else {
-      return { x: 0, y: 0, width: 0, height: 0 };
-    }
+    return null; // can't compute
   },
 
   /**
@@ -5631,15 +5512,11 @@ SC.CoreView.reopen(
     }
 
     attrs.owner = attrs.parentView = this ;
+    attrs.isVisibleInWindow = this.get('isVisibleInWindow');
     if (!attrs.page) { attrs.page = this.page ; }
 
     // Now add this to the attributes and create.
     if (view.isClass) { view = view.create(attrs); }
-
-    if (view.hasVisibility) {
-      view.set('isVisibleInWindow', this.get('isVisibleInWindow'));
-    }
-
     return view ;
   },
 
@@ -5674,12 +5551,13 @@ SC.CoreView.reopen(
     @returns YES if the contextmenu can show up
   */
   contextMenu: function(evt) {
-    if (this.get('isContextMenuEnabled')) { return YES; }
+    if(!this.get('isContextMenuEnabled')) evt.stop();
+    return true;
   }
 
 });
 
-SC.CoreView.mixin(/** @scope SC.View.prototype */ {
+SC.CoreView.mixin(/** @scope SC.CoreView */ {
 
   /** @private walk like a duck -- used by SC.Page */
   isViewClass: YES,
@@ -5694,13 +5572,7 @@ SC.CoreView.mixin(/** @scope SC.View.prototype */ {
     @function
   */
   design: function() {
-    if (this.isDesign) {
-      //@ if (debug)
-      SC.Logger.warn("SC.View#design called twice for %@.".fmt(this));
-      //@ endif
-      return this;
-    }
-
+    if (this.isDesign) { return this; } // only run design one time
     var ret = this.extend.apply(this, arguments);
     ret.isDesign = YES ;
     if (SC.ViewDesigner) {
@@ -5905,62 +5777,7 @@ SC.CoreView.unload = function() {
   }
 } ;
 
-/** 
-  @class 
-
-  Base class for managing a view.  Views provide two functions:
-
-  1. They translate state and events into drawing instructions for the
-     web browser and
-
-  2. They act as first responders for incoming keyboard, mouse, and
-     touch events.
-
-  h2. View Initialization
-
-  When a view is setup, there are several methods you can override that
-  will be called at different times depending on how your view is created.
-  Here is a guide to which method you want to override and when:
-
-  - *init:* override this method for any general object setup (such as
-    observers, starting timers and animations, etc) that you need to happen
-    everytime the view is created, regardless of whether or not its layer
-    exists yet.
-
-  - *render:* override this method to generate or update your HTML to reflect
-    the current state of your view.  This method is called both when your view
-    is first created and later anytime it needs to be updated.
-
-  - *didCreateLayer:* the render() method is used to generate new HTML.
-    Override this method to perform any additional setup on the DOM you might
-    need to do after creating the view.  For example, if you need to listen
-    for events.
-
-  - *willDestroyLayer:* if you implement didCreateLayer() to setup event
-    listeners, you should implement this method as well to remove the same
-    just before the DOM for your view is destroyed.
-
-  - *updateLayer:* Normally, when a view needs to update its content, it will
-    re-render the view using the render() method.  If you would like to
-    override this behavior with your own custom updating code, you can
-    replace updateLayer() with your own implementation instead.
-
-  - *didAppendToDocument:* in theory all DOM setup could be done
-    in didCreateLayer() as you already have a DOM element instantiated.
-    However there is cases where the element has to be first appended to the
-    Document because there is either a bug on the browser or you are using
-    plugins which objects are not instantiated until you actually append the
-    element to the DOM. This will allow you to do things like registering
-    DOM events on flash or quicktime objects.
-
-  @extends SC.Responder
-  @extends SC.DelegateSupport
-  @since SproutCore 1.0
-
-*/
-SC.View = SC.CoreView.extend(/** @scope SC.View.prototype */{
-  classNames: ['sc-view']
-});
+SC.View = SC.CoreView.extend({});
 
 //unload views for IE, trying to collect memory.
 if(SC.browser.msie) SC.Event.add(window, 'unload', SC.View, SC.View.unload) ;
@@ -5971,7 +5788,7 @@ if(SC.browser.msie) SC.Event.add(window, 'unload', SC.View, SC.View.unload) ;
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -6604,7 +6421,7 @@ SC.Pane = SC.View.extend(SC.ResponderContext,
     // now.
     //
     // For example, say we're isVisible=NO, but we have not yet added the
-    // 'sc-hidden' class to the layer because of the "don't update the layer if
+    // 'hidden' class to the layer because of the "don't update the layer if
     // we're not visible in the window" check.  If any of our parent views
     // became visible, our layer would incorrectly be shown!
     this.updateLayerIfNeeded(YES);
@@ -6642,12 +6459,6 @@ SC.Pane = SC.View.extend(SC.ResponderContext,
 
 
 /* >>>>>>>>>> BEGIN source/panes/keyboard.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
 sc_require("panes/pane");
 
 SC.Pane.reopen(
@@ -6718,12 +6529,6 @@ SC.Pane.reopen(
 });
 
 /* >>>>>>>>>> BEGIN source/panes/layout.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
 sc_require("panes/pane");
 
 SC.Pane.reopen(
@@ -6744,29 +6549,48 @@ SC.Pane.reopen(
   computeParentDimensions: function(frame) {
     if(this.get('designer') && SC.suppressMain) { return arguments.callee.base.apply(this,arguments); }
 
-    var wDim = {x: 0, y: 0, width: 1000, height: 1000},
+    var wframe = this.get('currentWindowSize'),
+        wDim = {x: 0, y: 0, width: 1000, height: 1000},
         layout = this.get('layout');
 
-    // There used to be a whole bunch of code right here to calculate
-    // based first on a stored window size, then on root responder, then
-    // from document... but a) it is incorrect because we don't care about
-    // the window size, but instead, the clientWidth/Height of the body, and
-    // b) the performance benefits are not worth complicating the code that much.
-    if (document && document.body) {
-      wDim.width = document.body.clientWidth;
-      wDim.height = document.body.clientHeight;
-
-      // IE7 is the only browser which reports clientHeight _including_ scrollbar.
-      if (SC.browser.isIE && SC.browser.compareVersion("7.0") === 0) {
-        var scrollbarSize = SC.platform.get('scrollbarSize');
-        if (document.body.scrollWidth > wDim.width) {
-          wDim.width -= scrollbarSize;
-        }
-        if (document.body.scrollHeight > wDim.height) {
-          wDim.height -= scrollbarSize;
-        }
+    if (wframe){
+      wDim.width = wframe.width;
+      wDim.height = wframe.height;
+    }
+    // Call the RootResponder instance...
+    else if (SC.RootResponder.responder) {
+      var wSize = SC.RootResponder.responder.get('currentWindowSize');
+      if (wSize){
+        wDim.width = wSize.width;
+        wDim.height = wSize.height;
       }
     }
+    // If all else fails then we need to Calculate it from the window size and DOM
+    else {
+      var size, body, docElement;
+      if(!this._bod || !this._docElement){
+        body = document.body;
+        docElement = document.documentElement;
+        this._body=body;
+        this._docElement=docElement;
+      }else{
+        body = this._body;
+        docElement = this._docElement;
+      }
+
+      if (window.innerHeight) {
+        wDim.width = window.innerWidth;
+        wDim.height = window.innerHeight;
+      } else if (docElement && docElement.clientHeight) {
+        wDim.width = docElement.clientWidth;
+        wDim.height = docElement.clientHeight;
+      } else if (body) {
+        wDim.width = body.clientWidth;
+        wDim.height = body.clientHeight;
+      }
+      this.windowSizeDidChange(null, wDim);
+    }
+
 
     // If there is a minWidth or minHeight set on the pane, take that
     // into account when calculating dimensions.
@@ -6815,12 +6639,6 @@ SC.Pane.reopen(
 });
 
 /* >>>>>>>>>> BEGIN source/panes/manipulation.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
 sc_require("panes/pane");
 
 SC.Pane.reopen(
@@ -6850,13 +6668,6 @@ SC.Pane.reopen(
 });
 
 /* >>>>>>>>>> BEGIN source/panes/template.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
 /**
   SC.TemplatePane is a helper that will create a new pane based on
   a single root TemplateView.
@@ -6883,12 +6694,6 @@ SC.mixin(SC.TemplatePane, {
 });
 
 /* >>>>>>>>>> BEGIN source/panes/visibility.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
 sc_require("panes/pane");
 
 SC.Pane.reopen(
@@ -6905,7 +6710,7 @@ SC.Pane.reopen(
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -6947,7 +6752,7 @@ SC.ObservableProtocol = {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -7080,7 +6885,7 @@ SC.SparseArrayDelegate = {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -7113,306 +6918,11 @@ SC.Application = SC.Responder.extend(SC.ResponderContext,
 
 });
 
-/* >>>>>>>>>> BEGIN source/views/template.js */
-sc_require("views/view/base");
-
-// Global hash of shared templates. This will automatically be populated
-// by the build tools so that you can store your Handlebars templates in
-// separate files that get loaded into JavaScript at buildtime.
-SC.TEMPLATES = SC.Object.create();
-
-/** @class
-
-  SC.TemplateView allows you to create a view that uses the Handlebars templating
-  engine to generate its HTML representation.
-
-  To use it, create a file in your project called +mytemplate.handlebars+. Then,
-  set the +templateName+ property of your SC.TemplateView to +mytemplate+.
-
-  Alternatively, you can set the +template+ property to any function that
-  returns a string. It is recommended that you use +SC.Handlebars.compile()+ to
-  generate a function from a string containing Handlebars markup.
-
-  @extends SC.CoreView
-  @since SproutCore 1.5
-*/
-SC.TemplateView = SC.CoreView.extend(
-/** @scope SC.TemplateView.prototype */ {
-
-  // This makes it easier to build custom views on top of TemplateView without
-  // gotchas, but may have tab navigation repercussions. The tab navigation
-  // system should be revisited.
-  acceptsFirstResponder: YES,
-
-  /**
-    The name of the template to lookup if no template is provided.
-
-    SC.TemplateView will look for a template with this name in the global
-    +SC.TEMPLATES+ hash. Usually this hash will be populated for you
-    automatically when you include +.handlebars+ files in your project.
-
-    @property {String}
-  */
-  templateName: null,
-
-  /**
-    The hash in which to look for +templateName+. Defaults to SC.TEMPLATES.
-
-    @property {Object}
-  */
-  templates: SC.TEMPLATES,
-
-  /**
-    The template to use to render the view. This should be a function that
-    accepts an optional context parameter and returns a string of HTML that
-    will be inserted into the DOM relative to its parent view.
-
-    In general, you should set the +templateName+ property instead of setting
-    the template yourself.
-
-    @property {Function}
-  */
-  template: function(key, value) {
-    if (value !== undefined) {
-      return value;
-    }
-
-    var templateName = this.get('templateName'),
-        template = this.get('templates').get(templateName);
-
-    if (!template) {
-      
-      if (templateName) {
-        SC.Logger.warn('%@ - Unable to find template "%@".'.fmt(this, templateName));
-      }
-      
-
-      return function() { return ''; };
-    }
-
-    return template;
-  }.property('templateName').cacheable(),
-
-  /**
-    The object from which templates should access properties.
-
-    This object will be passed to the template function each time the render
-    method is called, but it is up to the individual function to decide what
-    to do with it.
-
-    By default, this will be the view itself.
-
-    @property {Object}
-  */
-  context: function(key, value) {
-    if (value !== undefined) {
-      return value;
-    }
-
-    return this;
-  }.property().cacheable(),
-
-  /**
-    When the view is asked to render, we look for the appropriate template
-    function and invoke it, then push its result onto the passed
-    SC.RenderContext instance.
-
-    @param {SC.RenderContext} context the render context
-  */
-  render: function(context) {
-    var template = this.get('template');
-
-    this._didRenderChildViews = YES;
-
-    context.push(template(this.get('context'), null, null, { view: this, isRenderData: true }));
-  },
-
-  // in TemplateView, updating is handled by observers created by helpers in the
-  // template. As a result, we create an empty update method so that the old
-  // (pre-1.5) behavior which would force a full re-render does not get activated.
-  update: function() { },
-
-  /**
-    Since mouseUp events will not fire unless we return YES to mouseDown, the
-    default mouseDown implementation returns YES if a mouseDown method exists.
-  */
-  mouseDown: function() {
-    if (this.mouseUp) { return YES; }
-    return NO;
-  }
-});
-
-/* >>>>>>>>>> BEGIN source/system/bindable_span.js */
-sc_require('views/template');
-
-/** @private
-  @class
-
-  SC._BindableSpan is a private view created by the Handlebars {{bind}} helpers
-  that is used to keep track of bound properties.
-
-  Every time a property is bound using a {{mustache}}, an anonymous subclass of
-  SC._BindableSpan is created with the appropriate sub-template and context
-  set up. When the associated property changes, just the template for this view
-  will re-render.
-*/
-SC._BindableSpan = SC.TemplateView.extend({
-  /**
-   The type of HTML tag to use. To ensure compatibility with
-   Internet Explorer 7, a <span> tag is used to ensure that inline elements are
-   not rendered with display: block.
-
-   @property {String}
-  */
-  tagName: 'span',
-
-  /**
-    The function used to determine if the +displayTemplate+ or
-    +inverseTemplate+ should be rendered. This should be a function that takes
-    a value and returns a Boolean.
-
-    @property {Function}
-  */
-  shouldDisplayFunc: null,
-
-  /**
-    Whether the template rendered by this view gets passed the context object
-    of its parent template, or gets passed the value of retrieving +property+
-    from the previous context.
-
-    For example, this is YES when using the {{#if}} helper, because the template
-    inside the helper should look up properties relative to the same object as
-    outside the block. This would be NO when used with +{{#with foo}}+ because
-    the template should receive the object found by evaluating +foo+.
-
-    @property {Boolean}
-  */
-  preserveContext: NO,
-
-  /**
-    The template to render when +shouldDisplayFunc+ evaluates to YES.
-
-    @property {Function}
-  */
-  displayTemplate: null,
-
-  /**
-    The template to render when +shouldDisplayFunc+ evaluates to NO.
-
-    @property {Function}
-  */
-  inverseTemplate: null,
-
-  /**
-    The key to look up on +previousContext+ that is passed to
-    +shouldDisplayFunc+ to determine which template to render.
-
-    In addition, if +preserveContext+ is NO, this object will be passed to the
-    template when rendering.
-
-    @property {String}
-  */
-  property: null,
-
-  /**
-    Determines which template to invoke, sets up the correct state based on
-    that logic, then invokes the default SC.TemplateView +render+
-    implementation.
-
-    This method will first look up the +property+ key on +previousContext+,
-    then pass that value to the +shouldDisplayFunc+ function. If that returns
-    YES, the +displayTemplate+ function will be rendered to DOM. Otherwise,
-    +inverseTemplate+, if specified, will be rendered.
-
-    For example, if this SC._BindableSpan represented the {{#with foo}} helper,
-    it would look up the +foo+ property of its context, and +shouldDisplayFunc+
-    would always return true. The object found by looking up +foo+ would be
-    passed to +displayTemplate+.
-
-    @param {SC.RenderContext} renderContext}
-  */
-  render: function(renderContext) {
-    var shouldDisplay = this.get('shouldDisplayFunc'),
-        property = this.get('property'),
-        preserveContext = this.get('preserveContext'),
-        context = this.get('previousContext');
-
-    var inverseTemplate = this.get('inverseTemplate'),
-        displayTemplate = this.get('displayTemplate');
-
-    var result = context.getPath(property);
-
-    // First, test the conditional to see if we should
-    // render the template or not.
-    if (shouldDisplay(result)) {
-      this.set('template', displayTemplate);
-
-      // If we are preserving the context (for example, if this
-      // is an #if block, call the template with the same object.
-      if (preserveContext) {
-        this.set('context', context);
-      } else {
-      // Otherwise, determine if this is a block bind or not.
-      // If so, pass the specified object to the template
-        if (displayTemplate) {
-          this.set('context', result);
-        } else {
-        // This is not a bind block, just push the result of the
-        // expression to the render context and return.
-          renderContext.push(Handlebars.Utils.escapeExpression(result));
-          return;
-        }
-      }
-    } else if (inverseTemplate) {
-      this.set('template', inverseTemplate);
-
-      if (preserveContext) {
-        this.set('context', context);
-      } else {
-        this.set('context', result);
-      }
-    } else {
-      this.set('template', function() { return ''; });
-    }
-
-    return arguments.callee.base.apply(this,arguments);
-  },
-
-  /**
-    Called when the property associated with this <span> changes.
-
-    We destroy all registered children, then render the view again and insert
-    it into DOM.
-  */
-  rerender: function() {
-    var idx, len, childViews, childView;
-
-    childViews = this.get('childViews');
-    len = childViews.get('length');
-    for (idx = len-1; idx >= 0; idx--){
-      childView = childViews[idx];
-      childView.$().remove();
-      childView.removeFromParent();
-      childView.destroy();
-    }
-
-    var context = this.renderContext(this.get('tagName'));
-    var elem;
-    this.renderToContext(context);
-
-    elem = context.element();
-    this.$().replaceWith(elem);
-    this.set('layer', elem);
-    this._notifyDidCreateLayer();
-  }
-});
-
-
 /* >>>>>>>>>> BEGIN source/system/ready.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -7424,22 +6934,7 @@ sc_require('system/event') ;
 
 SC.mixin({
   isReady: NO,
-  
-  /**
-    Allows apps to avoid automatically attach the ready handlers if they
-    want to by setting this flag to YES
-    
-    @property {Boolean}
-  */
-  suppressOnReady: SC.suppressOnReady ? YES : NO,
-  
-  /**
-    Allows apps to avoid automatically invoking main() when onReady is called
-    
-    @property {Boolean}
-  */
-  suppressMain: SC.suppressMain ? YES : NO,
-  
+
   /**
     Add the passed target and method to the queue of methods to invoke when
     the document is ready.  These methods will be called after the document
@@ -7455,8 +6950,8 @@ SC.mixin({
     @returns {SC}
   */
   ready: function(target, method) {
-    var queue = SC._readyQueue;
-    
+    var queue = this._readyQueue;
+
     // normalize
     if (method === undefined) {
       method = target; target = null ;
@@ -7464,49 +6959,38 @@ SC.mixin({
       method = target[method] ;
     }
 
-    if(SC.isReady) {
-      jQuery(document).ready(function() { method.call(target); });
-    }
-    else {
-      if(!queue) SC._readyQueue = [];
-      SC._readyQueue.push(function() { method.call(target); });
-    }
-    
+    jQuery(document).ready(function() { method.call(target); });
+
     return this ;
   },
 
   onReady: {
-    done: function() {
-      if(SC.isReady) return;
-      SC.isReady = true;
-      
+    startRunLoop: function() {
       SC.RunLoop.begin();
-      
+    },
+    setupLocales: function() {
       SC.Locale.createCurrentLocale();
       jQuery("body").addClass(SC.Locale.currentLanguage.toLowerCase());
-      
+    },
+    removeLoading: function() {
       jQuery("#loading").remove();
-      
-      var queue = SC._readyQueue, idx, len;
-      
-      if(queue) {
-        for(idx=0,len=queue.length;idx<len;idx++) {
-          queue[idx].call();
-        }
-        SC._readyQueue = null;
-      }
-      
-      if(window.main && !SC.suppressMain && (SC.mode === SC.APP_MODE)) { window.main(); }
+    },
+    done: function() {
+      SC.isReady = true;
+      if(window.main && !SC.suppressMain && (SC.mode === SC.APP_MODE)) { main(); }
       SC.RunLoop.end();
     }
   }
 
 }) ;
 
-// let apps ignore the regular onReady handling if they need to
-if(!SC.suppressOnReady) {
-  jQuery.event.special.ready._default = SC.onReady.done;
-}
+jQuery(document)
+  .ready(SC.onReady.startRunLoop)
+  .ready(SC.onReady.setupLocales)
+  .ready(SC.onReady.removeLoading);
+jQuery.event.special.ready._default = SC.onReady.done;
+
+SC.removeLoading = YES;
 
 // default to app mode.  When loading unit tests, this will run in test mode
 SC.APP_MODE = "APP_MODE";
@@ -7517,7 +7001,7 @@ SC.mode = SC.APP_MODE;
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -7529,28 +7013,8 @@ SC.mode = SC.APP_MODE;
   and events are supported by the browser, allowing you to create much more
   robust apps.
 */
-SC.platform = SC.Object.create({
-  /**
-    The size of scrollbars in this browser.
-
-    @property
-  */
-  scrollbarSize: function() {
-    var tester = document.createElement("DIV");
-    tester.innerHTML = "<div style='height:1px;'></div>";
-    tester.style.cssText="position:absolute;width:100px;height:100px;overflow-y:visible;";
-
-    document.body.appendChild(tester);
-    var noScroller = tester.childNodes[0].innerWidth;
-    tester.style.overflowY = 'scroll';
-    var withScroller = tester.childNodes[0].innerWidth;
-    document.body.removeChild(tester);
-
-    return noScroller-withScroller;
-
-  }.property().cacheable(),
-
-
+SC.platform = {
+  
   /*
     NOTES
       - A development version of Chrome 9 incorrectly reported supporting touch
@@ -7862,7 +7326,7 @@ SC.platform = SC.Object.create({
   */
   windowSizeDeterminesOrientation: SC.browser.iOS || !('onorientationchange' in window)
 
-});
+};
 
 /* Calculate CSS Prefixes */
 
@@ -7938,7 +7402,7 @@ SC.platform = SC.Object.create({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -9675,13 +9139,8 @@ SC.RootResponder = SC.Object.extend({
     view = this._mouseDownView = this.sendEvent('mouseDown', evt, view) ;
     if (view && view.respondsTo('mouseDragged')) this._mouseCanDrag = YES ;
 
-    // Determine if any views took responsibility for the
-    // event. If so, save that information so we can prevent
-    // the next click event we receive from propagating to the browser.
-    var ret = view ? evt.hasCustomEventHandling : YES;
-    this._lastMouseDownCustomHandling = ret;
 
-    return ret;
+    return view ? evt.hasCustomEventHandling : YES;
   },
 
   /**
@@ -9696,6 +9155,8 @@ SC.RootResponder = SC.Object.extend({
       evt.allowDefault();
       return YES;
     }
+
+    this.targetViewForEvent(evt);
 
     if (this._drag) {
       this._drag.tryToPerform('mouseUp', evt) ;
@@ -9745,33 +9206,7 @@ SC.RootResponder = SC.Object.extend({
     // (This is used to calculate double click events)
     this._lastMouseUpAt = Date.now() ;
 
-    // Determine if any views took responsibility for the
-    // event. If so, save that information so we can prevent
-    // the next click event we receive from propagating to the browser.
-    var ret = handler ? evt.hasCustomEventHandling : YES;
-    this._lastMouseUpCustomHandling = ret;
-
-    return ret;
-  },
-
-  /**
-    Certain browsers ignore us overriding mouseup and mousedown events and
-    still allow default behavior (such as navigating away when the user clicks
-    on a link). To block default behavior, we store whether or not the last
-    mouseup or mousedown events resulted in us calling preventDefault() or
-    stopPropagation(), in which case we make the same calls on the click event.
-
-    @param {Event} evt the click event
-    @returns {Boolean} whether the event should be propagated to the browser
-  */
-  click: function(evt) {
-    if (!this._lastMouseUpCustomHandling || !this._lastMouseDownCustomHandling) {
-      evt.preventDefault();
-      evt.stopPropagation();
-      return NO;
-    }
-
-    return YES;
+    return (handler) ? evt.hasCustomEventHandling : YES ;
   },
 
   dblclick: function(evt){
@@ -10113,7 +9548,7 @@ SC.ready(SC.RootResponder, SC.RootResponder.ready = function() {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -10325,7 +9760,7 @@ SC.ready(function() {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -10842,7 +10277,7 @@ replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -10952,7 +10387,7 @@ SC.Page.localization = function(attrs) { return attrs; };
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -12017,7 +11452,7 @@ SC.RenderContext.escapeHTML = function(text) {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -12714,7 +12149,7 @@ SC.SelectionSet.EMPTY = SC.SelectionSet.create().freeze();
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -13106,12 +12541,11 @@ SC.SparseArray.array = function(len) {
 };
 
 /* >>>>>>>>>> BEGIN source/system/timer.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 /**
   @class
@@ -13665,7 +13099,7 @@ SC.Timer.returnTimerToPool = function(timer) {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -13758,7 +13192,7 @@ SC.mixin( /** @scope SC */ {
       This is passed to `jQuery()`, so any value supported by `jQuery()` will work.
     @param {String} relativeToFlag flag to determine which relative element to determine offset by.
       One of either: 'document', 'viewport' or 'parent' (default: 'document').
-    @returns {Object} the offset of the element as an Object (ie. Hash) in the form { x: value, y: value }.
+    @returns {Object} the offset of the element as an Object (ie. Hash) in the form { left: value, top: value }.
    */
   offset: function(elem, relativeToFlag) {
     var userAgent,
@@ -13795,12 +13229,6 @@ SC.mixin( /** @scope SC */ {
       }
     }
 
-    // Translate 'left', 'top' to 'x', 'y'
-    result.x = result.left;
-    result.y = result.top;
-    delete result.left;
-    delete result.top;
-
     return result;
   },
 
@@ -13821,12 +13249,6 @@ SC.mixin( /** @scope SC */ {
 }) ;
 
 /* >>>>>>>>>> BEGIN source/system/utils/rect.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
 SC.mixin( /** @scope SC */ {
   /** A Point at {0,0} */
   ZERO_POINT: { x: 0, y: 0 },
@@ -13926,7 +13348,108 @@ SC.mixin( /** @scope SC */ {
 
 });
 
-/* >>>>>>>>>> BEGIN source/views/template_collection.js */
+/* >>>>>>>>>> BEGIN source/views/template.js */
+sc_require("views/view/base");
+
+// Global hash of shared templates. This will automatically be populated
+// by the build tools so that you can store your Handlebars templates in
+// separate files that get loaded into JavaScript at buildtime.
+SC.TEMPLATES = SC.Object.create();
+
+/** @class
+
+  SC.TemplateView allows you to create a view that uses the Handlebars templating
+  engine to generate its HTML representation.
+
+  @extends SC.CoreView
+  @since SproutCore 1.5
+*/
+SC.TemplateView = SC.CoreView.extend(
+/** @scope SC.TemplateView.prototype */ {
+
+  // This makes it easier to build custom views on top of TemplateView without
+  // gotchas, but may have tab navigation reprecussions. The tab navigation
+  // system should be revisited.
+  acceptsFirstResponder: YES,
+
+  templateName: null,
+
+  templates: SC.TEMPLATES,
+
+  template: function() {
+    var templateName = this.get('templateName');
+    var template = this.get('templates').get(templateName);
+
+    if (!template) {
+      //@if(debug)
+      if (templateName) {
+        SC.Logger.warn('%@ - Unable to find template "%@".'.fmt(this, templateName));
+      }
+      //@endif
+
+      return function() { return ''; };
+    }
+
+    return template;
+  }.property('templateName').cacheable(),
+
+  context: function() {
+    return this;
+  }.property().cacheable(),
+
+  /**
+    When the view is asked to render, we look for the appropriate
+    template and invoke it with this view as the context, as well
+    as a hash that contains a reference to the view.
+
+    @param {SC.RenderContext} context the render context
+  */
+  render: function(context) {
+    var template = this.get('template');
+
+    this._didRenderChildViews = YES;
+
+    context.push(template(this.get('context'), null, null, { view: this, isRenderData: true }));
+  },
+
+  // in TemplateView, updating is handled by observers created by helpers in the
+  // template. As a result, we create an empty update method so that the old
+  // (pre-1.5) behavior which would force a full re-render does not get activated.
+  update: function() { },
+
+  /**
+    Since mouseUp events will not fire unless we return YES to mouseDown, the
+    default mouseDown implementation returns YES if a mouseDown method exists.
+  */
+  mouseDown: function() {
+    if (this.mouseUp) { return YES; }
+    return NO;
+  }
+});
+
+/* >>>>>>>>>> BEGIN source/views/template/checkbox_support.js */
+SC.CheckboxSupport = {
+  didCreateLayer: function() {
+    this.$('input').change(jQuery.proxy(function() {
+      SC.RunLoop.begin();
+      this.notifyPropertyChange('value');
+      SC.RunLoop.end();
+    }, this));
+  },
+
+  value: function(key, value) {
+    if (value !== undefined) {
+      this.$('input').attr('checked', value);
+    } else {
+      value = this.$('input').attr('checked');
+    }
+
+    return value;
+  }.property().idempotent()
+};
+
+
+/* >>>>>>>>>> BEGIN source/views/template/collection.js */
 sc_require('views/template');
 
 SC.TemplateCollectionView = SC.TemplateView.extend({
@@ -13940,13 +13463,11 @@ SC.TemplateCollectionView = SC.TemplateView.extend({
   didCreateLayer: function() {
     if(this.get('content')) {
       var indexSet = SC.IndexSet.create(0, this.getPath('content.length'));
-      this.arrayContentDidChange(this.get('content'), [], 0);
+      this.arrayContentDidChange(this.get('content'), null, '[]', indexSet);
     }
   },
 
-  itemView: 'SC.TemplateView',
-
-  itemContext: null,
+  itemView: "SC.TemplateView",
 
   itemViewClass: function() {
     var itemView = this.get('itemView');
@@ -13962,149 +13483,115 @@ SC.TemplateCollectionView = SC.TemplateView.extend({
       extensions.template = this.get('itemViewTemplate');
     }
 
-    if (this.get('tagName') === 'ul' || this.get('tagName') === 'ol') {
-      extensions.tagName = 'li';
+    if (this.get('tagName') === 'ul') {
+      extensions.tagname = 'li';
     }
 
     return itemView.extend(extensions);
   }.property('itemView').cacheable(),
 
-  /**
-    @private
-
-    When the content property of the collection changes, remove any existing
-    child views and observers, then set up an observer on the new content, if
-    needed.
-  */
-  _sctcv_contentDidChange: function() {
-    this.get('childViews').forEach(function() {
-      this.removeChild(view);
-      view.destroy();
-    }, this);
-
+  contentDidChange: function() {
+    this.removeAllChildren();
     this.$().empty();
     this.didCreateLayer();
 
-    var content = this._content;
-    if (content) {
-      content.removeEnumerableObserver(this, this.arrayContentDidChange);
-    }
+    this.get('content').addRangeObserver(null, this, this.arrayContentDidChange);
+  }.observes('content', '.content.[]'),
 
-    content = this._content = this.get('content');
-    if (content) {
-      content.addEnumerableObserver(this, this.arrayContentDidChange);
-    }
-  }.observes('content'),
-
-  /**
-    Called when a mutation to the underlying content array occurs.
-
-    This method will replay that mutation against the views that compose the
-    SC.TemplateCollectionView, ensuring that the view reflects the model.
-
-    This enumerable observer is added in contentDidChange.
-
-    @param {Array} addedObjects the objects that were added to the content
-    @param {Array} removedObjects the objects that were removed from the content
-    @param {Number} changeIndex the index at which the changes occurred
-  */
-  arrayContentDidChange: function(addedObjects, removedObjects, changeIndex) {
-    var content       = this.get('content'),
+  arrayContentDidChange: function(array, objects, key, indexes) {
+    var content = this.get('content'),
         itemViewClass = this.get('itemViewClass'),
-        childViews    = this.get('childViews'),
-        addedViews    = [],
-        renderFunc, childView, itemOptions, elem, insertAtElement, item, itemElem, idx, len;
+        childViews = this.get('childViews'),
+        toDestroy = [], toReuse = [],
+        view, item, matchIndex, lastView, length, i;
 
-    // If the contents were empty before and this template collection has an empty view
-    // remove it now.
     emptyView = this.get('emptyView');
-    if (emptyView) { emptyView.$().remove(); emptyView.removeFromParent(); }
+    if(emptyView) { emptyView.$().remove(); emptyView.removeFromParent(); }
 
-    // For each object removed from the content, remove the corresponding
-    // child view from DOM and the child views array.
-    len = removedObjects.get('length');
-
-    // Loop through child views that correspond with the removed items.
-    // Note that we loop from the end of the array to the beginning because
-    // we are mutating it as we go.
-    for (idx = (changeIndex+len)-1; idx >= changeIndex; idx--) {
-      childView = childViews[idx];
-      childView.$().remove();
-      childView.removeFromParent();
-      childView.destroy();
-    }
-
-    // If we have content to display, create a view for
-    // each item.
-    itemOptions = this.get('itemViewOptions') || {};
-
-    elem = this.$();
-    insertAtElement = elem.find('li')[changeIndex-1] || null;
-    len = addedObjects.get('length');
-
-    // TODO: This logic is duplicated from the view helper. Refactor
-    // it so we can share logic.
-    var itemAttrs = {
-      "id": itemOptions.id,
-      "class": itemOptions['class'],
-      "classBinding": itemOptions.classBinding
-    };
-
-    renderFunc = function(context) {
-      arguments.callee.base.apply(this,arguments);
-      SC.Handlebars.ViewHelper.applyAttributes(itemAttrs, this, context);
-    };
-
-    delete itemOptions.id;
-    delete itemOptions['class'];
-    delete itemOptions.classBinding;
-
-    for (idx = 0; idx < len; idx++) {
-      item = addedObjects.objectAt(idx);
-      view = this.createChildView(itemViewClass.extend(itemOptions, {
-        content: item,
-        render: renderFunc
-      }));
-
-      var contextProperty = view.get('contextProperty');
-      if (contextProperty) {
-        view.set('context', view.get(contextProperty));
-      }
-
-      itemElem = view.createLayer().$();
-      if (!insertAtElement) {
-        elem.append(itemElem);
+    // Destroy unused views
+    for (i=0, length=childViews.get('length'); i < length; i++) {
+      view = childViews.objectAt(i);
+      if (content.contains(view.get('content'))) {
+        toReuse.push(view);
       } else {
-        itemElem.insertAfter(insertAtElement);
+        toDestroy.push(view);
       }
-      insertAtElement = itemElem;
-
-      addedViews.push(view);
     }
 
-    childViews.replace(changeIndex, 0, addedViews);
+    for (i=0, length=toDestroy.length; i < length; i++) { toDestroy[i].destroy(); }
 
-    var inverseTemplate = this.get('inverseTemplate');
-    if (childViews.get('length') === 0 && inverseTemplate) {
+    childViews = [];
+
+    if(array.get('length') === 0 && this.get('inverseTemplate')) {
       view = this.createChildView(SC.TemplateView.extend({
-        template: inverseTemplate,
+        template: this.get('inverseTemplate'),
         content: this
       }));
       this.set('emptyView', view);
-      view.createLayer().$().appendTo(elem);
-      this.childViews = [view];
+      view.createLayer().$().appendTo(this.$());
     }
 
-    // Because the layer has been modified, we need to invalidate the frame
-    // property, if it exists, at the end of the run loop. This allows it to
-    // be used inside of SC.ScrollView.
-    this.invokeLast('invalidateFrame');
-  },
+    var itemOptions = this.itemViewOptions || {};
 
-  invalidateFrame: function() {
-    this.notifyPropertyChange('frame');
+    // Add items, using previous if possible
+    for (i=0, length=array.get('length'); i < length; i++) {
+      item = array.objectAt(i);
+      view = toReuse.find(function(v){ return v.get('content') === item; });
+      if (!view) {
+        view = this.createChildView(itemViewClass.extend({
+          content: item,
+          tagName: 'li',
+
+          render: function(context) {
+            arguments.callee.base.apply(this,arguments);
+            SC.Handlebars.ViewHelper.applyAttributes(itemOptions, this, context);
+          }
+        }));
+        view.createLayer().$().appendTo(this.$());
+      }
+      childViews.push(view);
+    }
+
+    this.childViews = childViews;
   }
 });
+
+
+/* >>>>>>>>>> BEGIN source/views/template/text_field_support.js */
+SC.TextFieldSupport = {
+  value: function(key, value) {
+    if (value !== undefined) {
+      this.$('input').val(value);
+    } else {
+      value = this.$('input').val();
+    }
+
+    return value;
+  }.property().idempotent(),
+
+  didCreateLayer: function() {
+    SC.Event.add(this.$('input'), 'focus', this, this.focusIn);
+    SC.Event.add(this.$('input'), 'blur', this, this.focusOut);
+  },
+
+  focusIn: function(event) {
+    this.becomeFirstResponder();
+    this.tryToPerform('focus', event);
+  },
+
+  focusOut: function(event) {
+    this.resignFirstResponder();
+    this.tryToPerform('blur', event);
+  },
+
+  keyUp: function(event) {
+    if (event.keyCode === 13) {
+      return this.tryToPerform('insertNewline', event);
+    } else if (event.keyCode === 27) {
+      return this.tryToPerform('cancel', event);
+    }
+  }
+};
 
 
 /* >>>>>>>>>> BEGIN source/views/view/layout_style.js */
@@ -14693,7 +14180,7 @@ SC.View.LayoutStyleCalculator = SC.Object.extend({
 
 });
 
-SC.CoreView.runCallback = function(callback)/** @scope SC.View.prototype */{
+SC.CoreView.runCallback = function(callback){
   var additionalArgs = SC.$A(arguments).slice(1),
       typeOfAction = SC.typeOf(callback.action);
 
@@ -15187,7 +14674,7 @@ SC.View.reopen({
       children = this.get('childViews');
       for(i=0, childLen = children.length; i<childLen; i++){
         child = children[i];
-        if(child._computeNextValidKeyView && child.get('isVisibleInWindow') && child.get('isVisible')){
+        if(child.get('isVisibleInWindow') && child.get('isVisible')){
           ret = child._computeNextValidKeyView(currentView, seen);
         }
         if (ret) { return ret; }
@@ -15233,7 +14720,7 @@ SC.View.reopen({
       children = this.get('childViews');
       for(i=children.length-1; 0<=i; i--){
         child = children[i];
-        if(child._computePreviousValidKeyView && child.get('isVisibleInWindow') && child.get('isVisible')){
+        if(child.get('isVisibleInWindow') && child.get('isVisible')){
           ret = child._computePreviousValidKeyView(currentView, seen);
         }
         if (ret) { return ret; }
@@ -15281,11 +14768,6 @@ SC.LAYOUT_AUTO = 'auto';
 
 SC.View.reopen(
   /** @scope SC.View.prototype */ {
-
-  /**
-    Set to YES to indicate the view has visibility support added.
-  */
-  hasLayout: YES,
 
   concatenatedProperties: ["layoutProperties"],
 
@@ -15368,50 +14850,33 @@ SC.View.reopen(
     @returns {SC.View} receiver
   */
   adjust: function(key, value) {
-    var layout = this.get('layout'), didChange = NO, cur, hash;
+    var layout = SC.clone(this.get('layout')), didChange = NO, cur ;
 
     if (key === undefined) { return this ; } // nothing to do.
 
     // handle string case
     if (SC.typeOf(key) === SC.T_STRING) {
-      // this is copied from below
-      cur = layout[key];
+      hash = {};
+      hash[key] = value;
+    } else {
+      hash = key;
+    }
 
-      if(value === undefined || cur == value) return this;
+    for(key in hash) {
+      if (!hash.hasOwnProperty(key)) { continue; }
 
-      layout = SC.clone(layout);
+      value = hash[key] ;
+      cur = layout[key] ;
 
-      if(value === null) {
-        delete layout[key];
+      if (value === undefined || cur == value) { continue; }
+
+      if (value === null) {
+        delete layout[key] ;
       } else {
-        layout[key] = value;
+        layout[key] = value ;
       }
 
       didChange = YES;
-    }
-
-    else {
-      hash = key;
-
-      for(key in hash) {
-        if (!hash.hasOwnProperty(key)) { continue; }
-
-        value = hash[key] ;
-        cur = layout[key] ;
-
-        if (value === undefined || cur == value) { continue; }
-
-        // only clone the layout the first time we see a change
-        if(!didChange) layout = SC.clone(layout);
-
-        if (value === null) {
-          delete layout[key] ;
-        } else {
-          layout[key] = value ;
-        }
-
-        didChange = YES;
-      }
     }
 
     // now set adjusted layout
@@ -17066,15 +16531,15 @@ SC.View._RenderDelegateProxy = {
   isViewRenderDelegateProxy: YES,
 
   /**
-    Creates a View Render Delegate Proxy for the specified view.
-
-    Implementation note: this creates a hash of the view's displayProperties
-    array so that the proxy may quickly determine whether a property is a
-    displayProperty or not. This could cause issues if the view's displayProperties
-    array is modified after instantiation.
-
-    @param {SC.View} view The view this proxy should proxy to.
-    @returns SC.View._RenderDelegateProxy
+   * Creates a View Render Delegate Proxy for the specified view.
+   *
+   * Implementation note: this creates a hash of the view's displayProperties
+   * array so that the proxy may quickly determine whether a property is a
+   * displayProperty or not. This could cause issues if the view's displayProperties
+   * array is modified after instantiation.
+   *
+   * @param {SC.View} view The view this proxy should proxy to.
+   * @returns SC.View._RenderDelegateProxy
   */
   createForView: function(view) {
     var ret = SC.beget(this);
@@ -17091,25 +16556,21 @@ SC.View._RenderDelegateProxy = {
     ret._displayPropertiesLookup = lookup;
     ret.renderState = {};
 
-    ret._view = view;
+    ret.view = view;
     return ret;
   },
 
 
   /**
-    Provides the render delegate with any property it needs.
-
-    This first looks up whether the property exists in the view's
-    displayProperties, and whether it exists prefixed with 'display';
-    for instance, if the render delegate asks for 'title', this will
-    look for 'displayTitle' in the view's displayProperties array.
-
-    If the property is not in `displayProperties`, but a property
-    is defined on the view, an error will be thrown to assist in
-    debugging.
-
-   @param {String} property The name of the property the render delegate needs.
-   @returns The value.
+   * Provides the render delegate with any property it needs.
+   *
+   * This first looks up whether the property exists in the view's
+   * displayProperties, and whether it exists prefixed with 'display';
+   * for instance, if the render delegate asks for 'title', this will
+   * look for 'displayTitle' in the view's displayProperties array.
+   *
+   * @param {String} property The name of the property the render delegate needs.
+   * @returns The value.
   */
   get: function(property) {
     if (this[property] !== undefined) { return this[property]; }
@@ -17117,20 +16578,21 @@ SC.View._RenderDelegateProxy = {
     var displayProperty = 'display' + property.capitalize();
 
     if (this._displayPropertiesLookup[displayProperty]) {
-      return this._view.get(displayProperty);
+      return this.view.get(displayProperty);
     } else if (this._displayPropertiesLookup[property]) {
-      return this._view.get(property);
+      return this.view.get(property);
     }
 
     return undefined;
   },
 
   /**
-   Checks if any of the specified properties have changed.
-
-   For each property passed, this first determines whether to use the
-   'display' prefix. Then, it calls view.didChangeFor with context and that
-   property name.
+   * Checks if any of the specified properties have changed.
+   *
+   * For each property passed, this first determines whether to use the
+   * 'display' prefix. Then, it calls view.didChangeFor with context and that
+   * property name.
+   *
   */
   didChangeFor: function(context) {
     var len = arguments.length, idx;
@@ -17139,50 +16601,15 @@ SC.View._RenderDelegateProxy = {
           displayProperty = 'display' + property.capitalize();
 
       if (this._displayPropertiesLookup[displayProperty]) {
-        if (this._view.didChangeFor(context, displayProperty)) { return YES; }
+        if (this.view.didChangeFor(context, displayProperty)) { return YES; }
       } else if (this._displayPropertiesLookup[property]) {
-        if (this._view.didChangeFor(context, property)) { return YES; }
+        if (this.view.didChangeFor(context, property)) { return YES; }
       }
     }
 
     return NO;
   }
 };
-
-/**
-  Generates a computed property that will look up the specified property from
-  the view's render delegate, if present. You may specify a default value to
-  return if there is no such property or is no render delegate.
-  
-  The generated property is read+write, so it may be overriden.
-  
-  @param {String} propertyName The name of the property to get from the render delegate..
-  @param {Value} def The default value to use if the property is not present.
-*/
-SC.propertyFromRenderDelegate = function(propertyName, def) {
-  return function(key, value) {
-    // first, handle set() case
-    if (value !== undefined) {
-      this['_set_rd_' + key] = value;
-    }
-
-    // use any value set manually via set()  -- two lines ago.
-    var ret = this['_set_rd_' + key];
-    if (ret !== undefined) return ret;
-
-    // finally, try to get it from the render delegate
-    var renderDelegate = this.get('renderDelegate');
-    if (renderDelegate && renderDelegate.get) {
-      var proxy = this.get('renderDelegateProxy');
-      ret = renderDelegate.getPropertyFor(proxy, propertyName);
-    }
-
-    if (ret !== undefined) return ret;
-    
-    return def;
-  }.property('renderDelegate').cacheable();
-};
-
 
 
 /* >>>>>>>>>> BEGIN source/views/view/touch.js */
@@ -17259,11 +16686,6 @@ sc_require("views/view");
 
 SC.View.reopen(
   /** @scope SC.View.prototype */ {
-
-  /**
-    Set to YES to indicate the view has visibility support added.
-  */
-  hasVisibility: YES,
 
   /**
     YES only if the view and all of its parent views are currently visible
@@ -17346,7 +16768,7 @@ SC.View.reopen(
     // now.
     //
     // For example, say we're isVisible=NO, but we have not yet added the
-    // 'sc-hidden' class to the layer because of the "don't update the layer if
+    // 'hidden' class to the layer because of the "don't update the layer if
     // we're not visible in the window" check.  If any of our parent views
     // became visible, our layer would incorrectly be shown!
     this.updateLayerIfNeeded(YES);
@@ -17378,7 +16800,7 @@ SC.View.reopen(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 

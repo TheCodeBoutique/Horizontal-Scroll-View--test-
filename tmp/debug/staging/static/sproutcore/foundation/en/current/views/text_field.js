@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -48,14 +48,6 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
   */
   applyImmediately: YES,
 
-  /*
-  * Flag indicating whether the editor should automatically commit if you click
-  * outside it.
-  *
-  * @type {Boolean}
-  */
-  commitOnBlur: YES,
-
   /**
     If YES, the field will hide its text from display. The default value is NO.
     
@@ -88,7 +80,7 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
   formattedHint: function() {
     var hint = this.get('hint');
 
-    return typeof(hint) === 'string' && this.get('localize') ? hint.loc() : hint;
+    return this.get('localize') ? hint.loc() : hint;
   }.property('hint', 'localize').cacheable(),
 
   /*
@@ -217,19 +209,7 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
     @type Boolean
   */
   shouldRenderBorder: YES,
-
-  //
-  // SUPPORT FOR AUTOMATIC RESIZING
-  //
-  supportsAutoResize: YES,
-  autoResizeLayer: function() { return this.$input()[0]; }
-  .property('layer').cacheable(),
-
-  autoResizeText: function() { return this.get('value'); }
-  .property('value').cacheable(),
-
-  autoResizePadding: SC.propertyFromRenderDelegate('autoResizePadding', 20),
-
+  
   /** @private
     Whether to show hint or not
   */
@@ -757,8 +737,6 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
   },
   
   fieldDidFocus: function(evt) {
-    this.becomeFirstResponder();
-
     this.beginEditing(evt);
     
     // We have to hide the intercept pane, as it blocks the events. 
@@ -780,9 +758,7 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
   },
   
   fieldDidBlur: function(evt) {
-    this.resignFirstResponder() ;
-
-    if(this.get('commitOnBlur')) this.commitEditing(evt);
+    this.commitEditing(evt);
     
     // get the pane we hid intercept pane for (if any)
     var touchPane = this._didHideInterceptForPane;

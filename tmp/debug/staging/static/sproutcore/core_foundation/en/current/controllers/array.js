@@ -1,9 +1,8 @@
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 sc_require('controllers/controller');
 sc_require('mixins/selection_support');
@@ -406,19 +405,14 @@ SC.ArrayController = SC.Controller.extend(SC.Array, SC.SelectionSupport,
         oldlen = this._scac_length || 0,
         func   = this._scac_rangeDidChange,
         efunc  = this._scac_enumerableDidChange,
-        cfunc  = this._scac_enumerableContentDidChange,
         sfunc  = this._scac_contentStatusDidChange,
-        ro     = this._scac_rangeObserver,
         newlen;
 
     if (last === cur) { return this; } // nothing to do
 
     // teardown old observer
     if (last) {
-      if (last.isSCArray) {
-        if (ro) { last.removeRangeObserver(ro); }
-        last.removeEnumerableObserver(this, cfunc);
-      }
+      if (ro && last.isSCArray) { last.removeRangeObserver(ro); }
       else if (last.isEnumerable) { last.removeObserver('[]', this, efunc); }
       last.removeObserver('status', this, sfunc);
     }
@@ -434,7 +428,6 @@ SC.ArrayController = SC.Controller.extend(SC.Array, SC.SelectionSupport,
     // get(length) because we want to avoid computed an ordered array.
     if (cur) {
       if (!orders && cur.isSCArray) { ro = cur.addRangeObserver(null, this, func); }
-      if (cur.isSCArray) { cur.addEnumerableObserver(this, cfunc); }
       else if (cur.isEnumerable) { cur.addObserver('[]', this, efunc); }
       newlen = cur.isEnumerable ? cur.get('length') : 1;
       cur.addObserver('status', this, sfunc);
@@ -448,7 +441,7 @@ SC.ArrayController = SC.Controller.extend(SC.Array, SC.SelectionSupport,
     // finally, notify enumerable content has changed.
     this._scac_length = newlen;
     this._scac_contentStatusDidChange();
-    this.enumerableContentDidChange(0, newlen, newlen - oldlen, this, last||[]);
+    this.enumerableContentDidChange(0, newlen, newlen - oldlen);
     this.updateSelectionAfterContentChange();
   }.observes('content'),
 
@@ -473,50 +466,6 @@ SC.ArrayController = SC.Controller.extend(SC.Array, SC.SelectionSupport,
       this.endPropertyChanges();
       this.updateSelectionAfterContentChange();
     }
-  },
-
-  /**
-    @private
-
-    Forward enumerable content observer notifications to enumerable observers
-    on the array controller.
-
-    Since our content may be bound to another object, and that binding will not
-    update until the end of the run loop, we buffer up all enumerable changes
-    and play them back at the end of the run loop, once bindings have fired.
-
-    @param {Array} addedObjects the array of objects that were added
-    @param {Array} removedObject the array of objects that were removed
-    @param {Number} start the index at which the positions occurred
-  */
-  _scac_enumerableContentDidChange: function(addedObjects, removedObjects, start) {
-    var enumerableChanges = this._scac_enumerableChanges || [];
-
-    enumerableChanges.push([addedObjects, removedObjects, start]);
-
-    this._scac_enumerableChanges = enumerableChanges;
-    this.invokeOnce(this._scac_propagateEnumerableObservers);
-
-    this.setupPropertyChainsForEnumerableContent(addedObjects, removedObjects);
-  },
-
-  /**
-    @private
-
-    At the end of the run loop, notifies enumerable observers on this array
-    controller of changes we received from the content object.
-  */
-  _scac_propagateEnumerableObservers: function() {
-    var enumerableChanges = this._scac_enumerableChanges;
-    var idx, len, change;
-
-    len = enumerableChanges.get('length');
-    for (idx = 0; idx < len; idx++) {
-      change = enumerableChanges[idx];
-      this._notifyEnumerableObservers(change[0], change[1], change[2]);
-    }
-
-    this._scac_enumerableChanges = null;
   },
 
   /** @private

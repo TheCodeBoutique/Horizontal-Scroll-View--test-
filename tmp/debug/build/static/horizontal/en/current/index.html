@@ -11,28 +11,29 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <link rel="apple-touch-icon" href="/static/sproutcore/foundation/en/current/source/images/sproutcore-logo.png?1302159774" />
-	  <link rel="apple-touch-startup-image" media="screen and (orientation:portrait)" href="/static/sproutcore/foundation/en/current/source/images/sproutcore-startup-portrait.png?1302159774" /> 
-	  <link rel="apple-touch-startup-image" media="screen and (orientation:landscape)" href="/static/sproutcore/foundation/en/current/source/images/sproutcore-startup-landscape.png?1302159774" />
-	  <link rel="shortcut icon" href="/static/sproutcore/foundation/en/current/images/favicon.ico?1302159774" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/static/sproutcore/foundation/en/current/source/images/sproutcore-logo.png?1300492110" />
+	  <link rel="apple-touch-startup-image" media="screen and (orientation:portrait)" href="/static/sproutcore/foundation/en/current/source/images/sproutcore-startup-portrait.png?1300492110" /> 
+	  <link rel="apple-touch-startup-image" media="screen and (orientation:landscape)" href="/static/sproutcore/foundation/en/current/source/images/sproutcore-startup-landscape.png?1300492110" />
+	  <link rel="shortcut icon" href="/static/sproutcore/foundation/en/current/images/favicon.ico?1300492110" type="image/x-icon" />
     
     <title>Horizontal</title>
-  <script type="text/javascript">String.preferredLanguage = "en";</script>
-<script type="text/javascript">
+  <script type="text/javascript">
 /* >>>>>>>>>> BEGIN source/core.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
+
+/* >>>>>>>>>> BEGIN __sc_chance.js */
 
 /* >>>>>>>>>> BEGIN source/system/browser.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -99,7 +100,7 @@ SC.browser = SC._detectBrowser();
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 /*global SC_benchmarkPreloadEvents*/
@@ -114,7 +115,7 @@ if (typeof SC_benchmarkPreloadEvents !== "undefined") {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -171,9 +172,9 @@ SC.setupBodyClassNames = function() {
       (function() { 
         var styles = [];
         if (window.devicePixelRatio == 2 || window.location.search.indexOf("2x") > -1) {
-          styles = ["/static/sproutcore/testing/en/current/stylesheet.css?1302159774","/static/sproutcore/core_foundation/en/current/stylesheet.css?1302159774","/static/sproutcore/foundation/en/current/stylesheet.css?1302159774","/static/sproutcore/desktop/en/current/stylesheet.css?1302159774","/static/offaxis/en/current/stylesheet.css?1303185867"];
+          styles = ["/static/sproutcore/testing/en/current/stylesheet@2x.css?1300492111","/static/sproutcore/core_foundation/en/current/stylesheet@2x.css?1300492110","/static/sproutcore/foundation/en/current/stylesheet@2x.css?1300492110","/static/sproutcore/desktop/en/current/stylesheet@2x.css?1300492110","/static/sproutcore/ace/en/current/stylesheet@2x.css?1300492111"];
         } else {
-          styles = ["/static/sproutcore/testing/en/current/stylesheet.css?1302159774","/static/sproutcore/core_foundation/en/current/stylesheet.css?1302159774","/static/sproutcore/foundation/en/current/stylesheet.css?1302159774","/static/sproutcore/desktop/en/current/stylesheet.css?1302159774","/static/offaxis/en/current/stylesheet.css?1303185867"];
+          styles = ["/static/sproutcore/testing/en/current/stylesheet.css?1300492111","/static/sproutcore/core_foundation/en/current/stylesheet.css?1300492110","/static/sproutcore/foundation/en/current/stylesheet.css?1300492110","/static/sproutcore/desktop/en/current/stylesheet.css?1300492110","/static/sproutcore/ace/en/current/stylesheet.css?1300492111"];
         }
 
         var head = document.getElementsByTagName("head")[0];
@@ -195,7 +196,7 @@ SC.setupBodyClassNames = function() {
     </script>
   </head>
     
-  <body class="offaxis focus">  
+  <body class="sc-theme focus">  
     <script>
     SC.benchmarkPreloadEvents['bodyStart'] = new Date().getTime();
     </script>
@@ -203,7 +204,7 @@ SC.setupBodyClassNames = function() {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -219,26 +220,28 @@ if (SC.setupBodyClassNames) SC.setupBodyClassNames() ;
 
 
 </div>
-  <script type="text/javascript" src="/static/sproutcore/debug/en/current/javascript.js?1302159774"></script>
-  <script type="text/javascript" src="/static/sproutcore/testing/en/current/javascript.js?1302159774"></script>
-  <script type="text/javascript" src="/static/sproutcore/jquery/en/current/javascript.js?1302159774"></script>
-  <script type="text/javascript" src="/static/sproutcore/runtime/en/current/javascript.js?1302159774"></script>
-  <script type="text/javascript" src="/static/sproutcore/handlebars/en/current/javascript.js?1302159774"></script>
-  <script type="text/javascript" src="/static/sproutcore/core_foundation/en/current/javascript.js?1302159774"></script>
-  <script type="text/javascript" src="/static/sproutcore/datetime/en/current/javascript.js?1302159774"></script>
-  <script type="text/javascript" src="/static/sproutcore/foundation/en/current/javascript.js?1302159774"></script>
-  <script type="text/javascript" src="/static/sproutcore/desktop/en/current/javascript.js?1302159774"></script>
-  <script type="text/javascript" src="/static/sproutcore/datastore/en/current/javascript.js?1302159774"></script>
-  <script type="text/javascript" src="/static/sproutcore/en/current/javascript.js?1302159774"></script>
-  <script type="text/javascript" src="/static/offaxis/en/current/__sc_chance.js?1303185867"></script>
-  <script type="text/javascript" src="/static/offaxis/en/current/source/theme.js?1303185546"></script>
-  <script type="text/javascript" src="/static/horizontal/en/current/source/core.js?1303181782"></script>
-  <script type="text/javascript" src="/static/horizontal/en/current/source/controllers/app.js?1303183000"></script>
-  <script type="text/javascript" src="/static/horizontal/en/current/source/controllers/apps.js?1303182836"></script>
-  <script type="text/javascript" src="/static/horizontal/en/current/source/resources/applications.js?1303188015"></script>
-  <script type="text/javascript" src="/static/horizontal/en/current/source/resources/appList.js?1303183319"></script>
-  <script type="text/javascript" src="/static/horizontal/en/current/source/resources/main_page.js?1303186817"></script>
-  <script type="text/javascript" src="/static/horizontal/en/current/source/main.js?1303183081"></script>
+<script type="text/javascript">String.preferredLanguage = "en";</script>
+  <script type="text/javascript" src="/static/sproutcore/debug/en/current/javascript.js?1300492110"></script>
+  <script type="text/javascript" src="/static/sproutcore/testing/en/current/javascript.js?1300492111"></script>
+  <script type="text/javascript" src="/static/sproutcore/jquery/en/current/javascript.js?1300492111"></script>
+  <script type="text/javascript" src="/static/sproutcore/runtime/en/current/javascript.js?1300492111"></script>
+  <script type="text/javascript" src="/static/sproutcore/handlebars/en/current/javascript.js?1300492111"></script>
+  <script type="text/javascript" src="/static/sproutcore/core_foundation/en/current/javascript.js?1300492110"></script>
+  <script type="text/javascript" src="/static/sproutcore/datetime/en/current/javascript.js?1300492110"></script>
+  <script type="text/javascript" src="/static/sproutcore/foundation/en/current/javascript.js?1300492111"></script>
+  <script type="text/javascript" src="/static/sproutcore/desktop/en/current/javascript.js?1300492110"></script>
+  <script type="text/javascript" src="/static/sproutcore/datastore/en/current/javascript.js?1300492110"></script>
+  <script type="text/javascript" src="/static/sproutcore/en/current/javascript.js?1300492111"></script>
+  <script type="text/javascript" src="/static/sproutcore/empty_theme/en/current/javascript.js?1300492111"></script>
+  <script type="text/javascript" src="/static/sproutcore/ace/en/current/javascript.js?1300492111"></script>
+  <script type="text/javascript" src="/static/horizontal/en/current/source/core.js?1303281264"></script>
+  <script type="text/javascript" src="/static/horizontal/en/current/__sc_chance.js?0"></script>
+  <script type="text/javascript" src="/static/horizontal/en/current/source/controllers/app.js?1303281264"></script>
+  <script type="text/javascript" src="/static/horizontal/en/current/source/controllers/apps.js?1303281264"></script>
+  <script type="text/javascript" src="/static/horizontal/en/current/source/resources/applications.js?1303281264"></script>
+  <script type="text/javascript" src="/static/horizontal/en/current/source/resources/appList.js?1303281264"></script>
+  <script type="text/javascript" src="/static/horizontal/en/current/source/resources/main_page.js?1303281409"></script>
+  <script type="text/javascript" src="/static/horizontal/en/current/source/main.js?1303281264"></script>
 
   <script>
   SC.benchmarkPreloadEvents['bodyEnd'] = new Date().getTime();

@@ -18,7 +18,7 @@ SC.stringsFor('English', {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -36,15 +36,12 @@ SC.allowsBackspaceToPreviousPage = NO;
 
 /* >>>>>>>>>> BEGIN __sc_chance.js */
 if (typeof CHANCE_SLICES === 'undefined') var CHANCE_SLICES = [];CHANCE_SLICES = CHANCE_SLICES.concat([]);
-
 /* >>>>>>>>>> BEGIN source/system/drag.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 SC.DRAG_LINK = 0x0004; SC.DRAG_COPY = 0x0001; SC.DRAG_MOVE = 0x0002;
 SC.DRAG_NONE = 0x0000; SC.DRAG_ANY = 0x000F; SC.DRAG_DATA = 0x0008; // includes SC.DRAG_REORDER
@@ -386,15 +383,8 @@ SC.Drag = SC.Object.extend(
 	    if (evt.makeTouchResponder) {
 	      // Should use invokeLater if I can figure it out
 	      var self = this;
-	      SC.Timer.schedule({ 
-	        target: evt, 
-	        action: function() { 
-	          if (!evt.hasEnded) evt.makeTouchResponder(self, YES);
-	        }, 
-	        interval: 1
-	      });
-	    } 
-	    else {
+	      SC.Timer.schedule({ target: evt, action: function(){ if (!evt.hasEnded) evt.makeTouchResponder(self, YES); }, interval: 1 });
+	    } else {
 	      // notify root responder that a drag is in process
 	      this.ghostView.rootResponder.dragDidStart(this, evt) ;
 	    }
@@ -405,7 +395,6 @@ SC.Drag = SC.Object.extend(
     
     // let all drop targets know that a drag has started
     var ary = this._dropTargets() ;
-    
     for (var idx=0, len=ary.length; idx<len; idx++) {
       ary[idx].tryToPerform('dragStarted', this, evt) ;
     }
@@ -1024,12 +1013,11 @@ SC.Drag.mixin(
 });
 
 /* >>>>>>>>>> BEGIN source/debug/drag.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 require('system/drag') ;
 
@@ -1067,13 +1055,11 @@ SC.Drag.mixin(
 
 });
 /* >>>>>>>>>> BEGIN source/mixins/border.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 SC.BORDER_BEZEL  = 'sc-bezel-border';
 SC.BORDER_BLACK  = 'sc-black-border';
@@ -1222,12 +1208,6 @@ SC.mixin(SC.Border, {
 });
 
 /* >>>>>>>>>> BEGIN source/mixins/collection_fast_path.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
 /** 
   An experimental CollectionView mixin that makes it extremely fast under
   certain circumstances, including for mobile devices.
@@ -1927,7 +1907,7 @@ SC.CollectionFastPath = {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -1951,7 +1931,7 @@ SC.CollectionGroup = {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -2048,7 +2028,7 @@ SC.CollectionRowDelegate = {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -2342,13 +2322,11 @@ SC.CollectionViewDelegate = {
 };
 
 /* >>>>>>>>>> BEGIN source/mixins/navigation_builder.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 /**
   @namespace
@@ -2476,13 +2454,11 @@ SC.NavigationBuilder = {
 
 
 /* >>>>>>>>>> BEGIN source/mixins/scrollable.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 /**
   @namespace
@@ -2500,11 +2476,11 @@ SC.NavigationBuilder = {
 */
 SC.Scrollable = {
   
-
+//@if(debug)
   initMixin: function() {
     SC.Logger.warn("SC.Scrollable is deprecated and will be removed in a future version of SproutCore.  Consider pulling the mixin into your own app if you want to keep using it.");
   },
- 
+//@endif 
 
   /** Informs the view system that the receiver is scrollable.
   
@@ -2733,13 +2709,11 @@ SC.Scrollable = {
 
 
 /* >>>>>>>>>> BEGIN source/panes/modal.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 /** @class
 
@@ -2808,12 +2782,11 @@ SC.ModalPane = SC.Pane.extend({
 });
 
 /* >>>>>>>>>> BEGIN source/panes/panel.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 sc_require('panes/modal');
 
@@ -2857,12 +2830,25 @@ SC.PanelPane = SC.Pane.extend({
   ariaRole: 'dialog',
 
   /**
-    The WAI-ARIA label for the panel. Screen readers will use this to tell
-    the user a name for the panel.
+    The WAI-ARIA attribute for the panel pane. This property is assigned to
+    'aria-labelledby' attribute, which defines a string value that labels the
+    element. Used to support voiceover. It should be assigned a non-empty string,
+    if the 'aria-labelledby' attribute has to be set for the element.
 
     @property {String}
   */
-  ariaLabel: null,
+  ariaLabeledBy: null,
+
+  /**
+    The WAI-ARIA attribute for the panel pane. This property is assigned to
+    'aria-describedby' attribute.Used to support voiceover. It is intended to
+    provide additional detail that some users might need. It should be assigned
+    a non-empty string, if the 'aria-describedby' attribute has to be set for
+    the element.
+
+    @property {String}
+  */
+  ariaDescribedBy: null,
 
   /**
     Indicates that a pane is modal and should not allow clicks to pass
@@ -2987,25 +2973,30 @@ SC.PanelPane = SC.Pane.extend({
     return ret ;
   },
 
-  displayProperties: ['ariaLabel']
+  render: function(context, firstTime) {
+    arguments.callee.base.apply(this,arguments);
+    var ariaLabeledBy   = this.get('ariaLabeledBy'),
+        ariaDescribedBy = this.get('ariaDescribedBy');
+
+    //addressing accessibility
+    if(firstTime) {
+      if(ariaLabeledBy && ariaLabeledBy !== "") {
+        context.attr('aria-labelledby', ariaLabeledBy);
+      }
+      if(ariaDescribedBy && ariaDescribedBy !== "") {
+       context.attr('aria-describedby', ariaDescribedBy);
+      }
+    }
+  }
 });
 
 /* >>>>>>>>>> BEGIN source/views/button.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-
-// ..........................................................
-// CONSTANTS
-//
-SC.TOGGLE_BEHAVIOR = 'toggle';
-SC.PUSH_BEHAVIOR =   'push';
-SC.TOGGLE_ON_BEHAVIOR = 'on';
-SC.TOGGLE_OFF_BEHAVIOR = 'off';
-SC.HOLD_BEHAVIOR = 'hold';
 
 /** @class
 
@@ -3021,9 +3012,10 @@ SC.HOLD_BEHAVIOR = 'hold';
 
   @extends SC.View
   @extends SC.Control
+  @extends SC.Button
   @since SproutCore 1.0
 */
-SC.ButtonView = SC.View.extend(SC.Control,
+SC.ButtonView = SC.View.extend(SC.Control, SC.Button,
 /** @scope SC.ButtonView.prototype */ {
 
   /**
@@ -3041,135 +3033,6 @@ SC.ButtonView = SC.View.extend(SC.Control,
     @property {String}
   */
   themeName: 'square',
-
-  // ..........................................................
-  // VALUE PROPERTIES
-  // 
-  
-  /**
-    Used to automatically update the state of the button view for toggle style
-    buttons.
-
-    for toggle style buttons, you can set the value and it will be used to
-    update the isSelected state of the button view.  The value will also
-    change as the user selects or deselects.  You can control which values
-    the button will treat as isSelected by setting the toggleOnValue and 
-    toggleOffValue.  Alternatively, if you leave these properties set to
-    YES or NO, the button will do its best to convert a value to an 
-    appropriate state:
-  
-    - null, false, 0  -> isSelected = false
-    - any other single value -> isSelected = true
-    - array -> if all values are the same state: that state.  otherwise MIXED.
-    
-    @property {Object}
-  */  
-  value: null,
-
-  /**
-    Value of a selected toggle button.
-  
-    for a toggle button, set this to any object value you want.  The button
-    will be selected if the value property equals the targetValue.  If the
-    value is an array of multiple items that contains the targetValue, then
-    the button will be set to a mixed state.
-
-    default is YES
-    
-    @property {Object}
-  */
-  toggleOnValue: YES,
-
-  /**
-    Value of an unselected toggle button.
-  
-    For a toggle button, set this to any object value you want.  When the
-    user toggle's the button off, the value of the button will be set to this
-    value.
-  
-    default is NO 
-  
-    @property {Object}
-  */
-  toggleOffValue: NO,
-
-
-  // ..........................................................
-  // TITLE 
-  // 
-  
-  /**
-    If YES, then the title will be localized.
-    
-    @property {Boolean}
-  */
-  localize: NO,
-  
-  /** @private */
-  localizeBindingDefault: SC.Binding.bool(),
-
-  /**
-    The button title.  If localize is YES, then this should be the localization key to display.  Otherwise, this will be the actual string displayed in the title.  This property is observable and bindable.
-    
-    @property {String}
-  */  
-  title: '',
-
-  /**
-    If you set this property, the title property will be updated automatically
-    from the content using the key you specify.
-    
-    @property {String}
-  */
-  contentTitleKey: null,
-  
-  /**
-    The button icon.  Set this to either a URL or a CSS class name (for 
-    spriting).  Note that if you pass a URL, it must contain at 
-    least one slash to be detected as such.
-    
-    @property {String}
-  */
-  icon: null,
-
-  /**
-    If you set this property, the icon will be updated automatically from the
-    content using the key you specify.
-    
-    @property {String}
-  */
-  contentIconKey: null,
-
-  /**
-    If YES, button will attempt to display an ellipsis if the title cannot 
-    fit inside of the visible area.  This feature is not available on all
-    browsers.
-    
-    @property {Boolean}
-  */
-  needsEllipsis: YES,
-  
-  /**
-    The computed display title.  This is generated by localizing the title 
-    property if necessary.
-    
-    @property {String}
-  */
-  displayTitle: function() {
-    var ret = this.get('title');
-    return (ret && this.get('localize')) ? ret.loc() : (ret || '');
-  }.property('title','localize').cacheable(),
-  
-  /**
-    The key equivalent that should trigger this button on the page.
-    
-    @property {String}
-  */
-  keyEquivalent: null,
-
-  // ..........................................................
-  // BEHAVIOR
-  // 
 
   /**
     The behavioral mode of this button.
@@ -3253,7 +3116,7 @@ SC.ButtonView = SC.View.extend(SC.Control,
 
   /**
     If YES, use a focus ring.
-
+    
     TODO: When is this property ever changed? Is this redundant with
     render delegates since it can now be turned on on a theme-by-theme
     basis? --TD
@@ -3261,54 +3124,6 @@ SC.ButtonView = SC.View.extend(SC.Control,
     @property {Boolean}
   */
   supportFocusRing: NO,
-
-  //
-  // Auto Resize Support
-  // These properties are provided so that SC.AutoResize can be mixed in
-  // to enable automatic resizing of the button.
-  //
-  /**
-    SC.ButtonView supports automatic resizing.
-
-    @private
-    @property
-  */
-  supportsAutoResize: YES,
-
-  /**
-    The layer for autoresizing buttons is the button layer itself.
-
-    TODO: get this from the render delegate so other elements may be used.
-
-    @private
-    @property
-  */
-  autoResizeLayer: function() {
-    return this.get('layer');
-  }.property('layer').cacheable(),
-
-  /**
-    The text to be used to automatically resize the view: the displayTitle.
-
-    @private
-    @property
-  */
-  autoResizeText: function() {
-    return this.get('displayTitle');
-  }.property('displayTitle').cacheable(),
-
-  /**
-    The padding to add to the measured size of the text to arrive at the measured
-    size for the view.
-
-    SC.ButtonView gets this from its render delegate, but if not supplied, defaults
-    to 10.
-
-    @default 10
-    @property
-  */
-  autoResizePadding: SC.propertyFromRenderDelegate('autoResizePadding', 10),
-
 
   // TODO: What the hell is this? --TD
   _labelMinWidthIE7: 0,
@@ -3388,10 +3203,6 @@ SC.ButtonView = SC.View.extend(SC.Control,
     if (keyEquivalent) {
       this._defaultKeyEquivalent = keyEquivalent;
     }
-
-    // if value is not null, update isSelected to match value.  If value is
-    // null, we assume you may be using isSelected only.  
-    if (!SC.none(this.get('value'))) this._button_valueDidChange();  
   },
 
   /**
@@ -3424,140 +3235,6 @@ SC.ButtonView = SC.View.extend(SC.Control,
     @property {String}
   */
   renderDelegateName: 'buttonRenderDelegate',
-
-  /**
-    Updates the value, title, and icon keys based on the content object, if 
-    set.
-    
-    @property {Object} target the target of the object that changed
-    @property {String} key name of property that changed
-    @returns {SC.ButtonView} receiver
-  */
-  contentPropertyDidChange: function(target, key) {
-    var del = this.get('displayDelegate'), 
-        content = this.get('content'), value ;
-
-    var valueKey = this.getDelegateProperty('contentValueKey', del) ;
-    if (valueKey && (key === valueKey || key === '*')) {
-      this.set('value', content ? (content.get ? content.get(valueKey) : content[valueKey]) : null) ;
-    }
-
-    var titleKey = this.getDelegateProperty('contentTitleKey', del) ;
-    if (titleKey && (key === titleKey || key === '*')) {
-      this.set('title', content ? (content.get ? content.get(titleKey) : content[titleKey]) : null) ;
-    }
-
-    var iconKey = this.getDelegateProperty('contentIconKey', del);
-    if (iconKey && (key === iconKey || key === '*')) {
-      this.set('icon', content ? (content.get ? content.get(iconKey) : content[iconKey]) : null) ;
-    }
-    
-    return this ;
-  },
-
-  /** @private - when title changes, dirty display. */
-  _button_displayObserver: function() {
-    this.displayDidChange();
-  }.observes('title', 'icon', 'value'),
-
-  /**
-    Handle a key equivalent if set.  Trigger the default action for the 
-    button.  Depending on the implementation this may vary.
-    
-    @param {String} keystring
-    @param {SC.Event} evt
-    @returns {Boolean}  YES if handled, NO otherwise
-  */
-  performKeyEquivalent: function(keystring, evt) {
-    //If this is not visible
-    if (!this.get('isVisibleInWindow')) return NO;
-
-    if (!this.get('isEnabled')) return NO;
-    var equiv = this.get('keyEquivalent');
-
-    // button has defined a keyEquivalent and it matches!
-    // if triggering succeeded, true will be returned and the operation will 
-    // be handeled (i.e performKeyEquivalent will cease crawling the view 
-    // tree)
-    if (equiv) {
-      if (equiv === keystring) return this.triggerAction(evt);
-    
-    // should fire if isDefault OR isCancel.  This way if isDefault AND 
-    // isCancel, responds to both return and escape
-    } else if ((this.get('isDefault') && (keystring === 'return')) ||
-        (this.get('isCancel') && (keystring === 'escape'))) {
-          return this.triggerAction(evt);
-    }
-
-    return NO; // did not handle it; keep searching
-  },
-
-  // ..........................................................
-  // VALUE <-> isSelected STATE MANAGEMNT
-  // 
-
-  /**
-    This is the standard logic to compute a proposed isSelected state for a
-    new value.  This takes into account the toggleOnValue/toggleOffValue 
-    properties, among other things.  It may return YES, NO, or SC.MIXED_STATE.
-    
-    @param {Object} value
-    @returns {Boolean} return state
-  */
-  computeIsSelectedForValue: function(value) {
-    var targetValue = this.get('toggleOnValue'), state, next ;
-    
-    if (SC.typeOf(value) === SC.T_ARRAY) {
-
-      // treat a single item array like a single value
-      if (value.length === 1) {
-        state = (value[0] == targetValue) ;
-        
-      // for a multiple item array, check the states of all items.
-      } else {
-        state = null;
-        value.find(function(x) {
-          next = (x == targetValue) ;
-          if (state === null) {
-            state = next ;
-          } else if (next !== state) state = SC.MIXED_STATE ;
-          return state === SC.MIXED_STATE ; // stop when we hit a mixed state.
-        });
-      }
-      
-    // for single values, just compare to the toggleOnValue...use truthiness
-    } else {
-      if(value === SC.MIXED_STATE) state = SC.MIXED_STATE;
-      else state = (value === targetValue) ;
-    }
-    return state ;
-  },
-
-    /** @private
-    Whenever the button value changes, update the selected state to match.
-  */
-  _button_valueDidChange: function() {
-    var value = this.get('value'),
-        state = this.computeIsSelectedForValue(value);
-    this.set('isSelected', state) ; // set new state...
-  }.observes('value'),
-  
-  /** @private
-    Whenever the selected state is changed, make sure the button value is also updated.  Note that this may be called because the value has just changed.  In that case this should do nothing.
-  */
-  _button_isSelectedDidChange: function() {
-    var newState = this.get('isSelected'),
-        curState = this.computeIsSelectedForValue(this.get('value'));
-    
-    // fix up the value, but only if computed state does not match.
-    // never fix up value if isSelected is set to MIXED_STATE since this can
-    // only come from the value.
-    if ((newState !== SC.MIXED_STATE) && (curState !== newState)) {
-      var valueKey = (newState) ? 'toggleOnValue' : 'toggleOffValue' ;
-      this.set('value', this.get(valueKey));
-    }
-  }.observes('isSelected'),
-
 
   /** @private
     Used to store the keyboard equivalent.
@@ -3856,7 +3533,14 @@ SC.ButtonView = SC.View.extend(SC.Control,
 
 }) ;
 
-
+// ..........................................................
+// CONSTANTS
+//
+SC.TOGGLE_BEHAVIOR = 'toggle';
+SC.PUSH_BEHAVIOR =   'push';
+SC.TOGGLE_ON_BEHAVIOR = 'on';
+SC.TOGGLE_OFF_BEHAVIOR = 'off';
+SC.HOLD_BEHAVIOR = 'hold';
 
 /**
   The delay after which "click" behavior should transition to "click and hold"
@@ -3870,19 +3554,23 @@ SC.ButtonView.CLICK_AND_HOLD_DELAY = SC.browser.msie ? 600 : 300;
 
 SC.REGULAR_BUTTON_HEIGHT=24;
 
-
+SC.ButtonView.hasGivenDeprecationWarning = NO;
 
 /* >>>>>>>>>> BEGIN source/panes/alert.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
 sc_require('panes/panel');
 sc_require('views/button');
-
+/** 
+  button1 : 1st button from the right. default:OK
+  button2 : 2nd button from the right. Optional. Could be Cancel or 2nd action.
+  button3 : 1st button from the left. Optional. Could be Cancel or alternative option.
+*/
 /** 
   Passed to delegate when alert pane is dismissed by pressing button 1
 */
@@ -3921,14 +3609,11 @@ SC.BUTTON3_STATUS = 'button3';
   - *show()* - displays an alert with a customizable icon to the left
   
   In addition to passing a message, description and caption, you can also customize
-  the title of the button 1 (OK) and add an optional button 2 and 3 (Cancel or Extra).
+  the title of the button 1 (OK) and add an optional button 2 and 3 (Cancel or Extra).  Just
+  pass these titles of these buttons to enable them or null to disable then.
   
-  button1 : 1st button from the right. default:OK
-  button2 : 2nd button from the right. Optional. Could be Cancel or 2nd action.
-  button3 : 1st button from the left. Optional. Could be Cancel or alternative option.
-  
-  Additionally, you can define a delegate object.  This delegate's 
-  'alertPaneDidDismiss()' method will be called when the pane
+  Additionally, you can pass a delegate object as the last parameter.  This
+  delegate's 'alertPaneDidDismiss()' method will be called when the pane
   is dismissed, passing the pane instance and a key indicating which 
   button was pressed.
   
@@ -3937,25 +3622,13 @@ SC.BUTTON3_STATUS = 'button3';
   Show a simple AlertPane with an OK button:
   
   {{{
-    SC.AlertPane.warn({
-      message: "Could not load calendar",
-      description: "Your internet connection may be unavailable or our servers may be down.",
-      caption: "Try again in a few minutes."
-    });
+    SC.AlertPane.warn("Could not load calendar", "Your internet connection may be unavailable or our servers may be down.  Try again in a few minutes.");
   }}}
   
-  Show an AlertPane with a customized OK title (title will be 'Try Again') and
-  custom action:
+  Show an AlertPane with a customized OK title (title will be 'Try Again'):
   
   {{{
-    SC.AlertPane.warn({
-      message: "Could not load calendar",
-      description: "Your internet connection may be unavailable or our servers may be down.",
-      caption: "Try again in a few minutes.",
-      buttons: [
-        { title: "Try Again" }
-      ]
-    });
+    SC.AlertPane.warn("Could not load calendar", "Your internet connection may be unavailable or our servers may be down.  Try again in a few minutes.", "Try Again");
   }}}
   
   Show an AlertPane with a custom OK, a Cancel button and an Extra button, 
@@ -3963,6 +3636,7 @@ SC.BUTTON3_STATUS = 'button3';
   the user's dismisses the dialog.
   
   {{{
+
     MyApp.calendarController = SC.Object.create({
       alertPaneDidDismiss: function(pane, status) {
         switch(status) {
@@ -3979,45 +3653,12 @@ SC.BUTTON3_STATUS = 'button3';
             break;
         }
       },
+      
       ...
     });
     
-    
-    SC.AlertPane.warn({
-      message: "Could not load calendar",
-      description: "Your internet connection may be unavailable or our servers may be down.",
-      caption: "Try again in a few minutes.",
-      delegate: MyApp.calendarController,
-      buttons: [
-        { title: "Try Again" },
-        { title: "Cancel" },
-        { title: "More Info…" }
-      ]
-    });
+    SC.AlertPane.warn("Could not load calendar", "Your internet connection may be unavailable or our servers may be down.  Try again in a few minutes.", "Try Again", "Cancel", "More Info...", MyApp.calendarController);
   }}}
-  
-  Instead of using the delegate pattern above, you can also specify a target
-  and an action, similar to SC.ButtonView.
-  
-  {{{
-    SC.AlertPane.warn({
-      message: "Could not load calendar",
-      description: "Your internet connection may be unavailable or our servers may be down.",
-      caption: "Try again in a few minutes.",
-      buttons: [
-        { 
-          title: "OK", 
-          action: "didClickOK",
-          target: MyApp.calendarController
-        }
-      ]
-    });
-  }}}
-  
-  Also note that in addition to passing the action as a string of the method
-  name that will be invoked, you can also give a function reference as the
-  action.
-  
   
   @extends SC.PanelPane
   @since SproutCore 1.0
@@ -4035,21 +3676,41 @@ SC.AlertPane = SC.PanelPane.extend({
   ariaRole: 'alertdialog',
 
   /**
-    If defined, the delegate is notified when the pane is dismissed. If you have 
-    set specific button actions, they will be called on the delegate object
+    The WAI-ARIA attribute for the alert pane. This property is assigned to
+    'aria-labelledby' attribute, which defines a string value that labels the
+    element. Used to support voiceover. It should be assigned a non-empty string,
+    if the 'aria-labelledby' attribute has to be set for the element.
+
+    @property {String}
+  */
+  ariaLabeledBy: null,
+
+  /**
+    The WAI-ARIA attribute for the alert pane. This property is assigned to
+    'aria-describedby' attribute.Used to support voiceover. It is intended to
+    provide additional detail that some users might need. It should be assigned
+    a non-empty string, if the 'aria-describedby' attribute has to be set for
+    the element.
+
+    @property {String}
+  */
+  ariaDescribedBy: null,
+
+  /**
+    The delegate to notify when the pane is dismissed.  If you set a 
+    delegate, it should respond to the method:
     
-    The method to be called on your delegate will be:
     {{{
       alertPaneDidDismiss: function(pane, status)
     }}}
     
-    The status will be one of SC.BUTTON1_STATUS, SC.BUTTON2_STATUS or SC.BUTTON3_STATUS
+    The status will be on of SC.BUTTON1_STATUS, SC.BUTTON2_STATUS or SC.BUTTON3_STATUS
     depending on which button was clicked.
     
     @property {Object}
   */
   delegate: null,
-  
+
   /**
     The icon URL or class name.  If you do not set this, an alert icon will
     be shown instead.
@@ -4065,13 +3726,6 @@ SC.AlertPane = SC.PanelPane.extend({
     @property {String}
   */
   message: "",
-
-  /**
-    The ARIA label for the alert is the message, by default.
-  */
-  ariaLabel: function() {
-    return this.get('message');
-  }.property('message').cacheable(),
 
   /**
     An optional detailed decription.  Use this string to provide further 
@@ -4108,26 +3762,26 @@ SC.AlertPane = SC.PanelPane.extend({
   }.property('caption').cacheable(),
   
   /**
-    The button view for button 1 (OK).
+    The button view for the button 1 (OK).
     
     @property {SC.ButtonView}
   */
-  button1: SC.outlet('contentView.childViews.1.childViews.1'),
-    
+  buttonOne: SC.outlet('contentView.childViews.1.childViews.1'),
+
   /**
     The button view for the button 2 (Cancel).
     
     @property {SC.ButtonView}
   */
-  button2: SC.outlet('contentView.childViews.1.childViews.0'),
-    
+  buttonTwo: SC.outlet('contentView.childViews.1.childViews.0'),
+
   /**
     The button view for the button 3 (Extra).
     
     @property {SC.ButtonView}
   */
-  button3: SC.outlet('contentView.childViews.2.childViews.0'),
-    
+  buttonThree: SC.outlet('contentView.childViews.2.childViews.0'),
+
   /**
     The view for the button 3 (Extra) wrapper.
     
@@ -4150,8 +3804,9 @@ SC.AlertPane = SC.PanelPane.extend({
 
         render: function(context, firstTime) {
           var pane = this.get('pane');
+          var blank = SC.BLANK_IMAGE_URL ;
           if(pane.get('icon') == 'blank') context.addClass('plain');
-          context.push('<img src="'+SC.BLANK_IMAGE_URL+'" class="icon '+pane.get('icon')+'" />');
+          context.push('<img src="'+blank+'" class="icon '+pane.get('icon')+'" />');
           context.begin('h1').attr('class', 'header').text(pane.get('message') || '').end();
           context.push(pane.get('displayDescription') || '');
           context.push(pane.get('displayCaption') || '');
@@ -4164,34 +3819,35 @@ SC.AlertPane = SC.PanelPane.extend({
         layout: { bottom: 13, height: 24, right: 18, width: 466 },
         childViews: ['cancelButton', 'okButton'],
         classNames: ['text-align-right'],
-        
-        cancelButton: SC.ButtonView.extend({
-          useStaticLayout: YES,
-          actionKey: SC.BUTTON2_STATUS,
-          localize: YES,
-          titleMinWidth: 64,
-          layout: { right: 5, height: 'auto', width: 'auto', bottom: 0 },
-          theme: 'capsule',
-          isCancel: YES,
-          action: "dismiss",
-          isVisible: NO
-        }),
-        
-        okButton: SC.ButtonView.extend({
-          useStaticLayout: YES,
-          actionKey: SC.BUTTON1_STATUS,
-          localize: YES,
-          titleMinWidth: 64,
-          layout: { left: 0, height: 'auto', width: 'auto', bottom: 0 },
-          theme: 'capsule',
-          isDefault: YES,
-          action: "dismiss",
-          isVisible: NO
-        })
+        cancelButton : SC.ButtonView.extend({
+            useStaticLayout: YES,
+            actionKey: SC.BUTTON2_STATUS,
+            localize: YES,
+            titleMinWidth: 64,
+            layout: { right: 5, height: 'auto', width: 'auto', bottom: 0 },
+            theme: 'capsule',
+            title: "Cancel", 
+            isCancel: YES,
+            action: "dismiss",
+            isVisible: NO
+          }),
+
+        okButton : SC.ButtonView.extend({
+            useStaticLayout: YES,
+            actionKey: SC.BUTTON1_STATUS,
+            localize: YES,
+            titleMinWidth: 64,
+            layout: { left: 0, height: 'auto', width: 'auto', bottom: 0 },
+            theme: 'capsule',
+            title: "OK", 
+            isDefault: YES,
+            action: "dismiss"
+          })
       }),
       
       SC.View.extend({
         layout: { bottom: 13, height: 24, left: 18, width: 150 },
+        isVisible: NO,
         childViews: [
           SC.ButtonView.extend({
             useStaticLayout: YES,
@@ -4200,6 +3856,7 @@ SC.AlertPane = SC.PanelPane.extend({
             titleMinWidth: 64,
             layout: { left: 0, height: 'auto', width: 'auto', bottom: 0 },
             theme: 'capsule',
+            title: "Extra", 
             action: "dismiss",
             isVisible: NO
           })]
@@ -4207,40 +3864,14 @@ SC.AlertPane = SC.PanelPane.extend({
   }),
 
   /**
-    Action triggered whenever any button is pressed. Also the hides the 
-    alertpane itself.
-    
-    This will trigger the following chain of events:
-    1. If a delegate was given, and it has alertPaneDidDismiss it will be called
-    2. Otherwise it will look for the action of the button and call:
-       a) The action function reference if one was given
-       b) The action method on the target if one was given
-       c) If both a and b are missing, call the action on the rootResponder
-    
-    @param {SC.View} sender - the button view that was clicked
+    Action triggered whenever any button is pressed.  Notifies any delegate
+    and then hides the alert pane.
   */
   dismiss: function(sender) {
-    var del = this.delegate,
-        rootResponder, action, target;
-    
+    var del = this.delegate;
     if (del && del.alertPaneDidDismiss) {
       del.alertPaneDidDismiss(this, sender.get('actionKey'));
     }
-    else if(action = (sender && sender.get('customAction'))) {
-      if(SC.typeOf(action)===SC.T_FUNCTION) {
-        action.call(action);
-      }
-      else if(target = sender.get('target')) {
-        target.tryToPerform(action);
-      }
-      else {
-        rootResponder = this.getPath('pane.rootResponder');
-        if(rootResponder) {
-          rootResponder.sendAction(action, del, this);
-        }
-      }
-    }
-    
     this.remove(); // hide alert
   },
   
@@ -4251,184 +3882,146 @@ SC.AlertPane = SC.PanelPane.extend({
   alertInfoDidChange: function() {
     var v = this.getPath('contentView.childViews.0');
     if (v) v.displayDidChange(); // re-render message
-  }.observes('icon', 'message', 'displayDescription', 'displayCaption')
+  }.observes('icon', 'message', 'displayDescription', 'displayCaption'),
 
-});
 
-SC.AlertPane.mixin({
-  
-  /**
-    Show a dialog with a given set of hash attributes:
-    
-    {{{
-      SC.AlertPane.show({
-        message: "Could not load calendar",
-        description: "Your internet connection may be unavailable or our servers may be down.",
-        caption: "Try again in a few minutes.",
-        delegate: MyApp.calendarController
-      });
-    }}}
-    
-    See more examples for how to configure buttons and individual actions in the 
-    documentation for the SC.AlertPane class.
-    
-    @param {Hash} args
-  */
-  show: function(args) {
-    // normalize the arguments if this is a deprecated call
-    args = SC.AlertPane._argumentsCall.apply(this, arguments);
-    
-    var pane = this.create(args), 
-        idx = 0, 
-        buttons = args.buttons,
-        buttonView, title, action, target;
-    
-    if(buttons) {
-      buttons.forEach(function(button) {
-        idx++;
-        buttonView = pane.get('button%@'.fmt(idx));
-        
-        title = button.title;
-        action = button.action;
-        target = button.target;
-        
-        buttonView.set('title'.fmt(idx), title);
-        if(action) buttonView.set('customAction'.fmt(idx), action);
-        if(target) buttonView.set('target'.fmt(idx), target);
-        buttonView.set('isVisible', !!title);
-      });
-    }
-    else {
-      // if there are no buttons defined, just add the standard OK button
-      buttonView = pane.get('button1');
-      buttonView.set('title', "OK");
-      buttonView.set('isVisible', YES);
-    }
-    
-    var show = pane.append(); // make visible.
-    pane.adjust('height', pane.childViews[0].$().height());
-    pane.updateLayout();
-    return show;
-  },
-  
-  /**
-    Same as show() just that it uses sc-icon-alert-48 CSS classname
-    as the dialog icon
-    
-    @param {Hash} args
-  */
-  warn: function(args) {
-    // normalize the arguments if this is a deprecated call
-    args = SC.AlertPane._argumentsCall.apply(this, arguments);
-    
-    args.icon = 'sc-icon-alert-48';
-    return this.show(args);
-  },
-  
-  /**
-    Same as show() just that it uses sc-icon-info-48 CSS classname
-    as the dialog icon
-    
-    @param {Hash} args
-  */
-  info: function(args) {
-    // normalize the arguments if this is a deprecated call
-    args = SC.AlertPane._argumentsCall.apply(this, arguments);
-    
-    args.icon = 'sc-icon-info-48';
-    return this.show(args);
-  },
-  
-  /**
-    Same as show() just that it uses sc-icon-error-48 CSS classname
-    as the dialog icon
-    
-    @param {Hash} args
-  */
-  error: function(args) {
-    // normalize the arguments if this is a deprecated call
-    args = SC.AlertPane._argumentsCall.apply(this, arguments);
-    
-    args.icon = 'sc-icon-error-48';
-    return this.show(args);
-  },
-  
-  /**
-    Same as show() just that it uses blank CSS classname
-    as the dialog icon
-    
-    @param {Hash} args
-  */
-  plain: function(args) {
-    // normalize the arguments if this is a deprecated call
-    args = SC.AlertPane._argumentsCall.apply(this, arguments);
-    
-    args.icon = 'blank';
-    return this.show(args);
-  },
-  
-  /** @private
-    Set properties to new structure for call that use the old arguments 
-    structure.
-    
-    Deprecated API but is preserved for now for backwards compatibility.
-    
-    @deprecated
-  */
-  _argumentsCall: function(args) {
-    var ret = args;
-    if(SC.typeOf(args)!==SC.T_HASH) {
-      
-      SC.debug('SC.AlertPane has changed the signatures for show(), info(), warn(), error() and plain(). Please update accordingly.');
-      
-      var normalizedArgs = this._normalizeArguments(arguments);
-      
-      // now convert it to the new format for show()
-      ret = {
-        message: normalizedArgs[0],
-        description: normalizedArgs[1],
-        caption: normalizedArgs[2],
-        delegate: normalizedArgs[7],
-        icon: (normalizedArgs[6] || 'sc-icon-alert-48')
-      };
-      
-      // set buttons if there are any (and check if it's a string, since last
-      // argument could be the delegate object)
-      if(SC.typeOf(normalizedArgs[3])===SC.T_STRING || SC.typeOf(normalizedArgs[4])===SC.T_STRING || SC.typeOf(normalizedArgs[5])===SC.T_STRING) {
-        ret.buttons = [
-          { title: normalizedArgs[3] },
-          { title: normalizedArgs[4] },
-          { title: normalizedArgs[5] }
-        ];
+  render: function(context, firstTime) {
+    arguments.callee.base.apply(this,arguments);
+    var ariaLabeledBy   = this.get('ariaLabeledBy'),
+        ariaDescribedBy = this.get('ariaDescribedBy');
+
+    //addressing accessibility
+    if(firstTime) {
+      if(ariaLabeledBy && ariaLabeledBy !== "") {
+        context.attr('aria-labelledby', ariaLabeledBy);
       }
-      
+      if(ariaDescribedBy && ariaDescribedBy !== "") {
+       context.attr('aria-describedby', ariaDescribedBy);
+      }
     }
-    return ret;
-  },
-  
-  /** @private
-    internal method normalizes arguments for processing by helper methods.
-  */
-  _normalizeArguments: function(args) {
-    args = SC.A(args); // convert to real array
-    var len = args.length, delegate = args[len-1];
-    if (SC.typeOf(delegate) !== SC.T_STRING) {
-      args[len-1] = null;
-    } else delegate = null ;
-    args[7] = delegate ;
-    return args ;
   }
-  
 });
+
+/** @private
+  internal method normalizes arguments for processing by helper methods.
+*/
+SC.AlertPane._normalizeArguments = function(args) {
+  args = SC.A(args); // convert to real array
+  var len = args.length, delegate = args[len-1];
+  if (SC.typeOf(delegate) !== SC.T_STRING) {
+    args[len-1] = null;
+  } else delegate = null ;
+  args[7] = delegate ;
+  return args ;
+};
+
+/**
+  Displays a new alert pane according to the passed parameters.  Every 
+  parameter except for the message is optional.  You can always pass the 
+  delegate as the last parameter and it will be used, even if you omit items
+  in between.
+  
+  If you need to pass other parameters but you want to omit some others 
+  in between, pass null and the related UI item will be hidden
+  
+  Note that if you pass an icon, it should be 48 x 48 in size.
+  
+  @param {String} message the primary message
+  @param {String} description an optional detailed description
+  @param {String} caption an optional detailed fine print caption
+  @param {String} button1Title optional unlocalized title for button 1 (OK)
+  @param {String} button2Title optional unlocalized title for button 2 (Cancel)
+  @param {String} button3Title optional unlocalized title for button 3 (extra)
+  @param {String} iconUrl optional URL or class name for icon.
+  @param {Object} delegate optional delegate to notify when pane is dismissed
+  @returns {SC.AlertPane} new alert pane
+*/
+SC.AlertPane.show = function(message, description, caption, button1Title, button2Title, button3Title, iconUrl, delegate) {
+  
+  // get the delegate and normalize the rest of the params
+  var args = this._normalizeArguments(arguments);
+  
+  // create basic AlertPane
+  var ret = this.create({
+    message: args[0] || '',
+    description: args[1] || null,
+    caption: args[2] || null,
+    icon: args[6] || 'sc-icon-alert-48',
+    delegate: args[7]
+  });
+  
+  // customize buttons as needed
+  var buttonKeys = 'buttonOne buttonTwo buttonThree'.w(), button, title;
+  for(var idx=0;idx<3;idx++) {
+    button = ret.get(buttonKeys[idx]);
+    title = args[idx + 3];
+    if (title) {
+      button.set('title', title).set('isVisible', YES);
+      if(title=='?') button.set('titleMinWidth', 0);
+      if (idx==2) {
+        var button_wrapper = ret.get('buttonThreeWrapper');
+        button_wrapper.set('isVisible', YES);
+      }
+    }
+  }
+  var show = ret.append() ; // make visible.
+  ret.adjust('height', ret.childViews[0].$().height()) ;
+  ret.updateLayout() ;
+  return show ;
+};
+
+/**
+  Displays a warning alert pane.  See SC.AlertPane.show() for complete details. 
+  
+  @returns {SC.AlertPane} the pane
+*/
+SC.AlertPane.warn = function(message, description, caption, button1Title, button2Title, button3Title, delegate) {
+  var args = this._normalizeArguments(arguments);
+  args[6] = 'sc-icon-alert-48';
+  return this.show.apply(this, args);
+};
+
+
+/**
+  Displays a info alert pane.  See SC.AlertPane.show() for complete details. 
+  
+  @returns {SC.AlertPane} the pane
+*/
+SC.AlertPane.info = function(message, description, caption, button1Title, button2Title, button3Title, delegate) {
+  var args = this._normalizeArguments(arguments);
+  args[6] = 'sc-icon-info-48';
+  return this.show.apply(this, args);
+};
+
+/**
+  Displays a error allert pane.  See SC.AlertPane.show() for complete details. 
+  
+  @returns {SC.AlertPane} the pane
+*/
+SC.AlertPane.error = function(message, description, caption, button1Title, button2Title, button3Title, delegate) {
+  var args = this._normalizeArguments(arguments);
+  args[6] = 'sc-icon-error-48';
+  return this.show.apply(this, args);
+};
+
+/**
+  Displays a plain all-text allert pane w/o icon.  See SC.AlertPane.show() for complete details. 
+  
+  @returns {SC.AlertPane} the pane
+*/
+SC.AlertPane.plain = function(message, description, caption, button1Title, button2Title, button3Title, delegate) {
+  var args = this._normalizeArguments(arguments);
+  args[6] = 'blank';
+  return this.show.apply(this, args);
+};
 
 /* >>>>>>>>>> BEGIN source/panes/palette.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            portions copyright @2009 Apple Inc.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-
 
 sc_require('panes/panel');
 
@@ -4502,7 +4095,7 @@ SC.PalettePane = SC.PanelPane.extend({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            portions copyright @2009 Apple Inc.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -4763,37 +4356,6 @@ SC.PickerPane = SC.PalettePane.extend( /** @scope SC.PickerPane.prototype */ {
     @property Number
   */
   extraRightOffset: 0,
-  
-  /**
-    The target object to invoke the remove action on when the user clicks off the 
-    picker that is to be removed.
-
-    If you set this target, the action will be called on the target object
-    directly when the user clicks off the picker. If you leave this property 
-    set to null, then the button will search the responder chain for a view that
-    implements the action when the button is pressed instead.
-
-    @property {Object}
-  */
-  removeTarget: null,
-  
-  /**
-    The name of the action you want triggered when the user clicks off the
-    picker pane that is to be removed. 
-    
-    This property is used in conjunction with the removeTarget property to execute
-    a method when the user clicks off the picker pane.  
-
-    If you do not set a target, then clicking off the picker pane will cause the
-    responder chain to search for a view that implements the action you name
-    here, if one was provided. 
-    
-    Note that this property is optional. If no explicit value is provided then the 
-    picker pane will perform the default action which is to simply remove itself.
-
-    @property {String}
-  */
-  removeAction: null,
 
   /**
     Displays a new picker pane according to the passed parameters.
@@ -4912,7 +4474,7 @@ SC.PickerPane = SC.PalettePane.extend( /** @scope SC.PickerPane.prototype */ {
     }
     else {
       // Only really old versions will have to go through this code path.
-      ret   = SC.offset(anchor); // get x & y
+      ret   = SC.viewportOffset(anchor); // get x & y
       cq    = SC.$(anchor);
       ret.width = cq.outerWidth();
       ret.height = cq.outerHeight();
@@ -5238,17 +4800,8 @@ SC.PickerPane = SC.PalettePane.extend( /** @scope SC.PickerPane.prototype */ {
 
   /** @private - click away picker. */
   modalPaneDidClick: function(evt) {
-    var f = this.get('frame'),
-        target = this.get('removeTarget') || null,
-        action = this.get('removeAction'),
-        rootResponder = this.get('rootResponder');
-        
-    if (!this.clickInside(f, evt)) {
-      if (action) {
-        rootResponder.sendAction(action, target, this, this, null, this);
-      } else this.remove();
-    }
-    
+    var f = this.get("frame");
+    if(!this.clickInside(f, evt)) this.remove();
     return YES ; 
   },
 
@@ -5337,13 +4890,11 @@ SC.PickerPane.HUGE_PICKER_MENU_POINTER_OFFSET = [9, -9, -18, 18];
 SC.PickerPane.HUGE_PICKER_MENU_EXTRA_RIGHT_OFFSET = 12;
 
 /* >>>>>>>>>> BEGIN source/views/separator.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 /**
   @class
@@ -5380,7 +4931,7 @@ SC.SeparatorView = SC.View.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 sc_require('views/button') ;
@@ -5752,15 +5303,15 @@ SC.MenuItemView = SC.View.extend(SC.ContentDisplay,
     // Legacy support for actions that are functions
     if (SC.typeOf(action) === SC.T_FUNCTION) {
       action.apply(target, [rootMenu]);
-      
+      //@if(debug)
       SC.Logger.warn('Support for menu item action functions has been deprecated. Please use target and action.');
-      
+      //@endif
     } else {
       responder = this.getPath('pane.rootResponder') || SC.RootResponder.responder;
 
       if (responder) {
         // Send the action down the responder chain
-        responder.sendAction(action, target, rootMenu);
+        responder.sendAction(action, target, this);
       }
     }
 
@@ -6085,8 +5636,8 @@ SC.MenuItemView._contentPropertyToMenuItemPropertyMapping = {
 /* >>>>>>>>>> BEGIN source/panes/menu.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2010 Sprout Systems, Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+// Copyright: ©2006-2011 Strobe Inc. and contributors.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 require('panes/picker');
@@ -6125,7 +5676,7 @@ require('views/menu_item');
     var menuItems = [
       { title: 'Menu Item', keyEquivalent: 'ctrl_shift_n' },
       { title: 'Checked Menu Item', isChecked: YES, keyEquivalent: 'ctrl_a' },
-      { title: 'Selected Menu Item', keyEquivalent: ['backspace', 'delete'] },
+      { title: 'Selected Menu Item', keyEquivalent: 'backspace' },
       { isSeparator: YES },
       { title: 'Menu Item with Icon', icon: 'inbox', keyEquivalent: 'ctrl_m' },
       { title: 'Menu Item with Icon', icon: 'folder', keyEquivalent: 'ctrl_p' }
@@ -6179,17 +5730,11 @@ SC.MenuPane = SC.PickerPane.extend(
     menuHeightPadding, and submenuOffsetX if you don't explicitly set these
     properties.
 
-    Your theme can override the default values for each control size by specifying
-    them in the `menuRenderDelegate`. For example:
-
-        MyTheme.menuRenderDelegate = SC.BaseTheme.menuRenderDelegate.create({
-          'sc-tiny-size': {
-            itemHeight: 20,
-            itemSeparatorHeight: 9,
-            menuHeightPadding: 6,
-            submenuOffsetX: 2
-          }
-        });
+    Your theme can override the default values for each control size. For
+    example, to set the height of menu items for small menus, you could set
+    {{{
+      SC.MenuPane.SMALL_MENU_ITEM_HEIGHT = 10;
+    }}}
 
     Changing the controlSize once the menu is instantiated has no effect.
 
@@ -6208,9 +5753,9 @@ SC.MenuPane = SC.PickerPane.extend(
     controlSize.
 
     @type Number
-    @default itemHeight from theme if present, or 20.
+    @default null
   */
-  itemHeight: SC.propertyFromRenderDelegate('itemHeight', 20),
+  itemHeight: null,
 
   /**
     The height of separator menu items.
@@ -6222,9 +5767,9 @@ SC.MenuPane = SC.PickerPane.extend(
     be inferred from controlSize.
 
     @type Number
-    @default itemSeparatorHeight from theme, or 9.
+    @default null
   */
-  itemSeparatorHeight: SC.propertyFromRenderDelegate('itemSeparatorHeight', 9),
+  itemSeparatorHeight: null,
 
   /**
     The height of the menu pane.  This is updated every time menuItemViews
@@ -6246,9 +5791,9 @@ SC.MenuPane = SC.PickerPane.extend(
     controlSize.
 
     @type Number
-    @default menuHeightPadding from theme, or 6
+    @default null
   */
-  menuHeightPadding: SC.propertyFromRenderDelegate('menuHeightPadding', 6),
+  menuHeightPadding: null,
 
   /**
     The amount of offset x while positioning submenu.
@@ -6257,9 +5802,9 @@ SC.MenuPane = SC.PickerPane.extend(
     controlSize.
 
     @type Number
-    @default submenuOffsetX from theme, or 2
+    @default null
   */
-  submenuOffsetX: SC.propertyFromRenderDelegate('submenuOffsetX', 2),
+  submenuOffsetX: null,
 
   /**
     The last menu item to be selected by the user.
@@ -6457,8 +6002,7 @@ SC.MenuPane = SC.PickerPane.extend(
   itemSeparatorKey: 'separator',
 
   /**
-    The name of the property that contains the target for the action that is 
-    triggered when the user clicks the menu item.
+    The name of the property that contains the target for the action that is triggered when the user clicks the menu item.
 
     Note that this property is ignored if the menu item has a submenu.
 
@@ -6578,11 +6122,69 @@ SC.MenuPane = SC.PickerPane.extend(
     @private
   */
   init: function() {
-   return arguments.callee.base.apply(this,arguments);
+    switch (this.get('controlSize')) {
+      case SC.TINY_CONTROL_SIZE:
+        this.setIfNull('itemHeight', SC.MenuPane.TINY_MENU_ITEM_HEIGHT);
+        this.setIfNull('itemSeparatorHeight', SC.MenuPane.TINY_MENU_ITEM_SEPARATOR_HEIGHT);
+        this.setIfNull('menuHeightPadding', SC.MenuPane.TINY_MENU_HEIGHT_PADDING);
+        this.setIfNull('submenuOffsetX', SC.MenuPane.TINY_SUBMENU_OFFSET_X);
+        break;
+      case SC.SMALL_CONTROL_SIZE:
+        this.setIfNull('itemHeight', SC.MenuPane.SMALL_MENU_ITEM_HEIGHT);
+        this.setIfNull('itemSeparatorHeight', SC.MenuPane.SMALL_MENU_ITEM_SEPARATOR_HEIGHT);
+        this.setIfNull('menuHeightPadding', SC.MenuPane.SMALL_MENU_HEIGHT_PADDING);
+        this.setIfNull('submenuOffsetX', SC.MenuPane.SMALL_SUBMENU_OFFSET_X);
+        break;
+      case SC.REGULAR_CONTROL_SIZE:
+        this.setIfNull('itemHeight', SC.MenuPane.REGULAR_MENU_ITEM_HEIGHT);
+        this.setIfNull('itemSeparatorHeight', SC.MenuPane.REGULAR_MENU_ITEM_SEPARATOR_HEIGHT);
+        this.setIfNull('menuHeightPadding', SC.MenuPane.REGULAR_MENU_HEIGHT_PADDING);
+        this.setIfNull('submenuOffsetX', SC.MenuPane.REGULAR_SUBMENU_OFFSET_X);
+        break;
+      case SC.LARGE_CONTROL_SIZE:
+        this.setIfNull('itemHeight', SC.MenuPane.LARGE_MENU_ITEM_HEIGHT);
+        this.setIfNull('itemSeparatorHeight', SC.MenuPane.LARGE_MENU_ITEM_SEPARATOR_HEIGHT);
+        this.setIfNull('menuHeightPadding', SC.MenuPane.LARGE_MENU_HEIGHT_PADDING);
+        this.setIfNull('submenuOffsetX', SC.MenuPane.LARGE_SUBMENU_OFFSET_X);
+        break;
+      case SC.HUGE_CONTROL_SIZE:
+        this.setIfNull('itemHeight', SC.MenuPane.HUGE_MENU_ITEM_HEIGHT);
+        this.setIfNull('itemSeparatorHeight', SC.MenuPane.HUGE_MENU_ITEM_SEPARATOR_HEIGHT);
+        this.setIfNull('menuHeightPadding', SC.MenuPane.HUGE_MENU_HEIGHT_PADDING);
+        this.setIfNull('submenuOffsetX', SC.MenuPane.HUGE_SUBMENU_OFFSET_X);
+        break;
+    }
+
+    return arguments.callee.base.apply(this,arguments);
   },
 
-  displayProperties: ['controlSize'],
+  /**
+    Helper method that only sets a property if it is null.
+
+    @param {String} key the property to set
+    @param {Object} value
+    @private
+  */
+  setIfNull: function(key, value) {
+    if (this.get(key) === null) {
+      this.set(key, value);
+    }
+  },
+
   renderDelegateName: 'menuRenderDelegate',
+
+  /** @private
+    The render method is responsible for adding the control size class
+    name to the menu pane.
+
+    @param {SC.RenderContext} context the render context
+    @param {Boolean} firstTime YES if this is creating a layer
+  */
+  render: function(context, firstTime) {
+    context.addClass(this.get('controlSize'));
+
+    return arguments.callee.base.apply(this,arguments);
+  },
 
   /**
     Creates the child scroll view, and sets its contentView to a new
@@ -6681,6 +6283,7 @@ SC.MenuPane = SC.PickerPane.extend(
         len;
 
     if (!items) return views; // return an empty array
+
     heightKey = this.get('itemHeightKey');
     separatorKey = this.get('itemSeparatorKey');
     defaultHeight = this.get('itemHeight');
@@ -6710,15 +6313,7 @@ SC.MenuPane = SC.PickerPane.extend(
 
       keyEquivalent = item.get(keyEquivalentKey);
       if (keyEquivalent) {
-        // if array, apply each one for this view
-        if(SC.typeOf(keyEquivalent)===SC.T_ARRAY) {
-          keyEquivalent.forEach(function(keyEq) {
-            this._keyEquivalents[keyEq] = view;
-          }, this);
-        }
-        else {
-          this._keyEquivalents[keyEquivalent] = view;
-        }
+        this._keyEquivalents[keyEquivalent] = view;
       }
     }
 
@@ -7148,6 +6743,34 @@ SC._menu_fetchItem = function(k) {
   return this.get ? this.get(k) : this[k] ;
 };
 
+/**
+  Default metrics for the different control sizes.
+*/
+SC.MenuPane.TINY_MENU_ITEM_HEIGHT = 10;
+SC.MenuPane.TINY_MENU_ITEM_SEPARATOR_HEIGHT = 2;
+SC.MenuPane.TINY_MENU_HEIGHT_PADDING = 2;
+SC.MenuPane.TINY_SUBMENU_OFFSET_X = 0;
+
+SC.MenuPane.SMALL_MENU_ITEM_HEIGHT = 16;
+SC.MenuPane.SMALL_MENU_ITEM_SEPARATOR_HEIGHT = 7;
+SC.MenuPane.SMALL_MENU_HEIGHT_PADDING = 4;
+SC.MenuPane.SMALL_SUBMENU_OFFSET_X = 2;
+
+SC.MenuPane.REGULAR_MENU_ITEM_HEIGHT = 20;
+SC.MenuPane.REGULAR_MENU_ITEM_SEPARATOR_HEIGHT = 9;
+SC.MenuPane.REGULAR_MENU_HEIGHT_PADDING = 6;
+SC.MenuPane.REGULAR_SUBMENU_OFFSET_X = 2;
+
+SC.MenuPane.LARGE_MENU_ITEM_HEIGHT = 60;
+SC.MenuPane.LARGE_MENU_ITEM_SEPARATOR_HEIGHT = 20;
+SC.MenuPane.LARGE_MENU_HEIGHT_PADDING = 0;
+SC.MenuPane.LARGE_SUBMENU_OFFSET_X = 4;
+
+SC.MenuPane.HUGE_MENU_ITEM_HEIGHT = 20;
+SC.MenuPane.HUGE_MENU_ITEM_SEPARATOR_HEIGHT = 9;
+SC.MenuPane.HUGE_MENU_HEIGHT_PADDING = 0;
+SC.MenuPane.HUGE_SUBMENU_OFFSET_X = 0;
+
 // If a menu pane exceeds the height of the viewport, it will
 // be truncated to fit. This value determines the amount by which
 // the menu will be offset from the top and bottom of the viewport.
@@ -7157,7 +6780,7 @@ SC.MenuPane.VERTICAL_OFFSET = 23;
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -8054,10 +7677,9 @@ SC.SelectButtonView.MENU_WIDTH_OFFSET = -2;
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            portions copyright @2009 Apple Inc.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-
 
 sc_require('panes/panel');
 
@@ -8268,12 +7890,11 @@ SC.SheetPane.mixin( /** @scope SC.SheetPane */ {
 });
 
 /* >>>>>>>>>> BEGIN source/protocols/drag_data_source.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 require('system/drag') ;
 
@@ -8310,13 +7931,11 @@ SC.DragDataSource = {
 
 
 /* >>>>>>>>>> BEGIN source/protocols/drag_source.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 require('system/drag') ;
 
@@ -8395,13 +8014,11 @@ SC.DragSource = {
 
 
 /* >>>>>>>>>> BEGIN source/protocols/drop_target.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 require('system/drag');
 
@@ -8574,13 +8191,11 @@ SC.DropTarget = {
 };
 
 /* >>>>>>>>>> BEGIN source/protocols/responder.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 /** @static
 
@@ -8880,45 +8495,16 @@ SC.ResponderProtocol = {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-
 /**
-  Renders and updates the HTML representation of a button.
+  Renders and updates the HTML representation of SC.ButtonView.
 */
 SC.BaseTheme.buttonRenderDelegate = SC.RenderDelegate.create({
   name: 'button',
-
-  //
-  // SIZE DEFINITIONS
-  //
-  'sc-small-size': {
-    height: 18,
-    autoResizePadding: 15
-  },
-
-  'sc-regular-size': {
-    height: 24,
-    autoResizePadding: 20
-  },
-
-  'sc-huge-size': {
-    height: 30,
-    autoResizePadding: 30
-  },
-
-  'sc-jumbo-size': {
-    height: 44,
-    autoResizePadding: 50
-  },
-
-
-  //
-  // RENDERING LOGIC
-  //
-
+  
   /**
     Called when we need to create the HTML that represents the button.
 
@@ -8926,43 +8512,55 @@ SC.BaseTheme.buttonRenderDelegate = SC.RenderDelegate.create({
     @param {SC.RenderContext} context the render context instance
   */
   render: function(dataSource, context) {
-    this.addSizeClassName(dataSource, context);
+    var theme             = dataSource.get('theme'),
+        minWidth          = dataSource.get('titleMinWidth'),
+        toolTip           = dataSource.get('displayToolTip'),
+        view              = dataSource.get('view'),
+        isSelected        = dataSource.get('isSelected'),
+        isActive          = dataSource.get('isActive'),
+        isPopUpButton     = NO,
+        menu              = view.get('menu');
 
-    var labelContent,
-        toolTip     = dataSource.get('toolTip'),
-        isSelected  = dataSource.get('isSelected') || NO,
-        isActive    = dataSource.get('isActive') || NO,
-        labelId     = SC.guidFor(dataSource) + '-label';
+        if(menu) {
+          isPopUpButton = YES;
+        }
 
-    context.setClass({
-      'icon': !!dataSource.get('icon') || NO,
-      'def': dataSource.get('isDefault'),
-      'cancel': dataSource.get('isCancel'),
-      'active': isActive,
-      'sel': isSelected
-    });
+    var labelContent;
 
+    context.setClass('icon', !!dataSource.get('icon') || 0);    
+    context.setClass('def', dataSource.get('isDefault') || 0);
+    context.setClass('cancel', dataSource.get('isCancel') || 0);
+    
     if (toolTip) {
       context.attr('title', toolTip);
       context.attr('alt', toolTip);
     }
 
-    this.includeSlices(dataSource, context, SC.THREE_SLICE);
-
-    // accessibility
-    context.attr('aria-pressed', isActive.toString());
-    context.attr('aria-labelledby', labelId);
+    // addressing accessibility
+    context.attr('aria-pressed', isActive);
+    if(isPopUpButton) {
+      context.attr('aria-haspopup', isPopUpButton.toString());
+    }
+    
+    // Specify a minimum width for the inner part of the button.
+    minWidth = (minWidth ? "style='min-width: " + minWidth + "px'" : '');
+    context = context.push("<span class='sc-button-inner' " + minWidth + ">");
 
     // Create the inner label element that contains the text and, optionally,
     // an icon.
-    context = context.begin('label').addClass('sc-button-label').id(labelId);
-    dataSource.get('theme').labelRenderDelegate.render(dataSource, context);
+    context = context.begin('label').addClass('sc-button-label');
+    
+    // NOTE: we don't add the label class names because button styles its own label.
+    theme.labelRenderDelegate.render(dataSource, context);
     context = context.end();
+    
+    context.push("</span>");
 
     if (dataSource.get('supportFocusRing')) {
-      context = context.begin('div').addClass('focus-ring');
-      this.includeSlices(dataSource, context, SC.THREE_SLICE);
-      context = context.end();
+      context.push('<div class="focus-ring">',
+                    '<div class="focus-left"></div>',
+                    '<div class="focus-middle"></div>',
+                    '<div class="focus-right"></div></div>');
     }
   },
 
@@ -8974,30 +8572,39 @@ SC.BaseTheme.buttonRenderDelegate = SC.RenderDelegate.create({
     @param {SC.RenderContext} jquery the jQuery object representing the HTML representation of the button
   */
   update: function(dataSource, jquery) {
-    this.updateSizeClassName(dataSource, jquery);
+    var theme         = dataSource.get('theme'),
+        isSelected    = dataSource.get('isSelected'),
+        isActive      = dataSource.get('isActive'),
+        view          = dataSource.get('view'),
+        menu          = view.get('menu'),
+        isPopUpButton = NO;
 
-    if (dataSource.get('isActive')) {
-      jquery.addClass('active');
+        if(menu) {
+          isPopUpButton = YES;
+        }
+
+    if (dataSource.get('isActive')) jquery.addClass('active');
+    if (dataSource.get('isDefault')) jquery.addClass('default');
+    if (dataSource.get('isCancel')) jquery.addClass('cancel');
+    if (dataSource.get('icon')) jquery.addClass('icon');
+
+    // addressing accessibility
+    jquery.attr('aria-pressed', isActive);
+    if(isPopUpButton) {
+      jquery.attr('aria-haspopup', isPopUpButton.toString());
     }
-
-    jquery.attr('aria-pressed', dataSource.get('isActive').toString());
-
-    jquery.setClass('icon', !!dataSource.get('icon') || NO);
-    jquery.setClass('def', dataSource.get('isDefault') || NO);
-    jquery.setClass('cancel', dataSource.get('isCancel') || NO);
-
-    dataSource.get('theme').labelRenderDelegate.update(dataSource, jquery.find('label'));
+    theme.labelRenderDelegate.update(dataSource, jquery.find('label'));
   }
+  
 });
 
 /* >>>>>>>>>> BEGIN source/render_delegates/checkbox.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
 // ==========================================================================
-
 
 /**
   Renders and updates DOM representations of a checkbox (just the box,
@@ -9023,26 +8630,27 @@ SC.BaseTheme.checkboxRenderDelegate = SC.RenderDelegate.create({
   name: 'checkbox',
   
   render: function(dataSource, context) {
-    this.addSizeClassName(dataSource, context);
-
     var theme = dataSource.get('theme'),
-        ariaLabel, labelId;
+        view  = dataSource.get('view'),
+        ariaLabel,ariaLabeledBy;
 
-    // the label id is used so we can set the aria labelledby attribute
-    labelId = SC.guidFor(dataSource) + "-label";
+    if(view) {
+      ariaLabel     = view.get('ariaLabel');
+      ariaLabeledBy = view.get('ariaLabeledBy');
+    }
 
     var isSelected = dataSource.get('isSelected') || NO;
     var isActive = dataSource.get('isActive');
     var isDisabled = !dataSource.get('isEnabled');
 
-    var ariaIsSelected;
-    if (isSelected === SC.MIXED_STATE) ariaIsSelected = 'mixed';
-    else if (isSelected) ariaIsSelected = 'true';
-    else ariaIsSelected = 'false';
-
     context.attr('role', 'checkbox');
-    context.attr('aria-checked', ariaIsSelected);
-    context.attr('aria-labelledby', labelId);
+    context.attr('aria-checked', isSelected.toString());
+    if(ariaLabeledBy && ariaLabeledBy !== "") {
+      context.attr('aria-labelledby', ariaLabeledBy);
+    }
+    if(ariaLabel && ariaLabel !== "") {
+      context.attr('aria-label', ariaLabel);
+    }
 
     context.setClass({
       'sel': isSelected,
@@ -9052,33 +8660,36 @@ SC.BaseTheme.checkboxRenderDelegate = SC.RenderDelegate.create({
     
     context.push('<span class = "button"></span>');
     
-    context = context.begin('span').addClass('label').id(labelId);
+    context = context.begin('span').addClass('label');
     theme.labelRenderDelegate.render(dataSource, context);
     context = context.end();
   },
   
   update: function(dataSource, jquery) {
-    this.updateSizeClassName(dataSource, jquery);
+    var theme = dataSource.get('theme'),
+        view  = dataSource.get('view'),
+        ariaLabel,ariaLabeledBy;
 
-    var theme = dataSource.get('theme');
+    if(view) {
+      ariaLabel     = view.get('ariaLabel');
+      ariaLabeledBy = view.get('ariaLabeledBy');
+    }
 
     var isSelected = dataSource.get('isSelected');
     var isActive = dataSource.get('isActive');
     var isDisabled = !dataSource.get('isEnabled');
 
-    var ariaIsSelected;
-    if (isSelected === SC.MIXED_STATE) ariaIsSelected = 'mixed';
-    else if (isSelected) ariaIsSelected = 'true';
-    else ariaIsSelected = 'false';
-
     // address accessibility
-    jquery.attr('aria-checked', ariaIsSelected);
-
-    // NOTE: the other properties were already set in render, and should not
-    // need to be changed.
+    jquery.attr('aria-checked', isSelected.toString());
+    if(ariaLabeledBy && ariaLabeledBy !== "") {
+      jquery.attr('aria-labelledby', ariaLabeledBy);
+    }
+    if(ariaLabel && ariaLabel !== "") {
+      jquery.attr('aria-label', ariaLabel);
+    }
 
     theme.labelRenderDelegate.update(dataSource, jquery.find('span.label'));
-
+    
     // add class names
     jquery.setClass({
       'sel': isSelected,
@@ -9089,15 +8700,13 @@ SC.BaseTheme.checkboxRenderDelegate = SC.RenderDelegate.create({
 });
 
 
-
 /* >>>>>>>>>> BEGIN source/render_delegates/collection.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-
 
 // collections don't need their own rendering; however, in future, constants
 // like the row height will likely be specified on the render delegate.
@@ -9120,26 +8729,29 @@ SC.BaseTheme.collectionRenderDelegate = SC.RenderDelegate.create({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
 // ==========================================================================
-
 
 SC.BaseTheme.disclosureRenderDelegate = SC.RenderDelegate.create({
   name: 'disclosure',
   
   render: function(dataSource, context) {
-    this.addSizeClassName(dataSource, context);
-
     var theme = dataSource.get('theme'),
         value = dataSource.get('value'),
-        title = dataSource.get('title');
+        title = dataSource.get('title'),
+        view = dataSource.get('view'),
+        ariaLabel;
 
-    var labelId = SC.guidFor(dataSource) + "-label";
+    if(view) {
+      ariaLabel = view.get('ariaLabel');
+    }
 
     //addresing accessibility
     context.attr('aria-expanded', value);
-    context.attr('aria-labelledby', labelId);
+    if(ariaLabel && ariaLabel !== ""){
+      context.attr('aria-label', ariaLabel);
+    }
 
     if (dataSource.get('isSelected')) context.addClass('sel');
     
@@ -9149,20 +8761,27 @@ SC.BaseTheme.disclosureRenderDelegate = SC.RenderDelegate.create({
     
     context.push('<img src = "' + SC.BLANK_IMAGE_URL + '" class = "disclosure button ' + state + '" />');
     
-    context = context.begin('span').addClass('sc-button-label').id(labelId);
+    context = context.begin('span').addClass('sc-button-label');
     theme.labelRenderDelegate.render(dataSource, context);
     context = context.end();
   },
   
   update: function(dataSource, jquery) {
-    this.updateSizeClassName(dataSource, jquery);
-
     var theme = dataSource.get('theme'),
         value = dataSource.get('value'),
-        title = dataSource.get('title');
+        title = dataSource.get('title'),
+        view = dataSource.get('view'),
+        ariaLabel;
+
+    if(view) {
+      ariaLabel = view.get('ariaLabel');
+    }
 
     //addresing accessibility
     jquery.attr('aria-expanded', value);
+    if(ariaLabel && ariaLabel !== ""){
+      jquery.attr('aria-label', ariaLabel);
+    }
 
     if (dataSource.get('isSelected')) jquery.addClass('sel');
 
@@ -9181,10 +8800,9 @@ SC.BaseTheme.disclosureRenderDelegate = SC.RenderDelegate.create({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-
 
 SC.THREE_SLICE = ['left', 'middle', 'right'];
 
@@ -9194,7 +8812,7 @@ SC.NINE_SLICE = [
   'bottom-left', 'bottom', 'bottom-right'
 ];
 
-SC.RenderDelegate.reopen({
+SC.mixin(SC.RenderDelegate.prototype, {
   /*@scope SC.RenderDelegate.prototype*/
   
   /**
@@ -9213,22 +8831,17 @@ SC.RenderDelegate.reopen({
     }
   }
 });
-
 /* >>>>>>>>>> BEGIN source/render_delegates/image_button.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
 // ==========================================================================
-
 
 SC.BaseTheme.imageButtonRenderDelegate = SC.RenderDelegate.create({
   name: 'image-button',
   render: function(dataSource, context) {
-    // render controlSize
-    this.addSizeClassName(dataSource, context);
-
     var image = dataSource.get('image');
 
     context.addClass('no-min-width');
@@ -9242,8 +8855,6 @@ SC.BaseTheme.imageButtonRenderDelegate = SC.RenderDelegate.create({
   },
 
   update: function(dataSource, $) {
-    this.updateSizeClassName(dataSource, $);
-
     if (dataSource.didChangeFor('imageButtonRenderDelegate', 'image')) {
       var image = dataSource.get('image');
 
@@ -9251,15 +8862,13 @@ SC.BaseTheme.imageButtonRenderDelegate = SC.RenderDelegate.create({
     }
   }
 });
-
 /* >>>>>>>>>> BEGIN source/render_delegates/master_detail.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-
 
 /**
   Border between the two panes of the MasterDetail.
@@ -9286,28 +8895,77 @@ SC.BaseTheme.masterDetailRenderDelegate = SC.RenderDelegate.create({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-
 SC.BaseTheme.panelRenderDelegate = SC.RenderDelegate.create({
   name: 'panel',
+
+  render: function(dataSource, context) {
+    context.push(
+      "<div class='middle'></div>",
+      "<div class='top-left-edge'></div>",
+      "<div class='top-edge'></div>",
+      "<div class='top-right-edge'></div>",
+      "<div class='right-edge'></div>",
+      "<div class='bottom-right-edge'></div>",
+      "<div class='bottom-edge'></div>",
+      "<div class='bottom-left-edge'></div>",
+      "<div class='left-edge'></div>"
+    );
+  },
+  
+  update: function() {
+    // We never update child views. They get to do that on their own.
+  }
+});
+
+/* >>>>>>>>>> BEGIN source/render_delegates/menu.js */
+// ==========================================================================
+// Project:   SproutCore - JavaScript Application Framework
+// Copyright: ©2006-2011 Strobe Inc. and contributors.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
+// ==========================================================================
+
+sc_require('render_delegates/panel');
+
+// because render delegates are instances and therefore not, currently,
+// subclassable, this is line-for-line the same render delegate as pickerRenderDelegate.
+// this is obviously not optimal.
+SC.BaseTheme.menuRenderDelegate = SC.RenderDelegate.create({
+  name: 'menu',
   
   render: function(dataSource, context) {
-    context = context.begin('div').addClass('panel-background');
-    this.includeSlices(dataSource, context, SC.NINE_SLICE);
-    context = context.end();
+    var panelRenderDelegate = dataSource.get('theme').panelRenderDelegate;
 
-    // the label for the panel could change...
-    var ariaLabel = dataSource.get('ariaLabel');
-    context.attr('aria-label', ariaLabel || '');
+    panelRenderDelegate.render(dataSource, context);
+
+    var preferType = dataSource.get('preferType');
+    var pointerPosition = dataSource.get('pointerPos');
+    var pointerPositionY = dataSource.get('pointerPosY');
+
+    if (preferType == SC.PICKER_POINTER || preferType == SC.PICKER_MENU_POINTER) {
+      context.push('<div class="sc-pointer ' + pointerPosition + '" style="margin-top: ' + pointerPositionY + 'px"></div>');
+      context.addClass(pointerPosition);
+    }
   },
+  
+  update: function(dataSource, $) {
+    var panelRenderDelegate = dataSource.get('theme').panelRenderDelegate;
+    panelRenderDelegate.update(dataSource, $);
+    
+    var preferType = dataSource.get('preferType');
+    var pointerPosition = dataSource.get('pointerPos');
+    var pointerPositionY = dataSource.get('pointerPosY');
 
-  update: function(dataSource, jQuery) {
-    // the label for the panel could change...
-    var ariaLabel = dataSource.get('ariaLabel');
-    jQuery.attr('aria-label', ariaLabel || '');
+    if (preferType == SC.PICKER_POINTER || preferType == SC.PICKER_MENU_POINTER) {
+      var el = $.find('.sc-pointer');
+      el.attr('class', "sc-pointer "+pointerPosition);
+      el.attr('style', "margin-top: "+pointerPositionY+"px");
+      $.addClass(pointerPosition);
+    }
 
   }
 });
@@ -9316,10 +8974,9 @@ SC.BaseTheme.panelRenderDelegate = SC.RenderDelegate.create({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
 // ==========================================================================
-
 sc_require('render_delegates/panel');
 
 SC.BaseTheme.pickerRenderDelegate = SC.RenderDelegate.create({
@@ -9358,100 +9015,19 @@ SC.BaseTheme.pickerRenderDelegate = SC.RenderDelegate.create({
   }
 });
 
-/* >>>>>>>>>> BEGIN source/render_delegates/menu.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
-sc_require('render_delegates/picker');
-
-// This is the same as a pickerRenderDelegate, but is named 'menu' instead.
-SC.BaseTheme.menuRenderDelegate = SC.BaseTheme.pickerRenderDelegate.create({
-  name: 'menu',
-
-  render: function(orig, dataSource, context) {
-    this.addSizeClassName(dataSource, context);
-    orig(dataSource, context);
-  }.enhance(),
-
-  update: function(orig, dataSource, jquery) {
-    this.updateSizeClassName(dataSource, jquery);
-    orig(dataSource, jquery);
-  }.enhance(),
-
-  itemHeight: 20,
-  itemSeparatorHeight: 9,
-  menuHeightPadding: 6,
-  submenuOffsetX: 2,
-
-  verticalOffset: 23,
-
-  'sc-tiny-size': {
-    itemHeight: 10,
-    itemSeparatorHeight: 2,
-    menuHeightPadding: 2,
-    submenuOffsetX: 0
-  },
-
-  'sc-small-size': {
-    itemHeight: 16,
-    itemSeparatorHeight: 7,
-    menuHeightPadding: 4,
-    submenuOffsetX: 2
-  },
-
-  'sc-large-size': {
-    itemHeight: 60,
-    itemSeparatorHeight: 20,
-    menuHeightPadding: 0,
-    submenuOffsetX: 4
-  },
-
-  // pretty sure these sizes are wrong, but I copied them from their original
-  // values so... please fix.
-  'sc-huge-size': {
-    itemHeight: 20,
-    itemSeparatorHeight: 9,
-    menuHeightPadding: 0,
-    submenuOffsetX: 0
-  }
-});
-
-/* >>>>>>>>>> BEGIN source/render_delegates/popup_button.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
-
-/**
- * Renders and updates the HTML representation of a popup button.
- */
-SC.BaseTheme.popupButtonRenderDelegate = SC.RenderDelegate.create({
-  render: function(dataSource, context) {
-    context.attr('aria-haspopup', 'true');
-    dataSource.get('theme').buttonRenderDelegate.render(dataSource, context);
-  },
-
-  update: function(dataSource, jQuery) {
-    dataSource.get('theme').buttonRenderDelegate.update(dataSource, jQuery);
-  }
-});
-
 /* >>>>>>>>>> BEGIN source/render_delegates/progress.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
+SC.BaseTheme.PROGRESS_ANIMATED_BACKGROUND_MATRIX = [];
+SC.BaseTheme.PROGRESS_OFFSET_RANGE = 24;
+
 /**
+  @class
   Renders and updates DOM representations of progress bars.
   
   Parameters
@@ -9461,87 +9037,170 @@ SC.BaseTheme.popupButtonRenderDelegate = SC.RenderDelegate.create({
   - isIndeterminate
   - isRunning
   - isEnabled
-  - value
+  - value (from 0 to 1)
+  
+  There are a few other properties supported for backwards-compatibility
+  with certain ProgressView implementations; these ProgressViews should
+  be updated to match the new API. These properties will trigger deprecation
+  warnings.
   
   Theme Constants
   -------------------------------------
-  Ace's progressRenderDelegate's rendering process is not affected by 
-  any theme constants.
+  Note that, unlike render delegate parameters, which are mostly standardized,
+  the theme constants can vary by the theme and the theme's method of rendering
+  the control.
+  
+  - PROGRESS_ANIMATED_BACKGROUND_MATRIX: Set to the matrix used for 
+    background image position for animation. 
+    [1st image y-location, offset, total number of images]
+  
+  - PROGRESS_OFFSET_RANGE: The value of the progress inner offset range. 
+    Should be the same as width of image. Default it to 24.
+  
 */
 SC.BaseTheme.progressRenderDelegate = SC.RenderDelegate.create({
-  name: 'progress',
-  
   render: function(dataSource, context) {
-    this.addSizeClassName(dataSource, context);
-
-    var theme = dataSource.get('theme'),
+    var theme    = dataSource.get('theme'),
         valueMax = dataSource.get('maximum'),
         valueMin = dataSource.get('minimum'),
-        valueNow = dataSource.get('ariaValue');
+        valueNow = dataSource.get('value');
+    
+    var inner, animatedBackground, value = dataSource.get('value') * 100, 
+        cssString, backPosition,
+        isIndeterminate = dataSource.get('isIndeterminate'),
+        isRunning = dataSource.get('isRunning'),
+        isEnabled = dataSource.get('isEnabled'),
+        offsetRange = theme.PROGRESS_OFFSET_RANGE,
+        offset = (isIndeterminate && isRunning) ? 
+                (Math.floor(Date.now()/75)%offsetRange-offsetRange) : 0;
 
-    var value;
-    if (dataSource.get('isIndeterminate')) {
-      value = 120;
-    } else {
-      value = dataSource.get('value');
-    }
-
-    // make accessible
+    //addressing accessibility
     context.attr('aria-valuemax', valueMax);
     context.attr('aria-valuemin', valueMin);
     context.attr('aria-valuenow', valueNow);
     context.attr('aria-valuetext', valueNow);
-
-    
-    context.setClass({
-      indeterminate: dataSource.get('isIndeterminate'),
-      running: dataSource.get('isRunning'),
-      disabled: !dataSource.get('isEnabled'),
+      
+    // offsetRange from dataSource only supported for backwards-compatibility
+    if (dataSource.get('offsetRange')) {
+      if (!this._hasGivenOffsetRangeDeprecationWarning) {
+        console.warn(
+          "The 'offsetRange' property for progressRenderDelegate is deprecated. " +
+          "Please override the value on your theme, instead, by setting " +
+          "its PROGRESS_OFFSET_RANGE property."
+        );
+      }
+      this._hasGivenOffsetRangeDeprecationWarning = YES;
+      
+      offsetRange = dataSource.get('offsetRange');
+    }
+  
+    var classNames = {
+      'sc-indeterminate': isIndeterminate,
       'sc-empty': (value <= 0),
       'sc-complete': (value >= 100)
-    });
+    };
     
-    context = context.begin('div').addClass('track');
-    this.includeSlices(dataSource, context, SC.THREE_SLICE);
-    context = context.end();
+    // compute value for setting the width of the inner progress
+    if (!isEnabled) {
+      value = "0%" ;
+    } else if (isIndeterminate) {
+      value = "120%";
+    } else {
+      value = value + "%";
+    }
     
-    context = context.begin('div').addClass('content');
-    context.css('width', (value * 100) + "%");
-    this.includeSlices(dataSource, context, SC.THREE_SLICE);
-    context = context.end();
+    var classString = this._createClassNameString(classNames);
+    context.push('<div class="sc-inner ', classString, '" style="width: ', 
+                  value, ';left: ', offset, 'px;">',
+                  '<div class="sc-inner-head">','</div>',
+                  '<div class="sc-inner-tail"></div></div>',
+                  '<div class="sc-outer-head"></div>',
+                  '<div class="sc-outer-tail"></div>');
   },
   
   update: function(dataSource, $) {
-    this.updateSizeClassName(dataSource, $);
-
-    var theme = dataSource.get('theme'),
-        valueMax = dataSource.get('maximum'),
-        valueMin = dataSource.get('minimum'),
-        valueNow = dataSource.get('ariaValue');
-
-    // make accessible
-    $.attr('aria-valuemax', valueMax);
-    $.attr('aria-valuemin', valueMin);
-    $.attr('aria-valuenow', valueNow);
-    $.attr('aria-valuetext', valueNow);
-
-
-    var value;
-    if (dataSource.get('isIndeterminate')) {
-      value = 120;
+    
+    var theme    = dataSource.get('theme'),
+        valueNow = dataSource.get('value');
+    
+    var inner, value, cssString, backPosition,
+        animatedBackground = theme.PROGRESS_ANIMATED_BACKGROUND_MATRIX,
+        isIndeterminate = dataSource.get('isIndeterminate'),
+        isRunning = dataSource.get('isRunning'),
+        isEnabled = dataSource.get('isEnabled'),
+        offsetRange = dataSource.get('offsetRange'),
+        offset = (isIndeterminate && isRunning) ? 
+                (Math.floor(Date.now()/75)%offsetRange-offsetRange) : 0;
+  
+    // compute value for setting the width of the inner progress
+    if (!isEnabled) {
+      value = "0%" ;
+    } else if (isIndeterminate) {
+      value = "120%";
     } else {
-      value = dataSource.get('value');
+      value = (dataSource.get('value') * 100) + "%";
     }
 
-    $.setClass({
-      indeterminate: dataSource.get('isIndeterminate'),
-      running: dataSource.get('isRunning'),
-      disabled: !dataSource.get('isEnabled'),
+    var classNames = {
+      'sc-indeterminate': isIndeterminate,
       'sc-empty': (value <= 0),
       'sc-complete': (value >= 100)
-    });
+    };
     
-    $.find('.content').css('width', (value * 100) + "%");
+    //addressing accessibility
+    $.attr('aria-valuenow', valueNow);
+    $.attr('aria-valuetext', valueNow);
+    
+    $.setClass(classNames);
+    inner = $.find('.sc-inner');
+    
+    // animatedBackground from dataSource only supported for backwards-compatibility
+    if (dataSource.get('animatedBackgroundMatrix')) {
+      if (!this._hasGivenAnimatedBackgroundDeprecationWarning) {
+        console.warn(
+          "The 'animatedBackgroundMatrix' property for progressRenderDelegate " +
+          "is deprecated. Please override the value on your theme by setting " +
+          "its PROGRESS_ANIMATED_BACKGROUND_MATRIX property."
+        );
+      }
+      
+      this._hasGivenAnimatedBackgroundDeprecationWarning = YES;
+      
+      animatedBackground = dataSource.get('animatedBackgroundMatrix');
+    }
+    
+    if (!animatedBackground) {
+      animatedBackground = theme.PROGRESS_ANIMATED_BACKGROUND_MATRIX;
+    }
+    
+    cssString = "width: "+value+"; ";
+    cssString = cssString + "left: "+offset+"px; ";
+    if (animatedBackground.length === 3 ) {
+      inner.css('backgroundPosition', '0px -'+ 
+              (animatedBackground[0] + 
+              animatedBackground[1]*this._currentBackground)+'px');
+      if(this._currentBackground===animatedBackground[2]-1
+         || this._currentBackground===0){
+        this._nextBackground *= -1;
+      }
+      this._currentBackground += this._nextBackground;
+      
+      cssString = cssString + "backgroundPosition: "+backPosition+"px; ";
+      //Instead of using css() set attr for faster perf.
+      inner.attr('style', cssString);
+    }else{
+      inner.attr('style', cssString);
+    }
+  },
+  
+  
+  _createClassNameString: function(classNames) {
+    var classNameArray = [], key;
+    for(key in classNames) {
+      if(!classNames.hasOwnProperty(key)) continue;
+      if(classNames[key]) classNameArray.push(key);
+    }
+    return classNameArray.join(" ");
   }
 });
 
@@ -9549,7 +9208,7 @@ SC.BaseTheme.progressRenderDelegate = SC.RenderDelegate.create({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -9577,13 +9236,14 @@ SC.BaseTheme.radioRenderDelegate = SC.RenderDelegate.create({
   name: 'radio',
   
   render: function(dataSource, context) {
-    this.addSizeClassName(dataSource, context);
-
     var theme = dataSource.get('theme');
     
     var isSelected = dataSource.get('isSelected'),
         width = dataSource.get('width'),
-        labelId = SC.guidFor(dataSource) + '-label';
+        title = dataSource.get('title'),
+        value = dataSource.get('value'),
+        ariaLabeledBy = dataSource.get('ariaLabeledBy'),
+        ariaLabel     = dataSource.get('ariaLabel');
 
     context.setClass({
       active: dataSource.get('isActive'),
@@ -9595,26 +9255,31 @@ SC.BaseTheme.radioRenderDelegate = SC.RenderDelegate.create({
     //accessing accessibility
     context.attr('role', 'radio');
     context.attr('aria-checked', isSelected);
-    context.attr('aria-labelledby', labelId);
-    context.attr('aria-disabled', dataSource.get('isEnabled') ? 'false' : 'true');
+    if(ariaLabel && ariaLabel !== "") {
+      context.attr('aria-label', ariaLabel);
+    }
+    if(ariaLabeledBy && ariaLabeledBy !== "") {
+      context.attr('aria-labelledby', ariaLabeledBy);
+    }
 
     if (width) context.css('width', width);
-
+    
     context.push('<span class = "button"></span>');
-
-    context = context.begin('span').addClass('sc-button-label').id(labelId);
+    
+    context = context.begin('span').addClass('sc-button-label');
     theme.labelRenderDelegate.render(dataSource, context);
     context = context.end();
   },
-
+  
   update: function(dataSource, jquery) {
-    this.updateSizeClassName(dataSource, jquery);
-
     var theme = dataSource.get('theme');
-
+    
     var isSelected = dataSource.get('isSelected'),
         width = dataSource.get('width'),
-        value = dataSource.get('value');
+        title = dataSource.get('title'),
+        value = dataSource.get('value'),
+        ariaLabeledBy = dataSource.get('ariaLabeledBy'),
+        ariaLabel     = dataSource.get('ariaLabel');
 
     jquery.setClass({
       active: dataSource.get('isActive'),
@@ -9622,11 +9287,16 @@ SC.BaseTheme.radioRenderDelegate = SC.RenderDelegate.create({
       sel: dataSource.get('isSelected'),
       disabled: !dataSource.get('isEnabled')
     });
-
-    jquery.attr('aria-disabled', dataSource.get('isEnabled') ? 'false' : 'true');
+    
     jquery.attr('aria-checked', isSelected);
+    if(ariaLabel !== ""){
+      jquery.attr('aria-label', ariaLabel);
+    }
+    if(ariaLabeledBy !== "") {
+      jquery.attr('aria-labelledby', ariaLabeledBy);
+    }
     jquery.css('width', width ? width : null);
-
+    
     theme.labelRenderDelegate.update(dataSource, jquery.find('.sc-button-label'));
   }
 });
@@ -9635,10 +9305,9 @@ SC.BaseTheme.radioRenderDelegate = SC.RenderDelegate.create({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-
 
 /**
   @class
@@ -9664,8 +9333,6 @@ SC.BaseTheme.radioGroupRenderDelegate = SC.RenderDelegate.create({
   name: 'radio-group',
   
   render: function(dataSource, context) {
-    this.addSizeClassName(dataSource, context);
-
     var theme = dataSource.get('theme'),
         name = SC.guidFor(this),
         items = dataSource.get('items'), idx, len = items.length, item;
@@ -9673,7 +9340,6 @@ SC.BaseTheme.radioGroupRenderDelegate = SC.RenderDelegate.create({
     
     context.addClass(dataSource.get('layoutDirection'));
     context.attr('role', 'radiogroup');
-    context.attr('aria-disabled', dataSource.get('isEnabled') ? 'false' : 'true');
     
     for (idx = 0; idx < len; idx++) {
       item = items[idx];
@@ -9696,14 +9362,11 @@ SC.BaseTheme.radioGroupRenderDelegate = SC.RenderDelegate.create({
   },
   
   update: function(dataSource, jquery) {
-    this.updateSizeClassName(dataSource, jquery);
-
     var theme = dataSource.get('theme'),
         name = SC.guidFor(this),
         items = dataSource.get('items'), idx, len = items.length, item;
     
     jquery.addClass(dataSource.get('layoutDirection'));
-    jquery.attr('aria-disabled', dataSource.get('isEnabled') ? 'false' : 'true');
     
     if (dataSource.get('renderState').radioCount !== len) {
       // just regenerate if the count has changed. It would be better
@@ -9753,17 +9416,15 @@ SC.BaseTheme.radioGroupRenderDelegate = SC.RenderDelegate.create({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-
 
 /**
   Renders and updates the HTML representation of a segment child view within
   SC.SegmentedView.
 */
-SC.BaseTheme.segmentRenderDelegate = SC.RenderDelegate.create({
-  name: 'segment',
+SC.BaseTheme.segmentRenderDelegate = SC.Object.create({
 
   render: function(dataSource, context) {
     var theme = dataSource.get('theme'),
@@ -9777,7 +9438,6 @@ SC.BaseTheme.segmentRenderDelegate = SC.RenderDelegate.create({
       'sc-last-segment': dataSource.get('isLastSegment'),
       'sc-overflow-segment': dataSource.get('isOverflowSegment')
     };
-
     if (!SC.none(dataSource.get('index'))) classes['sc-segment-' + dataSource.get('index')] = YES;
     context.setClass(classes);
 
@@ -9813,15 +9473,14 @@ SC.BaseTheme.segmentRenderDelegate = SC.RenderDelegate.create({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
 /**
   Renders and updates the HTML representation of SC.SegmentedView.
 */
-SC.BaseTheme.segmentedRenderDelegate = SC.RenderDelegate.create({
-  name: 'segmented',
+SC.BaseTheme.segmentedRenderDelegate = SC.Object.create({
 
   /*
     We render everything external to the segments and let each segment use it's own render
@@ -9830,12 +9489,10 @@ SC.BaseTheme.segmentedRenderDelegate = SC.RenderDelegate.create({
     */
   render: function(dataSource, context) {
     // Use text-align to align the segments
-    this.addSizeClassName(dataSource, context);
     context.addStyle('text-align', dataSource.get('align'));
   },
 
   update: function(dataSource, jquery) {
-    this.updateSizeClassName(dataSource, jquery);
     jquery.css('text-align', dataSource.get('align'));
   },
 
@@ -9879,8 +9536,8 @@ SC.BaseTheme.segmentedRenderDelegate = SC.RenderDelegate.create({
       rect = segmentLayer.getBoundingClientRect();
 
       // Convert client rect into standard rect
-      // Remake the rect since IE8 won't let us modify the boundingClientRect
-      rect = { x: rect.left, y: rect.top, width: (rect.right-rect.left), height: (rect.bottom - rect.top) };
+      rect.x = rect.left;
+      rect.y = rect.top;
 
       // Return the index early if found
       if (SC.pointInRect(point, rect)) return i;
@@ -9895,7 +9552,7 @@ SC.BaseTheme.segmentedRenderDelegate = SC.RenderDelegate.create({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licened under MIT license (see license.js)
 // ==========================================================================
 
@@ -9915,12 +9572,17 @@ SC.BaseTheme.sliderRenderDelegate = SC.RenderDelegate.create({
   name: 'slider',
   
   render: function(dataSource, context) {
-    this.addSizeClassName(dataSource, context);
-
-    var blankImage = SC.BLANK_IMAGE_URL,
+    var blankImage  = SC.BLANK_IMAGE_URL,
         valueMax    = dataSource.get('maximum'),
         valueMin    = dataSource.get('minimum'),
-        valueNow    = dataSource.get('ariaValue');
+        valueNow    = dataSource.get('value');
+
+    context.push('<span class="sc-inner">',
+                  '<span class="sc-leftcap"></span>',
+                  '<span class="sc-rightcap"></span>',
+                  '<img src="', blankImage, 
+                  '" class="sc-handle" style="left: ', dataSource.get('value'), '%" />',
+                  '</span>');
 
     //addressing accessibility
     context.attr('aria-valuemax', valueMax);
@@ -9929,47 +9591,19 @@ SC.BaseTheme.sliderRenderDelegate = SC.RenderDelegate.create({
     context.attr('aria-valuetext', valueNow);
     context.attr('aria-orientation', 'horizontal');
 
-    context = context.begin('span').addClass('track');
-    this.includeSlices(dataSource, context, SC.THREE_SLICE);
-    context = context.end();
-
-    context.push(
-      '<img src="', blankImage, 
-      '" class="sc-handle" style="left: ', dataSource.get('value'), '%" />',
-      '</span>'
-    );
-
-    dataSource.get('renderState')._cachedHandle = null;
   },
   
   update: function(dataSource, jquery) {
-    this.updateSizeClassName(dataSource, jquery);
 
-    var valueMax    = dataSource.get('maximum'),
-        valueMin    = dataSource.get('minimum'),
-        valueNow    = dataSource.get('ariaValue');
-
-    //addressing accessibility
-    jquery.attr('aria-valuemax', valueMax);
-    jquery.attr('aria-valuemin', valueMin);
-    jquery.attr('aria-valuenow', valueNow);
-    jquery.attr('aria-valuetext', valueNow);
-    jquery.attr('aria-orientation', 'horizontal');
+    var valueNow    = dataSource.get('value');
 
     if (dataSource.didChangeFor('sliderRenderDelegate', 'value')) {
-      var handle = dataSource.get('renderState')._cachedHandle;
-      if (!handle) {
-        handle = dataSource.get('renderState')._cachedHandle = jquery.find('.sc-handle');
-      }
-
-      var frame = dataSource.get('frame'), value = dataSource.get('value');
-      if (frame && SC.platform.supportsCSS3DTransforms) {
-        value = (value / 100) * frame.width;
-        handle[0].style.cssText = "-webkit-transform: translate3d(" + value + "px,0,0);";
-      } else {
-        handle.css('left', value + "%");
-      }
+      jquery.find(".sc-handle").css('left', dataSource.get('value') + "%");
     }
+
+    //addressing accessibility
+    jquery.attr('aria-valuenow', valueNow);
+    jquery.attr('aria-valuetext', valueNow);
   }
   
 });
@@ -9978,7 +9612,7 @@ SC.BaseTheme.sliderRenderDelegate = SC.RenderDelegate.create({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -9987,7 +9621,7 @@ SC.BaseTheme.SourceList = SC.BaseTheme.subtheme('source-list');
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -10007,14 +9641,24 @@ SC.BaseTheme.toolbarRenderDelegate = SC.RenderDelegate.create({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-SC.BaseTheme.wellRenderDelegate = SC.RenderDelegate.create({
+// the 'well'-styled container
+SC.BaseTheme.wellRenderDelegate = SC.Object.create({
   name: 'well',
+  
   render: function(dataSource, context) {
-    this.includeSlices(dataSource, context, SC.NINE_SLICE);
+    context.push("<div class='top-left-edge'></div>",
+      "<div class='top-edge'></div>",
+      "<div class='top-right-edge'></div>",
+      "<div class='right-edge'></div>",
+      "<div class='bottom-right-edge'></div>",
+      "<div class='bottom-edge'></div>",
+      "<div class='bottom-left-edge'></div>",
+      "<div class='left-edge'></div>",
+      "<div class='content-background'></div>");
   },
   
   update: function() {
@@ -10026,11 +9670,11 @@ SC.BaseTheme.wellRenderDelegate = SC.RenderDelegate.create({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-SC.BaseTheme.workspaceRenderDelegate = SC.RenderDelegate.create({
+SC.BaseTheme.workspaceRenderDelegate = SC.Object.create({
   name: 'workspace',
   
   render: function() {
@@ -10042,13 +9686,11 @@ SC.BaseTheme.workspaceRenderDelegate = SC.RenderDelegate.create({
   }
 });
 /* >>>>>>>>>> BEGIN source/system/key_bindings.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 // Key Bindings are used to map a keyboard input to an action message on a
 // responder.  These bindings are most useful when implementing sophisticated
@@ -10086,13 +9728,11 @@ SC.BASE_KEY_BINDINGS = {
 
 
 /* >>>>>>>>>> BEGIN source/system/undo_manager.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 require('core');
 
@@ -10280,7 +9920,7 @@ SC.UndoManager = SC.Object.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -10297,10 +9937,10 @@ SC.UndoManager = SC.Object.extend(
   to "checkbox", the way the checkbox renders (including DOM) will actually
   be different than SC.ButtonView's.
   
-  @extends SC.ButtonView
+  @extends SC.FieldView
   @since SproutCore 1.0
 */
-SC.CheckboxView = SC.ButtonView.extend(SC.StaticLayout,
+SC.CheckboxView = SC.ButtonView.extend(SC.StaticLayout, SC.Button,
   /** @scope SC.CheckboxView.prototype */ {
 
   classNames: ['sc-checkbox-view', 'sc-checkbox-control'],
@@ -10313,6 +9953,27 @@ SC.CheckboxView = SC.ButtonView.extend(SC.StaticLayout,
     @property {String}
   */
   ariaRole: 'checkbox',
+
+  /**
+    The WAI-ARIA attribute for the checkbox. This property is assigned to
+    'aria-labelledby' attribute, which defines a string value that labels the
+    checkbox element. Used to support voiceover.It should be assigned a non-empty
+    string, if the 'aria-labelledby' attribute has to be set for the element.
+
+    @property {String}
+  */
+  ariaLabeledBy: null,
+
+  /**
+    The WAI-ARIA attribute for the checkbox. This property is assigned to
+    'aria-label' attribute, which defines a string value that labels the
+    checkbox element. Used to support voiceover. It is used when it is not
+    possible to have a visible label on the screen. It should be assigned a non-empty
+    string, if the 'aria-label' attribute has to be set for the element.
+
+    @property {String}
+  */
+  ariaLabel: null,
 
   // no special theme for Checkbox; button defaults to 'square', so we have to stop that.
   themeName: null,
@@ -10341,7 +10002,8 @@ SC.CheckboxView = SC.ButtonView.extend(SC.StaticLayout,
     this.set('isActive', NO);
     this._isMouseDown = NO;
 
-    if(!this.get('isEnabled')) {
+    if(!this.get('isEnabled') || 
+      (evt && evt.target && !this.$().within(evt.target))) {
       return YES;
     }
     var val = this.get('value');
@@ -10370,10 +10032,9 @@ SC.CheckboxView = SC.ButtonView.extend(SC.StaticLayout,
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            portions copyright @2009 Apple Inc.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-
 
 SC.LIST_ITEM_ACTION_CANCEL = 'sc-list-item-cancel-action';
 SC.LIST_ITEM_ACTION_REFRESH = 'sc-list-item-cancel-refresh';
@@ -10392,7 +10053,7 @@ SC.LIST_ITEM_ACTION_EJECT = 'sc-list-item-cancel-eject';
 
   @extends SC.View
   @extends SC.Control
-  @extends SC.InlineEditable
+  @extends SC.Editable
   @extends SC.StaticLayout
   @since SproutCore 1.0
 */
@@ -10527,7 +10188,13 @@ SC.ListItemView = SC.View.extend(
     Otherwise space will be allocated for it.
   */
   contentIsBranchKey: null,
-  
+
+
+  /**
+    YES if the item view is currently editing.
+  */
+  isEditing: NO,
+
   /**
     Indent to use when rendering a list item with an outline level > 0.  The
     left edge of the list item will be indented by this amount for each
@@ -10569,9 +10236,8 @@ SC.ListItemView = SC.View.extend(
     var content = this.get('content');
     return content && (content.get ? content.get('isEditable')!==NO : NO);
   }.property('content').cacheable(),
-  
-  inlineEditorDelegate: SC.InlineTextFieldDelegate,
-  
+
+
   /**
     Finds and retrieves the element containing the label.  This is used
     for inline editing.  The default implementation returns a CoreQuery
@@ -10867,19 +10533,22 @@ SC.ListItemView = SC.View.extend(
    return NO;
   },
 
-  /*
-  * @method
-  *
-  * Edits the label portion of the list item. If scrollIfNeeded is YES, will
-  * scroll to the item before editing it.
-  *
-  * @params {Boolean} if the parent scroll view should be scrolled to this item
-  * before editing begins
-  * @returns {Boolean} YES if successful
-  */
-  beginEditing: function(original, scrollIfNeeded) {
-    var el        = this.$label(),
-        parent    = this.get('parentView');
+  beginEditing: function() {
+    if (this.get('isEditing')) return YES ;
+    //if (!this.get('contentIsEditable')) return NO ;
+    return this._beginEditing(YES);
+  },
+
+  _beginEditing: function(scrollIfNeeded) {
+    var content   = this.get('content'),
+        del       = this.get('displayDelegate'),
+        labelKey  = this.getDelegateProperty('contentValueKey', del),
+        parent    = this.get('parentView'),
+        pf        = parent ? parent.get('frame') : null,
+        el        = this.$label(),
+        validator = this.get('validator'),
+        f, v, offset, oldLineHeight, fontSize, top, lineHeight, escapeHTML,
+        lineHeightShift, targetLineHeight, ret ;
 
     // if possible, find a nearby scroll view and scroll into view.
     // HACK: if we scrolled, then wait for a loop and get the item view again
@@ -10889,44 +10558,28 @@ SC.ListItemView = SC.View.extend(
       var collectionView = this.get('owner'), idx = this.get('contentIndex');
       this.invokeLast(function() {
         var item = collectionView.itemViewForContentIndex(idx);
-        if (item && item.beginEditing) item.beginEditing(NO);
+        if (item && item._beginEditing) item._beginEditing(NO);
       });
       return YES; // let the scroll happen then begin editing...
     }
 
-    else if (!parent || !el || el.get('length')===0) return NO ;
-
-    else return original();
-  }.enhance(),
-
-  /*
-  * @method
-  *
-  * Configures the editor to overlay the label properly.
-  */
-  inlineEditorWillBeginEditing: function(editor, editable, value) {
-    var content   = this.get('content'),
-        del       = this.get('displayDelegate'),
-        labelKey  = this.getDelegateProperty('contentValueKey', del),
-        parent    = this.get('parentView'),
-        el        = this.$label(),
-        validator = this.get('validator'),
-        f, v, offset, fontSize, top, lineHeight, escapeHTML,
-        lineHeightShift, targetLineHeight, ret ;
-
-    v = (labelKey && content) ? (content.get ? content.get(labelKey) : content[labelKey]) : content;
+    // nothing to do...
+    if (!parent || !el || el.get('length')===0) return NO ;
+    v = (labelKey && content && content.get) ? content.get(labelKey) : null ;
 
     f = this.computeFrameWithParentFrame(null);
+    offset = SC.viewportOffset(el[0]);
 
     // if the label has a large line height, try to adjust it to something
     // more reasonable so that it looks right when we show the popup editor.
-    lineHeight = this._oldLineHeight = el.css('lineHeight');
+    oldLineHeight = el.css('lineHeight');
     fontSize = el.css('fontSize');
     top = this.$().css('top');
 
     if (top) top = parseInt(top.substring(0,top.length-2),0);
     else top =0;
 
+    lineHeight = oldLineHeight;
     lineHeightShift = 0;
 
     if (fontSize && lineHeight) {
@@ -10937,26 +10590,44 @@ SC.ListItemView = SC.View.extend(
       } else oldLineHeight = null ;
     }
 
-    el = el[0];
-    offset = SC.offset(el);
-
     f.x = offset.x;
     f.y = offset.y+top + lineHeightShift ;
-    f.height = el.offsetHeight ;
-    f.width = el.offsetWidth ;
+    f.height = el[0].offsetHeight ;
+    f.width = el[0].offsetWidth ;
 
     escapeHTML = this.get('escapeHTML');
 
-    editor.set({
-      value: v,
-      exampleFrame: f,
+    ret = SC.InlineTextFieldView.beginEditing({
+      frame: f,
       exampleElement: el,
+      delegate: this,
+      value: v,
       multiline: NO,
       isCollection: YES,
       validator: validator,
-      escapeHTML: escapeHTML
+      escapeHTML: escapeHTML,
+      pane: this.get('pane'),
+      layout: this.get('layout')
     }) ;
+
+    // restore old line height for original item if the old line height
+    // was saved.
+    if (oldLineHeight) el.css({ lineHeight: oldLineHeight }) ;
+
+    // Done!  If this failed, then set editing back to no.
+    return ret ;
   },
+
+  commitEditing: function() {
+   if (!this.get('isEditing')) return YES ;
+   return SC.InlineTextFieldView.commitEditing();
+  },
+
+  discardEditing: function() {
+   if (!this.get('isEditing')) return YES ;
+   return SC.InlineTextFieldView.discardEditing();
+  },
+
 
   /** @private
     Allow editing.
@@ -10968,43 +10639,33 @@ SC.ListItemView = SC.View.extend(
   /** @private
    Hide the label view while the inline editor covers it.
   */
-  inlineEditorDidBeginEditing: function(original, inlineEditor, value, editable) {
-    original(inlineEditor, value, editable);
+  inlineEditorDidBeginEditing: function(inlineEditor) {
+   var el = this.$label() ;
+   this._oldOpacity = el.css('opacity');
+   el.css('opacity', 0.0) ;
+  },
 
-    var el = this.$label() ;
-    this._oldOpacity = el.css('opacity');
-    el.css('opacity', 0.0) ;
-
-    // restore old line height for original item if the old line height 
-    // was saved.
-    if (this._oldLineHeight) el.css({ lineHeight: this._oldLineHeight }) ;
-  }.enhance(),
+  inlineEditorShouldEndEditing: function(inlineEditor, finalValue) {
+   return YES ;
+  },
 
   /** @private
    Update the field value and make it visible again.
   */
-  inlineEditorDidCommitEditing: function(editor, finalValue, editable) {
+  inlineEditorDidEndEditing: function(inlineEditor, finalValue) {
+    this.set('isEditing', NO) ;
+
     var content = this.get('content') ;
     var del = this.displayDelegate ;
     var labelKey = this.getDelegateProperty('contentValueKey', del) ;
-
-    if(labelKey && content) {
-      if(content.set) content.set(labelKey, finalValue);
-      else content[labelKey] = finalValue;
+    if (labelKey && content && content.set) {
+     content.set(labelKey, finalValue) ;
     }
 
-    else this.set('content', finalValue);
+    this.$label().css("opacity", this._oldOpacity);
 
     this.displayDidChange();
-
-    this._endEditing();
   },
-
-  _endEditing: function(original) {
-    this.$label().css('opacity', this._oldOpacity);
-
-    original();
-  }.enhance(),
 
   /** @private
     Fills the passed html-array with strings that can be joined to form the
@@ -11296,7 +10957,7 @@ SC.ListItemView._deprecatedRenderWarningHasBeenIssued = false;
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -14388,7 +14049,7 @@ SC.CollectionView = SC.View.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 /*globals Shared */
@@ -14709,7 +14370,7 @@ SC.DateFieldView = SC.TextFieldView.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -14729,6 +14390,14 @@ SC.DisclosureView = SC.ButtonView.extend(
 /** @scope SC.DisclosureView.prototype */ {
   
   classNames: ['sc-disclosure-view'],
+
+  /**
+    The WAI-ARIA attribute for the disclosure button. This property is assigned
+    to 'aria-label' attribute, which defines a string value that labels the
+    the element. Used to support voiceover. It is used when it is not
+    possible to have a visible label on the screen.
+  */
+  ariaLabel: null,
 
   renderDelegateName: 'disclosureRenderDelegate',
 
@@ -14771,7 +14440,7 @@ SC.DisclosureView = SC.ButtonView.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 /** @class
@@ -14857,6 +14526,7 @@ SC.FileView = SC.FieldView.extend(
     })
   }),
   
+  /** SC.Button **/
   title: 'Choose File',
   
   /** SC.FieldView **/
@@ -14884,7 +14554,7 @@ SC.FileView = SC.FieldView.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -15521,12 +15191,6 @@ SC.ListView = SC.CollectionView.extend(
 
 /* >>>>>>>>>> BEGIN source/views/grid.js */
 // ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-// ==========================================================================
 // SC.GridView
 // ==========================================================================
 
@@ -15738,7 +15402,7 @@ SC.GridView = SC.ListView.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -15752,25 +15416,23 @@ SC.GridView = SC.ListView.extend(
 
   For example:
 
-      SC.ImageButtonView.create({
-        action: 'imageButtonWasClicked',
+  SC.ImageButtonView.create({
+    action: 'imageButtonWasClicked',
 
-        image: 'my-image-button-icon'
-      });
+    image: 'image-button-icon'
+  });
 
   You could then add some CSS rule for a normal state:
 
-      $theme.image-button .my-image-button-icon {
-        @include slice('my-image-button-image.png');
+    .sc-image-button-view .image-button-icon {
+      background: '';
+    }
 
-        // and an active state:
-        &.active {
-          @include slice('my-image-button-image-active.png');
-        }
-      }
+  And an active state:
 
-  Note: in addition to using SCSS and the Chance directives shown above, you
-  can use normal CSS syntax and sc_static.
+    .sc-image-button-view.active .image-button-icon {
+      background: '';
+    }
 
   @extends SC.View
   @extends SC.Control
@@ -15811,12 +15473,11 @@ SC.ImageButtonView = SC.ButtonView.extend(
   */
   image: null
 }) ;
-
 /* >>>>>>>>>> BEGIN source/views/toolbar.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -15906,7 +15567,7 @@ SC.ToolbarView = SC.View.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -16159,7 +15820,7 @@ SC.WorkspaceView = SC.View.extend({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -16418,7 +16079,7 @@ SC.MasterDetailView = SC.View.extend({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -16542,20 +16203,7 @@ SC.ScrollerView = SC.View.extend(
 
     @property
   */
-  isEnabled: function(key, value) {
-    if (value !== undefined) {
-      this._scsv_isEnabled = value;
-    }
-
-    if (this._scsv_isEnabled !== undefined) {
-      return this._scsv_isEnabled;
-    }
-
-    return this.get('proportion') < 1;
-  }.property('proportion').cacheable(),
-
-  // to allow setting isEnabled manually
-  _scsv_isEnabled: undefined,
+  isEnabled: YES,
 
   /**
     Determine the layout direction.  Determines whether the scrollbar should
@@ -16708,7 +16356,7 @@ SC.ScrollerView = SC.View.extend(
       }
 
       //addressing accessibility
-      context.attr('aria-valuemax', this.get('maximum'));
+      context.attr('aria-valuemax', this.get('maximun'));
       context.attr('aria-valuemin', this.get('minimum'));
       context.attr('aria-valuenow', this.get('value'));
       context.attr('aria-controls' , parentView.getPath('contentView.layerId'));
@@ -16942,7 +16590,7 @@ SC.ScrollerView = SC.View.extend(
         thumbPosition = this.get('thumbPosition'),
         value, clickLocation, clickOffset,
         scrollerLength = this.get('scrollerLength');
-
+        
     // Determine the subcontrol that was clicked
     if (target.className.indexOf('thumb') >= 0) {
       // Convert the mouseDown coordinates to the view's coordinates
@@ -17113,11 +16761,11 @@ SC.ScrollerView = SC.View.extend(
       
       switch (this.get('layoutDirection')) {
         case SC.LAYOUT_VERTICAL:
-          if (evt.clientY < topButtonRect.bottom) nowScrollingUp = YES;
+          if (evt.pageY < topButtonRect.bottom) nowScrollingUp = YES;
           else nowScrollingDown = YES;
           break;
         case SC.LAYOUT_HORIZONTAL:
-          if (evt.clientX < topButtonRect.right) nowScrollingUp = YES;
+          if (evt.pageX < topButtonRect.right) nowScrollingUp = YES;
           else nowScrollingDown = YES;
           break;
       }
@@ -17228,7 +16876,7 @@ SC.ScrollerView = SC.View.extend(
   }
 });
 
-// TODO: Use render delegates to handle rendering.
+// TO BE EVENTUALLY REPLACED W/RENDERERS FROM QUILMES
 SC.TouchScrollerView = SC.ScrollerView.extend({
   classNames: ['sc-touch-scroller-view'],
   scrollbarThickness: 12,
@@ -17350,11 +16998,12 @@ SC.TouchScrollerView = SC.ScrollerView.extend({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
 sc_require('views/scroller');
+sc_require('mixins/border');
 
 SC.NORMAL_SCROLL_DECELERATION = 0.95;
 SC.FAST_SCROLL_DECELERATION = 0.85;
@@ -17374,7 +17023,7 @@ SC.FAST_SCROLL_DECELERATION = 0.85;
   @extends SC.View
   @since SproutCore 1.0
 */
-SC.ScrollView = SC.View.extend({
+SC.ScrollView = SC.View.extend(SC.Border, {
   /** @scope SC.ScrollView.prototype */
   classNames: ['sc-scroll-view'],
 
@@ -17835,10 +17484,12 @@ SC.ScrollView = SC.View.extend({
     }
     
     if (!SC.none(x)) {
+      x = Math.max(this.get('minimumHorizontalScrollOffset'),Math.min(this.get('maximumHorizontalScrollOffset'), x)) ;
       this.set('horizontalScrollOffset', x) ;
     }
     
     if (!SC.none(y)) {
+      y = Math.max(this.get('minimumVerticalScrollOffset'),Math.min(this.get('maximumVerticalScrollOffset'), y)) ;
       this.set('verticalScrollOffset', y) ;
     }
     
@@ -19011,18 +18662,16 @@ SC.ScrollView = SC.View.extend({
         scale  = this._scale,
         width  = 0,
         height = 0,
-        dim, dimWidth, dimHeight, calculatedWidth, calculatedHeight;
-
-    // If no view has been set yet, or it doesn't have a frame,
-    // we can avoid doing any work.
-    if (!view || !f) { return; }
-
-    width = view.get('calculatedWidth') || f.width || 0;
-    height = view.get('calculatedHeight') || f.height || 0;
-
+        dim, dimWidth, dimHeight;
+    
+    if (view) {
+      width = view.get('calculatedWidth') || f.width || 0;
+      height = view.get('calculatedHeight') || f.height || 0;
+    }
+    
     width *= scale;
     height *= scale;
-
+    
     // cache out scroll settings...
     if (!force && (width === this._scroll_contentWidth) && (height === this._scroll_contentHeight)) return ;
     this._scroll_contentWidth  = width;
@@ -19125,7 +18774,7 @@ SC.ScrollView = SC.View.extend({
     // before we actually update the scrollTop/scrollLeft properties.
     // This gives views that use incremental rendering a chance to render
     // newly-appearing elements before they come into view.
-    if (content && content._viewFrameDidChange) {
+    if (content) {
       content._viewFrameDidChange();
 
       // Use accelerated drawing if the browser supports it
@@ -19175,7 +18824,7 @@ SC.ScrollView = SC.View.extend({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -19792,7 +19441,7 @@ SC.MenuScrollView = SC.ScrollView.extend({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -20031,7 +19680,7 @@ SC.NavigationView = SC.WorkspaceView.extend({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -20210,12 +19859,6 @@ SC.NavigationBarView = SC.ToolbarView.extend(SC.Gesturable, {
   }
 });
 /* >>>>>>>>>> BEGIN source/views/popup_button.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
 sc_require('views/button');
 
 /**
@@ -20280,8 +19923,6 @@ SC.PopupButtonView = SC.ButtonView.extend(
   // ..........................................................
   // INTERNAL SUPPORT
   //
-
-  renderDelegateName: 'popupButtonRenderDelegate',
   
   /**
     @private
@@ -20522,7 +20163,7 @@ SC.PopupButtonMenuLoader = SC.Task.extend({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -20660,7 +20301,7 @@ SC.ProgressView = SC.View.extend(SC.Control, {
   _backgroundOffset: 0,
   _currentBackground: 1,
   _nextBackground: 1,
-
+  
   // start animating at the end of the init() method.  note that we call this
   // here because we want this to make sure this function is called anytime 
   // the progress view is instantiated.
@@ -20683,23 +20324,11 @@ SC.ProgressView = SC.View.extend(SC.Control, {
       this.invokeLater(this._animateProgressBar, delay, 600);
     }
   },
-
-  /**
-    The WAI-ARIA value for the progress view. This value will be passed to any
-    rendering code as-is, not converted into percentages, etc. It is computed
-    based on the original value property.
-
-    @property
-  */
-  ariaValue: function() {
-    return this.get('value');
-  }.property('value').cacheable(),
-
-
-  displayProperties: 'displayValue ariaValue minimum maximum isRunning isEnabled isIndeterminate animatedBackgroundMatrix offsetRange'.w(),
-
+  
+  displayProperties: 'displayValue minimum maximum isRunning isEnabled isIndeterminate animatedBackgroundMatrix offsetRange'.w(),
+  
   renderDelegateName: 'progressRenderDelegate',
-
+  
   contentPropertyDidChange: function(target, key) {
     var content = this.get('content');
     this.beginPropertyChanges()
@@ -20733,7 +20362,7 @@ SC.ProgressView = SC.View.extend(SC.Control, {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 /** @class
@@ -20982,9 +20611,6 @@ SC.RadioView = SC.View.extend(SC.Control,
         title = value = icon = null;
         isEnabled = NO;
       }
-
-      // it can only be enabled if the radio view itself is enabled
-      isEnabled = isEnabled && this.get('isEnabled');
       
       if (item) {
         sel = (isArray) ? (viewValue.indexOf(value) >= 0) : (viewValue === value);
@@ -20999,18 +20625,20 @@ SC.RadioView = SC.View.extend(SC.Control,
         icon: icon,
         width: width,
         value: value,
-
+        
         isEnabled: isEnabled,
         isSelected: (isArray && viewValue.indexOf(value) >= 0 && viewValue.length === 1) || (viewValue === value),
         isMixed: (isArray && viewValue.indexOf(value) >= 0),
         isActive: this._activeRadioButton === idx,
+        ariaLabeledBy: ariaLabeledBy,
+        ariaLabel: ariaLabel,
         theme: this.get('theme'),
         renderState: {}
       }));
     }
 
     return ret; // done!
-  }.property('isEnabled', 'value', 'items', 'itemTitleKey', 'itemWidthKey', 'itemValueKey', 'itemIsEnabledKey', 'localize', 'itemIconKey','itemAriaLabeledByKey', 'itemAriaLabelKey').cacheable(),
+  }.property('value', 'items', 'itemTitleKey', 'itemWidthKey', 'itemValueKey', 'itemIsEnabledKey', 'localize', 'itemIconKey','itemAriaLabeledByKey', 'itemAriaLabelKey').cacheable(),
 
 
   acceptsFirstResponder: function() {
@@ -21083,7 +20711,7 @@ SC.RadioView = SC.View.extend(SC.Control,
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -21289,7 +20917,7 @@ SC.SceneView = SC.ContainerView.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 /**
@@ -21302,8 +20930,6 @@ SC.SceneView = SC.ContainerView.extend(
   @since SproutCore 1.5
 */
 SC.SegmentView = SC.View.extend(SC.Control, {
-
-  ariaRole: 'tab',
 
   classNames: ['sc-segment-view'],
 
@@ -21319,6 +20945,7 @@ SC.SegmentView = SC.View.extend(SC.Control, {
 
   controlSize: null,
 
+  /* SC.Button (note: we don't actually mix this in, because it doesn't define displayProperties or renderMixin) */
   title: '',
 
   value: null,
@@ -21344,14 +20971,8 @@ SC.SegmentView = SC.View.extend(SC.Control, {
 
   useStaticLayout: YES,
 
-  displayTitle: function() {
-    var ret = this.get('title');
-    if (this.get('localize')) ret = ret.loc();
-    return ret;
-  }.property('title', 'localize').cacheable(),
-
   // TODO: isDefault, isCancel, value not really used by render delegate
-  displayProperties: ['icon', 'displayTitle', 'value', 'displayToolTip', 'isDefault', 'isCancel', 'width', 'isFirstSegment', 'isMiddleSegment', 'isLastSegment', 'isOverflowSegment', 'index'],
+  displayProperties: ['icon', 'title', 'value', 'displayToolTip', 'isDefault', 'isCancel', 'width', 'isFirstSegment', 'isMiddleSegment', 'isLastSegment', 'isOverflowSegment', 'index'],
 
   /* SC.SegmentView */
 
@@ -21402,7 +21023,7 @@ SC.SegmentView = SC.View.extend(SC.Control, {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -21435,15 +21056,12 @@ SC.SegmentView = SC.View.extend(SC.Control, {
   | *itemIconKey*  | an icon |
   | *itemActionKey* | an optional action to fire when pressed |
   | *itemTargetKey* | an optional target for the action |
-  | *segmentViewClass* | class to be used for creating segments |
 
   @extends SC.View
   @since SproutCore 1.0
 */
 SC.SegmentedView = SC.View.extend(SC.Control,
 /** @scope SC.SegmentedView.prototype */ {
-
-  ariaRole: 'tablist',
 
   classNames: ['sc-segmented-view'],
 
@@ -21597,14 +21215,6 @@ SC.SegmentedView = SC.View.extend(SC.Control,
   */
   overflowIcon: null,
 
-  /**
-    The view class used when creating segments.
-
-    @property {SC.View}
-  */
-  segmentViewClass: SC.SegmentView,
-
-
   /** @private
     The following properties are used to map items to child views. Item keys
     are looked up on the item based on this view's value for each 'itemKey'.
@@ -21628,7 +21238,7 @@ SC.SegmentedView = SC.View.extend(SC.Control,
         icon = this.get('overflowIcon'),
         overflowView;
 
-    overflowView = this.get('segmentViewClass').create({
+    overflowView = SC.SegmentView.create({
       controlSize: this.get('controlSize'),
       localize: this.get('localize'),
       title: title,
@@ -21661,7 +21271,6 @@ SC.SegmentedView = SC.View.extend(SC.Control,
         itemKey,
         viewKeys = this.get('viewKeys'),
         viewKey,
-        segmentViewClass = this.get('segmentViewClass'),
         i, j;
 
     // Update childViews
@@ -21690,7 +21299,7 @@ SC.SegmentedView = SC.View.extend(SC.Control,
       for (i = childViews.get('length') - 1; i < items.get('length'); i++) {
 
         // We create a default SC.ButtonView-like object for each segment
-        childView = segmentViewClass.create({
+        childView = SC.SegmentView.create({
           controlSize: this.get('controlSize'),
           localize: this.get('localize')
         });
@@ -22408,7 +22017,7 @@ SC.SegmentedView = SC.View.extend(SC.Control,
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -22847,7 +22456,7 @@ SC.SelectView = SC.ButtonView.extend(
         isEnabled: itemEnabled,
         checkbox: isChecked,
         target: this,
-        action: 'displaySelectedItem'
+        action: this.displaySelectedItem
       }) ;
 
       //Set the items in the itemList array
@@ -23216,13 +22825,11 @@ SC.SelectView.HUGE_POPUP_MENU_WIDTH_OFFSET = 0;
 SC.SelectView.MENU_WIDTH_OFFSET = -2;
 
 /* >>>>>>>>>> BEGIN source/views/select_field.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 /**
   @class
@@ -23398,7 +23005,7 @@ SC.SelectFieldView = SC.FieldView.extend(
           if (!emptyName && index === 0 && fieldValue === '***') {
             this.set('value', value);
           }
-          if (value !== null && value !== undefined) value = (SC.guidFor(value)) ? SC.guidFor(value) : value.toString() ;
+          if (value) value = (SC.guidFor(value)) ? SC.guidFor(value) : value.toString() ;
    
           // render HTML
           var disable = (this.validateMenuItem && this.validateMenuItem(value, name)) ? '' : 'disabled="disabled" ' ;
@@ -23501,12 +23108,12 @@ SC.SelectFieldView = SC.FieldView.extend(
       
       while(!found && (--loc >= 0)) {
         object = objects.objectAt? objects.objectAt(loc) : objects[loc] ;
-        if (object === null || object === undefined) continue; // null means placeholder; just skip
+        if (!object) continue; // null means placeholder; just skip
       
         // get value using valueKey if there is one or use object
         // map to _guid or toString.
         if (valueKey) object = (object.get) ? object.get(valueKey) : object[valueKey] ;
-        var ov = (object !== null && object !== undefined) ? (SC.guidFor(object) ? SC.guidFor(object) : object.toString()) : null ;
+        var ov = (object) ? (SC.guidFor(object) ? SC.guidFor(object) : object.toString()) : null ;
       
         // use this object value if it matches.
         if (value == ov) found = object ;
@@ -23520,7 +23127,7 @@ SC.SelectFieldView = SC.FieldView.extend(
     if (SC.none(newValue)) { 
       newValue = '***' ; 
     } else {
-      newValue = ((newValue !== null && newValue !== undefined) ? (SC.guidFor(newValue) ? SC.guidFor(newValue) : newValue.toString()) : null );
+      newValue = ((newValue) ? (SC.guidFor(newValue) ? SC.guidFor(newValue) : newValue.toString()) : null );
     }
     this.$input().val(newValue);
     return this ;
@@ -23567,7 +23174,7 @@ SC.SelectFieldView = SC.FieldView.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -23648,15 +23255,7 @@ SC.SliderView = SC.View.extend(SC.Control,
   // INTERNAL PROPERTIES
   // 
   
-  displayProperties: 'displayValue ariaValue minimum maximum step frame'.w(),
-
-  /**
-   @property
-   The raw, unchanged value to be provided to screen readers and the like.
-  */
-  ariaValue: function() {
-    return this.get('value');
-  }.property('value').cacheable(),
+  displayProperties: 'displayValue minimum maximum step frame'.w(),
 
   // The name of the render delegate which is creating and maintaining
   // the DOM associated with instances of this view
@@ -23868,7 +23467,7 @@ SC.SliderView = SC.View.extend(SC.Control,
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -24039,7 +23638,7 @@ SC.SourceListGroupView = SC.View.extend(SC.Control, SC.CollectionGroup,
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -24090,10 +23689,11 @@ SC.SourceListView = SC.ListView.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
+sc_require('views/split');
 
 /**
   @class
@@ -24143,7 +23743,7 @@ SC.SplitDividerView = SC.View.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -25036,7 +24636,7 @@ SC.mixin(SC.View.prototype, {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -25148,7 +24748,7 @@ SC.StackedView = SC.CollectionView.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -25283,7 +24883,7 @@ SC.StaticContentView = SC.View.extend(SC.StaticLayout, {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -25390,17 +24990,16 @@ SC.TabView = SC.View.extend(
     var childViews  = [], view, containerView, layout,
         tabLocation = this.get('tabLocation'),
         tabHeight   = this.get('tabHeight');
-
-    if (tabLocation === SC.TOP_LOCATION) {
-      layout = { top: tabHeight/2+1, left: 0, right: 0, bottom: 0, border: 1 };
-    } else if (tabLocation === SC.TOP_TOOLBAR_LOCATION) {
-      layout = { top: tabHeight+1, left: 0, right: 0, bottom: 0, border: 1 };
-    } else {
-      layout = { top: 0, left: 0, right: 0, bottom: tabHeight-1, border: 1 };
-    }
-
-    containerView = this.containerView.extend({
+    
+    layout = (tabLocation === SC.TOP_LOCATION) ?
+             { top: tabHeight/2+1, left: 0, right: 0, bottom: 0 } :
+             (tabLocation === SC.TOP_TOOLBAR_LOCATION) ?
+             { top: tabHeight+1, left: 0, right: 0, bottom: 0 } :
+             { top: 0, left: 0, right: 0, bottom: tabHeight-1 } ;
+    
+    containerView = this.containerView.extend(SC.Border, {
       layout: layout,
+      borderStyle: SC.BORDER_BLACK,
       //adding the role
       ariaRole: 'tabpanel'
     });
@@ -25472,7 +25071,7 @@ SC._TAB_ITEM_KEYS = 'itemTitleKey itemValueKey itemIsEnabledKey itemIconKey item
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -25527,7 +25126,7 @@ SC.ThumbView = SC.View.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 /** @class
@@ -25616,7 +25215,7 @@ SC.WebView = SC.View.extend(SC.Control, {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 

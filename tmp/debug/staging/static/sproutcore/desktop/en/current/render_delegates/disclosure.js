@@ -1,26 +1,29 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
+// License:   Licened under MIT license (see license.js)
 // ==========================================================================
-
 
 SC.BaseTheme.disclosureRenderDelegate = SC.RenderDelegate.create({
   name: 'disclosure',
   
   render: function(dataSource, context) {
-    this.addSizeClassName(dataSource, context);
-
     var theme = dataSource.get('theme'),
         value = dataSource.get('value'),
-        title = dataSource.get('title');
+        title = dataSource.get('title'),
+        view = dataSource.get('view'),
+        ariaLabel;
 
-    var labelId = SC.guidFor(dataSource) + "-label";
+    if(view) {
+      ariaLabel = view.get('ariaLabel');
+    }
 
     //addresing accessibility
     context.attr('aria-expanded', value);
-    context.attr('aria-labelledby', labelId);
+    if(ariaLabel && ariaLabel !== ""){
+      context.attr('aria-label', ariaLabel);
+    }
 
     if (dataSource.get('isSelected')) context.addClass('sel');
     
@@ -30,20 +33,27 @@ SC.BaseTheme.disclosureRenderDelegate = SC.RenderDelegate.create({
     
     context.push('<img src = "' + SC.BLANK_IMAGE_URL + '" class = "disclosure button ' + state + '" />');
     
-    context = context.begin('span').addClass('sc-button-label').id(labelId);
+    context = context.begin('span').addClass('sc-button-label');
     theme.labelRenderDelegate.render(dataSource, context);
     context = context.end();
   },
   
   update: function(dataSource, jquery) {
-    this.updateSizeClassName(dataSource, jquery);
-
     var theme = dataSource.get('theme'),
         value = dataSource.get('value'),
-        title = dataSource.get('title');
+        title = dataSource.get('title'),
+        view = dataSource.get('view'),
+        ariaLabel;
+
+    if(view) {
+      ariaLabel = view.get('ariaLabel');
+    }
 
     //addresing accessibility
     jquery.attr('aria-expanded', value);
+    if(ariaLabel && ariaLabel !== ""){
+      jquery.attr('aria-label', ariaLabel);
+    }
 
     if (dataSource.get('isSelected')) jquery.addClass('sel');
 

@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -634,7 +634,7 @@ SC.Pane = SC.View.extend(SC.ResponderContext,
     // now.
     //
     // For example, say we're isVisible=NO, but we have not yet added the
-    // 'sc-hidden' class to the layer because of the "don't update the layer if
+    // 'hidden' class to the layer because of the "don't update the layer if
     // we're not visible in the window" check.  If any of our parent views
     // became visible, our layer would incorrectly be shown!
     this.updateLayerIfNeeded(YES);

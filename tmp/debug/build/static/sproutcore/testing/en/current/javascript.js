@@ -2,7 +2,7 @@
 // ==========================================================================
 // Project:   SproutCore Unit Testing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 /*globals CoreTest */
@@ -200,7 +200,7 @@ CoreTest = {
 // ==========================================================================
 // Project:   SproutCore Unit Testing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -262,12 +262,11 @@ if (!String.prototype.w) {
 
 /* >>>>>>>>>> BEGIN __sc_chance.js */
 if (typeof CHANCE_SLICES === 'undefined') var CHANCE_SLICES = [];CHANCE_SLICES = CHANCE_SLICES.concat([]);
-
 /* >>>>>>>>>> BEGIN source/extras.js */
 // ==========================================================================
 // Project:   SproutCore Unit Testing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -4676,7 +4675,7 @@ function triggerEvent( elem, type, event ) {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -4883,7 +4882,7 @@ function triggerEvent( elem, type, event ) {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -5086,14 +5085,13 @@ CoreTest.equiv = function () {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
 /*globals CoreTest Q$ */
 
 sc_require('jquery');
-var QUNIT_BREAK_ON_TEST_FAIL = false;
 
 /** @class
 
@@ -5624,11 +5622,6 @@ CoreTest.Plan = {
           msg = msg + ", expected: " + CoreTest.dump(expected) + " result: " + CoreTest.dump(actual);
         }
       }
-
-      if (QUNIT_BREAK_ON_TEST_FAIL & !pass) {
-        throw msg;
-      }
-
       return !!pass ? this.pass(msg) : this.fail(msg);
     },
 
@@ -5797,7 +5790,7 @@ window.htmlbody = function(string) {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -6019,7 +6012,7 @@ CoreTest.Runner = {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 

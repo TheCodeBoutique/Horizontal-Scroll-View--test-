@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -31,21 +31,23 @@ SC.Request = SC.Object.extend(SC.Copyable, SC.Freezable,
   // PROPERTIES
   // 
   
-/**
-  Sends the request asynchronously instead of blocking the browser.  You
-  should almost always make requests asynchronous.  You can change this 
-  options with the async() helper option (or simply set it directly).
-
-	@default YES
-  @property {Boolean}
-*/
-isAsynchronous: YES,
+  /**
+    Sends the request asynchronously instead of blocking the browser.  You
+    should almost always make requests asynchronous.  You can change this 
+    options with the async() helper option (or simply set it directly).
+    
+    Defaults to YES. 
+    
+    @property {Boolean}
+  */
+  isAsynchronous: YES,
 
   /**
     Processes the request and response as JSON if possible.  You can change
     this option with the json() helper method.
 
-    @default NO 
+    Defaults to NO 
+    
     @property {Boolean}
   */
   isJSON: NO,
@@ -54,7 +56,8 @@ isAsynchronous: YES,
     Process the request and response as XML if possible.  You can change this
     option with the xml() helper method.
     
-    @default NO
+    Defaults to NO
+  
     @property {Boolean}
   */
   isXML: NO,
@@ -82,7 +85,6 @@ isAsynchronous: YES,
     only supported option is SC.XHRResponse which uses a traditional
     XHR transport.
     
-		@default SC.XHRResponse
     @property {SC.Response}
   */
   responseClass: SC.XHRResponse,
@@ -90,7 +92,6 @@ isAsynchronous: YES,
   /**
     The original request for copied requests.
     
-		@default null
     @property {SC.Request}
   */
   source: null,
@@ -98,15 +99,13 @@ isAsynchronous: YES,
   /**
     The URL this request to go to.
     
-		@default null
-    @property {String}
+    @param {String}
   */
   address: null,
   
   /**
     The HTTP method to use.
     
-		@default GET
     @param {String}
   */
   type: 'GET',
@@ -122,7 +121,6 @@ isAsynchronous: YES,
     An exception will be thrown if you try to invoke send() on a request that
     has both a timeout and isAsyncronous set to NO.
     
-		@default null
     @property {Number}
   */
   timeout: null,
@@ -130,15 +128,11 @@ isAsynchronous: YES,
   /**
     The body of the request.  May be an object is isJSON or isXML is set,
     otherwise should be a string.
-
-		@property {Object|String}
   */
   body: null,
   
   /**
     The body, encoded as JSON or XML if needed.
-
-		@property {Object|String}
   */
   encodedBody: function() {
     // TODO: support XML
@@ -158,8 +152,8 @@ isAsynchronous: YES,
     
     If you do not want the request to actually send, call cancel().
     
-    @param {SC.Request} request A copy of the request object, not frozen
-    @param {SC.Response} response The object that will wrap the response
+    @param {SC.Request} request a copy of the request, not frozen
+    @returns {void}
   */
   willSend: function(request, response) {},
   
@@ -170,10 +164,10 @@ isAsynchronous: YES,
     
     The passed request is a frozen copy of the request, indicating the 
     options set at the time of the request.
-
-    @param {SC.Request} request A copy of the request object, frozen
-    @param {SC.Response} response The object that will wrap the response
-		@returns BOOL YES on success, NO on failure
+    
+    @param {SC.Request} request a copy of the request, frozen
+    @param {SC.Response} response the object that will carry the response
+    @returns {void}
   */
   didSend: function(request, response) {},
   
@@ -182,8 +176,8 @@ isAsynchronous: YES,
     your chance to fix up the response based on the results.  If you don't
     want to continue processing the response call response.cancel().
 
-    @param {SC.Request} request A copy of the request object, frozen
-    @param {SC.Response} response The object that will wrap the response
+    @param {SC.Response} response the response
+    @returns {void}
   */
   willReceive: function(request, response) {},
   
@@ -193,16 +187,14 @@ isAsynchronous: YES,
     point.  If you don't want to allow notifications to continue, call
     response.cancel()
 
-    @param {SC.Request} request A copy of the request object, frozen
-    @param {SC.Response} response The object that will wrap the response
+    @param {SC.Response} response reponse
+    @returns {void}
   */
   didReceive: function(request, response) {},
   
   // ..........................................................
   // HELPER METHODS
   // 
-
-  concatenatedProperties: 'COPY_KEYS',
 
   COPY_KEYS: 'isAsynchronous isJSON isXML address type timeout body responseClass willSend didSend willReceive didReceive'.w(),
   
@@ -376,8 +368,7 @@ isAsynchronous: YES,
     You may also pass additional parameters which will be passed along to your
     callback. If your callback handled the notification, it should return YES.
     
-    Scoping With Status Codes
-    ------
+    h2. Scoping With Status Codes
     
     If you pass a status code as the first option to this method, then your 
     notification callback will only be called if the response status matches
@@ -393,8 +384,7 @@ isAsynchronous: YES,
     method to be executed no matter what the resulting status is unless a 
     more specific notifier was registered and returned YES.
     
-    Callback Format
-    ------
+    h2. Callback Format
     
     Your notification callback should expect to receive the Response object
     as the first parameter plus any additional parameters that you pass.  
@@ -476,17 +466,12 @@ SC.Request.mixin(/** @scope SC.Request */ {
 });
 
 /**
-  @class
-
   The request manager coordinates all of the active XHR requests.  It will
   only allow a certain number of requests to be active at a time; queuing 
   any others.  This allows you more precise control over which requests load
   in which order.
-
-  @since SproutCore 1.0
 */
-SC.Request.manager = SC.Object.create( SC.DelegateSupport, 
-	/** @scope SC.Request.manager */{
+SC.Request.manager = SC.Object.create( SC.DelegateSupport, {
 
   /**
     Maximum number of concurrent requests allowed.  6 for all browsers.

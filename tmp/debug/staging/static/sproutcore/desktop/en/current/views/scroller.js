@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -125,20 +125,7 @@ SC.ScrollerView = SC.View.extend(
 
     @property
   */
-  isEnabled: function(key, value) {
-    if (value !== undefined) {
-      this._scsv_isEnabled = value;
-    }
-
-    if (this._scsv_isEnabled !== undefined) {
-      return this._scsv_isEnabled;
-    }
-
-    return this.get('proportion') < 1;
-  }.property('proportion').cacheable(),
-
-  // to allow setting isEnabled manually
-  _scsv_isEnabled: undefined,
+  isEnabled: YES,
 
   /**
     Determine the layout direction.  Determines whether the scrollbar should
@@ -291,7 +278,7 @@ SC.ScrollerView = SC.View.extend(
       }
 
       //addressing accessibility
-      context.attr('aria-valuemax', this.get('maximum'));
+      context.attr('aria-valuemax', this.get('maximun'));
       context.attr('aria-valuemin', this.get('minimum'));
       context.attr('aria-valuenow', this.get('value'));
       context.attr('aria-controls' , parentView.getPath('contentView.layerId'));
@@ -525,7 +512,7 @@ SC.ScrollerView = SC.View.extend(
         thumbPosition = this.get('thumbPosition'),
         value, clickLocation, clickOffset,
         scrollerLength = this.get('scrollerLength');
-
+        
     // Determine the subcontrol that was clicked
     if (target.className.indexOf('thumb') >= 0) {
       // Convert the mouseDown coordinates to the view's coordinates
@@ -696,11 +683,11 @@ SC.ScrollerView = SC.View.extend(
       
       switch (this.get('layoutDirection')) {
         case SC.LAYOUT_VERTICAL:
-          if (evt.clientY < topButtonRect.bottom) nowScrollingUp = YES;
+          if (evt.pageY < topButtonRect.bottom) nowScrollingUp = YES;
           else nowScrollingDown = YES;
           break;
         case SC.LAYOUT_HORIZONTAL:
-          if (evt.clientX < topButtonRect.right) nowScrollingUp = YES;
+          if (evt.pageX < topButtonRect.right) nowScrollingUp = YES;
           else nowScrollingDown = YES;
           break;
       }
@@ -811,7 +798,7 @@ SC.ScrollerView = SC.View.extend(
   }
 });
 
-// TODO: Use render delegates to handle rendering.
+// TO BE EVENTUALLY REPLACED W/RENDERERS FROM QUILMES
 SC.TouchScrollerView = SC.ScrollerView.extend({
   classNames: ['sc-touch-scroller-view'],
   scrollbarThickness: 12,

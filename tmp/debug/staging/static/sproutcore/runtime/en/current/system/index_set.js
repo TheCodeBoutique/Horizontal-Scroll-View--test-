@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -17,25 +17,25 @@ sc_require('mixins/copyable');
   continuous ranges of items in a parent array.  IndexSet's are used for
   selection, for managing invalidation ranges and other data-propogation.
 
-  Examples
-  ---
+  h2. Examples
 
-        var set = SC.IndexSet.create(ranges) ;
-        set.contains(index);
-        set.add(index, length);
-        set.remove(index, length);
+  {{{
+    var set = SC.IndexSet.create(ranges) ;
+    set.contains(index);
+    set.add(index, length);
+    set.remove(index, length);
 
-        // uses a backing SC.Array object to return each index
-        set.forEach(function(object) { .. })
+    // uses a backing SC.Array object to return each index
+    set.forEach(function(object) { .. })
 
-        // returns the index
-        set.forEachIndex(function(index) { ... });
+    // returns the index
+    set.forEachIndex(function(index) { ... });
 
-        // returns ranges
-        set.forEachRange(function(start, length) { .. });
+    // returns ranges
+    set.forEachRange(function(start, length) { .. });
+  }}}
 
-  Implementation Notes
-  ---
+  h2. Implementation Notes
 
   An IndexSet stores indices on the object.  A positive value great than the
   index tells you the end of an occupied range.  A negative values tells you
@@ -72,8 +72,6 @@ SC.IndexSet = SC.mixin({},
   /**
     To create a set, pass either a start and index or another IndexSet.
 
-    @param {Number} start
-    @param {Number} length
     @returns {SC.IndexSet}
   */
   create: function(start, length) {
@@ -99,21 +97,21 @@ SC.IndexSet = SC.mixin({},
   /**
     Walk like a duck.
 
-    @type Boolean
+    @property {Boolean}
   */
   isIndexSet: YES,
 
   /**  @private
     Internal setting determines the preferred skip size for hinting sets.
 
-    @type Number
+    @property {Number}
   */
   HINT_SIZE: 256,
 
   /**
     Total number of indexes contained in the set
 
-    @type Number
+    @property {Number}
   */
   length: 0,
 
@@ -122,14 +120,14 @@ SC.IndexSet = SC.mixin({},
     is sometimes useful when determining the total range of items covering
     the index set.
 
-    @type Number
+    @property {Number}
   */
   max: 0,
 
   /**
     The first index included in the set or -1.
 
-    @type Number
+    @property {Number}
   */
   min: function() {
     var content = this._content,
@@ -141,7 +139,7 @@ SC.IndexSet = SC.mixin({},
   /**
     Returns the first index in the set .
 
-    @type Number
+    @property {Number}
   */
   firstObject: function() {
     return (this.get('length')>0) ? this.get('min') : undefined;
@@ -752,8 +750,6 @@ SC.IndexSet = SC.mixin({},
 
   /**
     Add all the ranges in the passed array.
-
-    @param {Enumerable} objects The list of ranges you want to add
   */
   addEach: function(objects) {
     if (this.isFrozen) throw SC.FROZEN_ERROR;
@@ -772,8 +768,6 @@ SC.IndexSet = SC.mixin({},
 
   /**
     Removes all the ranges in the passed array.
-
-    @param {Object...} objects The list of objects you want to remove
   */
   removeEach: function(objects) {
     if (this.isFrozen) throw SC.FROZEN_ERROR;
@@ -824,13 +818,15 @@ SC.IndexSet = SC.mixin({},
     index.  This can be a more efficient way to iterate in some cases.  The
     callback should have the signature:
 
-          callback(start, length, indexSet, source) { ... }
+    {{{
+      callback(start, length, indexSet, source) { ... }
+    }}}
 
     If you pass a target as a second option, the callback will be called in
     the target context.
 
-    @param {Function} callback The method to run on each iteration
-    @param {Object} target the object to call the callback on
+    @param {Function} callback the iterator callback
+    @param {Object} target the target
     @returns {SC.IndexSet} receiver
   */
   forEachRange: function(callback, target) {
@@ -1008,7 +1004,9 @@ SC.IndexSet = SC.mixin({},
     have a source property on the set for this to work.  The callback you pass
     will be invoked for each object in the set with the following signature:
 
-          function callback(object, index, source, indexSet) { ... }
+    {{{
+      function callback(object, index, source, indexSet) { ... }
+    }}}
 
     If you pass a target, it will be used when the callback is called.
 
@@ -1048,8 +1046,6 @@ SC.IndexSet = SC.mixin({},
     Requires source to work.
 
     @param {Object} object the object to add
-    @param {Boolean} firstOnly Set to true if you can assume that the first
-       match is the only one
     @returns {SC.IndexSet} receiver
   */
   addObject: function(object, firstOnly) {
@@ -1075,8 +1071,6 @@ SC.IndexSet = SC.mixin({},
     then only finds the first index for each object.
 
     @param {SC.Enumerable} objects the objects to add
-    @param {Boolean} firstOnly Set to true if you can assume that the first
-       match is the only one
     @returns {SC.IndexSet} receiver
   */
   addObjects: function(objects, firstOnly) {
@@ -1095,8 +1089,6 @@ SC.IndexSet = SC.mixin({},
     Requires source to work.
 
     @param {Object} object the object to add
-    @param {Boolean} firstOnly Set to true if you can assume that the first
-       match is the only one
     @returns {SC.IndexSet} receiver
   */
   removeObject: function(object, firstOnly) {
@@ -1122,8 +1114,6 @@ SC.IndexSet = SC.mixin({},
     then only finds the first index for each object.
 
     @param {SC.Enumerable} objects the objects to add
-    @param {Boolean} firstOnly Set to true if you can assume that the first
-       match is the only one
     @returns {SC.IndexSet} receiver
   */
   removeObjects: function(objects, firstOnly) {
@@ -1142,7 +1132,7 @@ SC.IndexSet = SC.mixin({},
     Usually observing notifications from IndexSet are not useful, so
     supress them by default.
 
-    @type Boolean
+    @property {Boolean}
   */
   LOG_OBSERVING: NO,
 

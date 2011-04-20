@@ -1,10 +1,8 @@
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 /**
   @class
@@ -180,7 +178,7 @@ SC.SelectFieldView = SC.FieldView.extend(
           if (!emptyName && index === 0 && fieldValue === '***') {
             this.set('value', value);
           }
-          if (value !== null && value !== undefined) value = (SC.guidFor(value)) ? SC.guidFor(value) : value.toString() ;
+          if (value) value = (SC.guidFor(value)) ? SC.guidFor(value) : value.toString() ;
    
           // render HTML
           var disable = (this.validateMenuItem && this.validateMenuItem(value, name)) ? '' : 'disabled="disabled" ' ;
@@ -283,12 +281,12 @@ SC.SelectFieldView = SC.FieldView.extend(
       
       while(!found && (--loc >= 0)) {
         object = objects.objectAt? objects.objectAt(loc) : objects[loc] ;
-        if (object === null || object === undefined) continue; // null means placeholder; just skip
+        if (!object) continue; // null means placeholder; just skip
       
         // get value using valueKey if there is one or use object
         // map to _guid or toString.
         if (valueKey) object = (object.get) ? object.get(valueKey) : object[valueKey] ;
-        var ov = (object !== null && object !== undefined) ? (SC.guidFor(object) ? SC.guidFor(object) : object.toString()) : null ;
+        var ov = (object) ? (SC.guidFor(object) ? SC.guidFor(object) : object.toString()) : null ;
       
         // use this object value if it matches.
         if (value == ov) found = object ;
@@ -302,7 +300,7 @@ SC.SelectFieldView = SC.FieldView.extend(
     if (SC.none(newValue)) { 
       newValue = '***' ; 
     } else {
-      newValue = ((newValue !== null && newValue !== undefined) ? (SC.guidFor(newValue) ? SC.guidFor(newValue) : newValue.toString()) : null );
+      newValue = ((newValue) ? (SC.guidFor(newValue) ? SC.guidFor(newValue) : newValue.toString()) : null );
     }
     this.$input().val(newValue);
     return this ;

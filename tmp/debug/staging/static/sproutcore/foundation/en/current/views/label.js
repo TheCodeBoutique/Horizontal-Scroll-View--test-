@@ -1,16 +1,16 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
 sc_require('mixins/inline_editable');
 sc_require('mixins/inline_editor_delegate');
-sc_require('delegates/inline_text_field');
 
 SC.REGULAR_WEIGHT = 'normal';
 SC.BOLD_WEIGHT = 'bold';
+
 /**
   @class
   
@@ -25,7 +25,7 @@ SC.BOLD_WEIGHT = 'bold';
   @extends SC.InlineEditorDelegate
   @since SproutCore 1.0
 */
-SC.LabelView = SC.View.extend(SC.Control, SC.InlineEditable,
+SC.LabelView = SC.View.extend(SC.Control, SC.InlineEditorDelegate, SC.InlineEditable,
 /** @scope SC.LabelView.prototype */ {
 
   classNames: ['sc-label-view'],
@@ -33,14 +33,15 @@ SC.LabelView = SC.View.extend(SC.Control, SC.InlineEditable,
   displayProperties: 'displayTitle textAlign fontWeight icon escapeHTML needsEllipsis hint'.w(),
 
   /**
-    The delegate that gets notified of events related to the editing process. Set
-    this to the object you want to handles the lifecycle of the inline editor.
+    The WAI-ARIA attribute for the label view. This property is assigned to
+    'aria-labelledby' attribute, which defines a string value that labels the
+    element. Used to support voiceover. It should be assigned a non-empty string,
+    if the 'aria-labelledby' attribute has to be set for the element.
 
-    Defaults to itself.
-    @type SC.Object
+    @property {String}
   */
-  inlineEditorDelegate: SC.InlineTextFieldDelegate,
-
+  ariaLabeledBy: null,
+  
   isEditable: NO,
   
   /**
@@ -52,16 +53,17 @@ SC.LabelView = SC.View.extend(SC.Control, SC.InlineEditable,
     @type {SC.View}
     @default {SC.InlineTextFieldView}
   */
-  exampleEditor: SC.InlineTextFieldView,
+  exampleInlineTextFieldView: SC.InlineTextFieldView,
+  
+  /**
+    LabelView is its own delegate by default, but you can change this to use a customized editor.
+  */
+  editorDelegate: null,
   
   /**
     Specify the font weight for this.  You may pass SC.REGULAR_WEIGHT, or SC.BOLD_WEIGHT.
-    
-    @property {String} SC.REGULAR_WEIGHT|SC.BOLD_WEIGHT
-    @default null
-    @deprecated
   */
-  fontWeight: null,
+  fontWeight: SC.REGULAR_WEIGHT,
   
   /**
     If true, value will be escaped to avoid scripting attacks.
@@ -111,24 +113,8 @@ SC.LabelView = SC.View.extend(SC.Control, SC.InlineEditable,
   
   /**
     Set the alignment of the label view.
-    
-    @property {String} SC.ALIGN_LEFT|SC.ALIGN_MIDDLE|SC.ALIGN_RIGHT
-    @default null
-    @deprecated
   */
-  textAlign: null,
-
-  //
-  // SUPPORT FOR AUTOMATIC RESIZING
-  //
-  supportsAutoResize: YES,
-  autoResizeLayer: function() { return this.get('layer'); }
-  .property('layer').cacheable(),
-
-  autoResizeText: function() { return this.get('displayTitle'); }
-  .property('displayTitle').cacheable(),
-
-  autoResizePadding: SC.propertyFromRenderDelegate('autoResizePadding', 10),
+  textAlign: SC.ALIGN_LEFT,
 
   /**
     The name of the theme's SC.LabelView render delegate.
@@ -201,25 +187,25 @@ SC.LabelView = SC.View.extend(SC.Control, SC.InlineEditable,
   */
   doubleClick: function( evt ) { return this.beginEditing(); },
 
-  /*
-  * @method
-  *
-  * Hide the label view while the inline editor covers it.
+  /** @private 
+    Hide the label view while the inline editor covers it.
   */
-  inlineEditorDidBeginEditing: function(original, editor, value, editable) {
-    this._oldOpacity = this.get('layout').opacity || 1;
+  inlineEditorDidBeginEditing: function(editor) {
+    var layer = this.$();
+
+    // Cache the current opacity value
+    this._oldOpacity = layer.css('opacity');  //gets the opacity from the layer
+    // Hide the view by setting its opacity to 0
     this.adjust('opacity', 0);
-
-    original(editor, value, editable);
-  }.enhance(),
-
-  /*
-  * @method
-  *
-  * Restore the label view when the inline editor finishes.
+  },
+  
+  /** @private
+    Update the field value and make it visible again.
   */
-  inlineEditorDidEndEditing: function() {
+  inlineEditorDidEndEditing: function(editor, finalValue) {
+    this.setIfChanged('value', finalValue) ;
     this.adjust('opacity', this._oldOpacity);
     this._oldOpacity = null ;
+    this.set('isEditing', NO) ;
   }
 });

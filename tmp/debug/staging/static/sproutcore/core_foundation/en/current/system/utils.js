@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -94,7 +94,7 @@ SC.mixin( /** @scope SC */ {
       This is passed to `jQuery()`, so any value supported by `jQuery()` will work.
     @param {String} relativeToFlag flag to determine which relative element to determine offset by.
       One of either: 'document', 'viewport' or 'parent' (default: 'document').
-    @returns {Object} the offset of the element as an Object (ie. Hash) in the form { x: value, y: value }.
+    @returns {Object} the offset of the element as an Object (ie. Hash) in the form { left: value, top: value }.
    */
   offset: function(elem, relativeToFlag) {
     var userAgent,
@@ -130,12 +130,6 @@ SC.mixin( /** @scope SC */ {
         result.top = result.top - window.pageYOffset;
       }
     }
-
-    // Translate 'left', 'top' to 'x', 'y'
-    result.x = result.left;
-    result.y = result.top;
-    delete result.left;
-    delete result.top;
 
     return result;
   },

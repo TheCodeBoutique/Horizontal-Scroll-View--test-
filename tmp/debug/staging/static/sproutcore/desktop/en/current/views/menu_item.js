@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 sc_require('views/button') ;
@@ -373,15 +373,15 @@ SC.MenuItemView = SC.View.extend(SC.ContentDisplay,
     // Legacy support for actions that are functions
     if (SC.typeOf(action) === SC.T_FUNCTION) {
       action.apply(target, [rootMenu]);
-      
+      //@if(debug)
       SC.Logger.warn('Support for menu item action functions has been deprecated. Please use target and action.');
-      
+      //@endif
     } else {
       responder = this.getPath('pane.rootResponder') || SC.RootResponder.responder;
 
       if (responder) {
         // Send the action down the responder chain
-        responder.sendAction(action, target, rootMenu);
+        responder.sendAction(action, target, this);
       }
     }
 

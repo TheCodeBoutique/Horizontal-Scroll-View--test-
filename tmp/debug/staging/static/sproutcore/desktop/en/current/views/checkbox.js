@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -18,10 +18,10 @@
   to "checkbox", the way the checkbox renders (including DOM) will actually
   be different than SC.ButtonView's.
   
-  @extends SC.ButtonView
+  @extends SC.FieldView
   @since SproutCore 1.0
 */
-SC.CheckboxView = SC.ButtonView.extend(SC.StaticLayout,
+SC.CheckboxView = SC.ButtonView.extend(SC.StaticLayout, SC.Button,
   /** @scope SC.CheckboxView.prototype */ {
 
   classNames: ['sc-checkbox-view', 'sc-checkbox-control'],
@@ -34,6 +34,27 @@ SC.CheckboxView = SC.ButtonView.extend(SC.StaticLayout,
     @property {String}
   */
   ariaRole: 'checkbox',
+
+  /**
+    The WAI-ARIA attribute for the checkbox. This property is assigned to
+    'aria-labelledby' attribute, which defines a string value that labels the
+    checkbox element. Used to support voiceover.It should be assigned a non-empty
+    string, if the 'aria-labelledby' attribute has to be set for the element.
+
+    @property {String}
+  */
+  ariaLabeledBy: null,
+
+  /**
+    The WAI-ARIA attribute for the checkbox. This property is assigned to
+    'aria-label' attribute, which defines a string value that labels the
+    checkbox element. Used to support voiceover. It is used when it is not
+    possible to have a visible label on the screen. It should be assigned a non-empty
+    string, if the 'aria-label' attribute has to be set for the element.
+
+    @property {String}
+  */
+  ariaLabel: null,
 
   // no special theme for Checkbox; button defaults to 'square', so we have to stop that.
   themeName: null,
@@ -62,7 +83,8 @@ SC.CheckboxView = SC.ButtonView.extend(SC.StaticLayout,
     this.set('isActive', NO);
     this._isMouseDown = NO;
 
-    if(!this.get('isEnabled')) {
+    if(!this.get('isEnabled') || 
+      (evt && evt.target && !this.$().within(evt.target))) {
       return YES;
     }
     var val = this.get('value');

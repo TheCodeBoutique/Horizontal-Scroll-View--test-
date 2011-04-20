@@ -31,52 +31,52 @@ sc_require('extensions');
         {{content.title}}
       {{/boundIf}}
 */
+
 (function() {
-  // Binds a property into the DOM. This will create a hook in DOM that the
-  // KVO system will look for and upate if the property changes.
   var bind = function(property, options, preserveContext, shouldDisplay) {
-    var data    = options.data,
-        fn      = options.fn,
-        inverse = options.inverse,
-        view    = data.view;
+    var data = options.data;
+    var view = data.view;
+    var fn = options.fn;
 
-    // Set up observers for observable objects
-    if (this.isObservable) {
-      // Create the view that will wrap the output of this template/property and
-      // add it to the nearest view's childViews array.
-      // See the documentation of SC._BindableSpan for more.
-      var bindView = view.createChildView(SC._BindableSpan, {
-        preserveContext: preserveContext,
-        shouldDisplayFunc: shouldDisplay,
-        displayTemplate: fn,
-        inverseTemplate: inverse,
-        property: property,
-        previousContext: this
-      });
+    var spanId = "handlebars-bound-" + jQuery.uuid++;
+    var result = this.getPath(property);
 
-      view.get('childViews').push(bindView);
+    var self = this, renderContext = SC.RenderContext('span').id(spanId);
 
-      // Observe the given property on the context and
-      // tells the SC._BindableSpan to re-render.
-      this.addObserver(property, this, function observer() {
-        if (bindView.get('layer')) {
-          bindView.rerender();
+    this.addObserver(property, function observer() {
+      var result = self.getPath(property);
+      var span = view.$("#" + spanId);
+
+      if(span.length === 0) {
+        self.removeObserver(property, observer);
+        return;
+      }
+
+      if (fn && shouldDisplay(result)) {
+        var renderContext = SC.RenderContext('span').id(spanId);
+        renderContext.push(fn(self.get(property)));
+        var element = renderContext.element();
+        span.replaceWith(element);
+      } else if (shouldDisplay(result)) {
+        span.html(Handlebars.Utils.escapeExpression(result));
+      } else {
+        span.html("");
+      }
+    });
+
+    if (shouldDisplay(result)) {
+      if (preserveContext) {
+        renderContext.push(fn(this));
+      } else {
+        if (fn) {
+          renderContext.push(fn(result));
         } else {
-          // If no layer can be found, we can assume somewhere
-          // above it has been re-rendered, so remove the
-          // observer.
-          this.removeObserver(property, this, observer);
+          renderContext.push(Handlebars.Utils.escapeExpression(result));
         }
-      });
-
-      var context = bindView.renderContext(bindView.get('tagName'));
-      bindView.renderToContext(context);
-      return new Handlebars.SafeString(context.join());
-    } else {
-      // The object is not observable, so just render it out and
-      // be done with it.
-      return SC.getPath(this, property);
+      }
     }
+
+    return new Handlebars.SafeString(renderContext.join());
   };
 
   Handlebars.registerHelper('bind', function(property, fn) {
@@ -85,39 +85,15 @@ sc_require('extensions');
 
   Handlebars.registerHelper('boundIf', function(property, fn) {
     if(fn) {
-      return bind.call(this, property, fn, true, function(result) {
-        if (SC.typeOf(result) === SC.T_ARRAY) {
-          if (result.length !== 0) { return true; }
-          return false;
-        } else {
-          return !!result;
-        }
-      } );
+      return bind.call(this, property, fn, true, function(result) { return !!result; } );
     } else {
       throw "Cannot use boundIf helper without a block.";
     }
   });
 })();
 
-Handlebars.registerHelper('with', function(context, options) {
-  return Handlebars.helpers.bind.call(options.contexts[0], context, options);
-});
-
-Handlebars.registerHelper('if', function(context, options) {
-  return Handlebars.helpers.boundIf.call(options.contexts[0], context, options);
-});
-
-Handlebars.registerHelper('unless', function(context, options) {
-  var fn = options.fn, inverse = options.inverse;
-
-  options.fn = inverse;
-  options.inverse = fn;
-
-  return Handlebars.helpers.boundIf.call(options.contexts[0], context, options);
-});
-
 Handlebars.registerHelper('bindAttr', function(options) {
-  var attrs = options.hash;
+  var attrs = options.hash, attrKeys = SC.keys(options.hash);
   var view = options.data.view;
   var ret = [];
 
@@ -126,21 +102,10 @@ Handlebars.registerHelper('bindAttr', function(options) {
   // the bound property changes.
   var dataId = jQuery.uuid++;
 
-  // Handle classes differently, as we can bind multiple classes
-  var classBindings = attrs['class'];
-  if (classBindings != null) {
-    var classResults = SC.Handlebars.bindClasses(view, classBindings, dataId);
-    ret.push('class="'+classResults.join(' ')+'"');
-    delete attrs['class'];
-  }
-
-  var attrKeys = SC.keys(attrs);
-
   // For each attribute passed, create an observer and emit the
   // current value of the property as an attribute.
   attrKeys.forEach(function(attr) {
     var property = attrs[attr];
-    var value = view.getPath(property);
 
     // Add an observer to the view for when the property changes.
     // When the observer fires, find the element using the
@@ -158,30 +123,11 @@ Handlebars.registerHelper('bindAttr', function(options) {
         return;
       }
 
-      // A false result will remove the attribute from the element. This is
-      // to support attributes such as disabled, whose presence is meaningful.
-      if (result === NO) {
-        elem.removeAttr(attr);
-
-      // Likewise, a true result will set the attribute's name as the value.
-      } else if (result === YES) {
-        elem.attr(attr, attr);
-
-      } else {
-        elem.attr(attr, result);
-      }
+      elem.attr(attr, result);
     });
 
-    // Use the attribute's name as the value when it is YES
-    if (value === YES) {
-      value = attr;
-    }
-
-    // Do not add the attribute when the value is false
-    if (value !== NO) {
-      // Return the current value, in the form src="foo.jpg"
-      ret.push(attr+'="'+value+'"');
-    }
+    // Return the current value, in the form src="foo.jpg"
+    ret.push(attr+'="'+view.getPath(property)+'"');
   });
 
   // Add the unique identifier

@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -29,13 +29,14 @@ SC.BaseTheme.radioRenderDelegate = SC.RenderDelegate.create({
   name: 'radio',
   
   render: function(dataSource, context) {
-    this.addSizeClassName(dataSource, context);
-
     var theme = dataSource.get('theme');
     
     var isSelected = dataSource.get('isSelected'),
         width = dataSource.get('width'),
-        labelId = SC.guidFor(dataSource) + '-label';
+        title = dataSource.get('title'),
+        value = dataSource.get('value'),
+        ariaLabeledBy = dataSource.get('ariaLabeledBy'),
+        ariaLabel     = dataSource.get('ariaLabel');
 
     context.setClass({
       active: dataSource.get('isActive'),
@@ -47,26 +48,31 @@ SC.BaseTheme.radioRenderDelegate = SC.RenderDelegate.create({
     //accessing accessibility
     context.attr('role', 'radio');
     context.attr('aria-checked', isSelected);
-    context.attr('aria-labelledby', labelId);
-    context.attr('aria-disabled', dataSource.get('isEnabled') ? 'false' : 'true');
+    if(ariaLabel && ariaLabel !== "") {
+      context.attr('aria-label', ariaLabel);
+    }
+    if(ariaLabeledBy && ariaLabeledBy !== "") {
+      context.attr('aria-labelledby', ariaLabeledBy);
+    }
 
     if (width) context.css('width', width);
-
+    
     context.push('<span class = "button"></span>');
-
-    context = context.begin('span').addClass('sc-button-label').id(labelId);
+    
+    context = context.begin('span').addClass('sc-button-label');
     theme.labelRenderDelegate.render(dataSource, context);
     context = context.end();
   },
-
+  
   update: function(dataSource, jquery) {
-    this.updateSizeClassName(dataSource, jquery);
-
     var theme = dataSource.get('theme');
-
+    
     var isSelected = dataSource.get('isSelected'),
         width = dataSource.get('width'),
-        value = dataSource.get('value');
+        title = dataSource.get('title'),
+        value = dataSource.get('value'),
+        ariaLabeledBy = dataSource.get('ariaLabeledBy'),
+        ariaLabel     = dataSource.get('ariaLabel');
 
     jquery.setClass({
       active: dataSource.get('isActive'),
@@ -74,11 +80,16 @@ SC.BaseTheme.radioRenderDelegate = SC.RenderDelegate.create({
       sel: dataSource.get('isSelected'),
       disabled: !dataSource.get('isEnabled')
     });
-
-    jquery.attr('aria-disabled', dataSource.get('isEnabled') ? 'false' : 'true');
+    
     jquery.attr('aria-checked', isSelected);
+    if(ariaLabel !== ""){
+      jquery.attr('aria-label', ariaLabel);
+    }
+    if(ariaLabeledBy !== "") {
+      jquery.attr('aria-labelledby', ariaLabeledBy);
+    }
     jquery.css('width', width ? width : null);
-
+    
     theme.labelRenderDelegate.update(dataSource, jquery.find('.sc-button-label'));
   }
 });

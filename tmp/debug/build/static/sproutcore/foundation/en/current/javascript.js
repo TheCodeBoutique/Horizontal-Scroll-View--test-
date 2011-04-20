@@ -2,56 +2,55 @@
 
 /* >>>>>>>>>> BEGIN __sc_chance.js */
 if (typeof CHANCE_SLICES === 'undefined') var CHANCE_SLICES = [];CHANCE_SLICES = CHANCE_SLICES.concat([]);
-
 /* >>>>>>>>>> BEGIN source/mixins/tree_item_content.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
 /**
   @namespace
 
-  A tree item is a model object that acts as a node in a tree-like data
-  structure such as a hierarchy of folders or outline of items.  This mixin
+  A tree item is a model object that acts as a node in a tree-like data 
+  structure such as a hierarchy of folders or outline of items.  This mixin 
   can be applied to tree item model objects to customize the way the tree
   information is extracted from the object.
 
   h2. Basic Implementation
-
+  
   If you add this mixin, you must implement the treeItemChildren property so
   that it returns the current array of child tree items for the receiver.  If
   you do not implement this property the tree item will not function.
-
+  
   h2. Optimizing Branches
-
+  
   The most common use of this mixin is to override the treeItemBranchIndexes
   property to return an index set of child items that are themselves branches
   in the tree.  Normally the TreeController will need to walk every item in
-  your list to determine these branch items.  However by implementing this
+  your list to determine these branch items.  However by implementing this 
   method yourself, you can provide a result faster.
-
+  
   If none of your child items are branches, override this property to return
   null or an empty index set.
-
+  
   @since SproutCore 1.0
 */
 SC.TreeItemContent = {
 
-  /**
-    Walk like a duck.
-
+  /** 
+    Walk like a duck. 
+    
     @property {Boolean}
   */
   isTreeItemContent: YES,
-
+  
   /**
-    Property returns the children for this tree item.  The default simply
-    returns null.  If you implement this mixin, you MUST implement this
+    Property returns the children for this tree item.  The default simply 
+    returns null.  If you implement this mixin, you MUST implement this 
     property to return the actual tree item children for the item.
-
+   
     @property {SC.Array}
   */
   treeItemChildren: null,
@@ -59,36 +58,36 @@ SC.TreeItemContent = {
   /**
     The default property used to determine if the tree item is expanded.  You
     can implement you model object to update this property or you can override
-    treeItemDisclosureState() to compute the disclosure state however you
+    treeItemDisclosureState() to compute the disclosure state however you 
     want.
-
+    
     @property {Boolean}
   */
   treeItemIsExpanded: YES,
-
+  
   /**
-    Indicates whether the tree item should be rendered as a group or not.
+    Indicates whether the tree item should be rendered as a group or not. 
     This property is only useful on the root item in your tree.  Setting it to
     YES on any other item will be ignored.
-
+    
     @property {Boolean}
   */
   treeItemIsGrouped: NO,
-
+  
   /**
-    Returns the disclosure state for the tree item, which appears at the
-    index of the parent's treeItemChildren array.  The response must be one of
+    Returns the disclosure state for the tree item, which appears at the 
+    index of the parent's treeItemChildren array.  The response must be one of 
     SC.BRANCH_OPEN, SC.BRANCH_CLOSED or SC.LEAF_NODE.
-
-    If the parent parameter is null, then this item is part of the root
+     
+    If the parent parameter is null, then this item is part of the root 
     children array.
-
+    
     This method will only be called for tree items that have children.  Tree
     items with no children are assumed to be leaf nodes.
 
-    The default implementation uses the treeItemIsExpanded property to
+    The default implementation uses the treeItemIsExpanded property to 
     determine if the item should be open or closed.
-
+    
     @param {Object} parent the parent item containing this item
     @param {Number} idx the index of the item in the parent
     @returns {Number} branch state
@@ -96,52 +95,52 @@ SC.TreeItemContent = {
   treeItemDisclosureState: function(parent, idx) {
     return this.get('treeItemIsExpanded') ? SC.BRANCH_OPEN : SC.BRANCH_CLOSED;
   },
-
+  
   /**
-    Collapse the tree item.  The default implementation will change the
+    Collapse the tree item.  The default implementation will change the 
     treeItemIsExpanded property, but you can override this method to handle
     collapsing anyway you like.
-
+    
     @param {Object} parent the parent item containing this item
     @param {Number} idx the index of the item in the parent
     @returns {void}
   */
   treeItemCollapse: function(parent, idx) {
-    this.setIfChanged('treeItemIsExpanded', NO);
+    this.setIfChanged('treeItemIsExpanded', NO);    
   },
 
   /**
-    Expand the tree item.  The default implementation will change the
+    Expand the tree item.  The default implementation will change the 
     treeItemIsExpanded property, but you can override this method to handle
     collapsing anyway you like.
-
+    
     @param {Object} parent the parent item containing this item
     @param {Number} idx the index of the item in the parent
     @returns {void}
   */
   treeItemExpand: function(parent, idx) {
-    this.setIfChanged('treeItemIsExpanded', YES);
+    this.setIfChanged('treeItemIsExpanded', YES);    
   },
-
+  
   /**
-    Returns an index set containing the child indexes of the item that are
+    Returns an index set containing the child indexes of the item that are 
     themselves branches.  This will only be called on tree items with a branch
     disclosure state.
 
-    If the passed parent and index are both null, then the receiver is the
+    If the passed parent and index are both null, then the receiver is the 
     root node in the tree.
-
+    
     The default implementation iterates over the item's children to get the
     disclosure state of each one.  Child items with a branch disclosure state
-    will have their index added to the return index set.
-
-    You may want to override this method to provide a more efficient
+    will have their index added to the return index set.  
+    
+    You may want to override this method to provide a more efficient 
     implementation if you are working with large data sets and can infer which
     children are branches without iterating over each one.
 
     If you know for sure that all of the child items for this item are leaf
     nodes and not branches, simply override this method to return null.
-
+    
     @param {Object} parent the parent item containing this item
     @param {Number} index the index of the item in the parent
     @returns {SC.IndexSet} branch indexes
@@ -149,9 +148,9 @@ SC.TreeItemContent = {
   treeItemBranchIndexes: function(parent, index) {
     var children = this.get('treeItemChildren'),
         ret, lim, idx, item;
-
+        
     if (!children) return null ; // nothing to do
-
+    
     ret = SC.IndexSet.create();
     lim = children.get('length');
     for(idx=0;idx<lim;idx++) {
@@ -162,14 +161,14 @@ SC.TreeItemContent = {
 
     return ret.get('length')>0 ? ret : null;
   }
-
+  
 };
 
 /* >>>>>>>>>> BEGIN source/mixins/collection_content.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -349,26 +348,26 @@ SC.CollectionContent = {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
 sc_require('mixins/tree_item_content');
 sc_require('mixins/collection_content');
 
-/**
+/** 
   @ignore
   @class
-
+  
   A TreeNode is an internal class that will manage a single item in a tree
-  when trying to display the item in a hierarchy.
-
-  When displaying a tree of objects, a tree item object will be nested to
+  when trying to display the item in a hierarchy. 
+  
+  When displaying a tree of objects, a tree item object will be nested to 
   cover every object that might have child views.
-
-  TreeNode stores an array which contains either a number pointing to the
+  
+  TreeNode stores an array which contains either a number pointing to the 
   next place in the array there is a child item or it contains a child item.
-
+  
   @extends SC.Object
   @extends SC.Array
   @extends SC.CollectionContent
@@ -384,82 +383,82 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
   item: null,
 
   /**
-    The controller delegate.  If the item does not implement the
+    The controller delegate.  If the item does not implement the 
     TreeItemContent method, delegate properties will be used to determine how
     to access the content.  Set automatically when a tree item is created.
-
+    
     If you are creating an observer manually, you must set this to a non-null
     value.
   */
   delegate: null,
-
+  
   // ..........................................................
   // FOR NESTED OBSERVERS
-  //
-
+  // 
+  
   /**
     The parent TreeItemObserver for this observer.  Must be set on create.
   */
   parentObserver: null,
 
   /**
-    The parent item for the observer item.  Computed automatically from the
+    The parent item for the observer item.  Computed automatically from the 
     parent.  If the value of this is null, then this is the root of the tree.
   */
   parentItem: function() {
     var p = this.get('parentObserver');
     return p ? p.get('item') : null;
   }.property('parentObserver').cacheable(),
-
+  
   /**
     Index location in parent's children array.  If this is the root item
     in the tree, should be null.
   */
   index: null,
-
-  outlineLevel: 0,
-
+  
+  outlineLevel: 0, 
+  
   // ..........................................................
   // EXTRACTED FROM ITEM
-  //
-
+  // 
+  
   /**
     Array of child tree items.  Extracted from the item automatically on init.
   */
   children: null,
-
+  
   /**
     Disclosure state of this item.  Must be SC.BRANCH_OPEN or SC.BRANCH_CLOSED
     If this is the root of a item tree, the observer will have children but
     no parent or parent item.  IN this case the disclosure state is always
     SC.BRANCH_OPEN.
-
+    
     @property
     @type Number
   */
   disclosureState: SC.BRANCH_OPEN,
 
   /**
-    IndexSet of children with branches.  This will ask the delegate to name
+    IndexSet of children with branches.  This will ask the delegate to name 
     these indexes.  The default implementation will iterate over the children
     of the item but a more optimized version could avoid touching each item.
-
+    
     @property
     @type SC.IndexSet
   */
   branchIndexes: function() {
-    var item = this.get('item'),
+    var item = this.get('item'), 
         len, pitem, idx, children, ret;
-
+    
     // no item - no branches
     if (!item) return SC.IndexSet.EMPTY;
-
+    
     // if item is treeItemContent then ask it directly
     else if (item.isTreeItemContent) {
       pitem  = this.get('parentItem');
       idx    = this.get('index') ;
       return item.treeItemBranchIndexes(pitem, idx);
-
+      
     // otherwise, loop over children and determine disclosure state for each
     } else {
       children = this.get('children');
@@ -467,10 +466,10 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
       ret = SC.IndexSet.create();
       len = children.get('length');
       pitem = item ; // save parent
-
+      
       for(idx=0;idx<len;idx++) {
         if (!(item = children.objectAt(idx))) continue ;
-        if (!this._computeChildren(item, pitem, idx)) continue; // no children
+        if (!this._computeChildren(item, pitem, idx)) continue; // no chil'en
         if (this._computeDisclosureState(item, pitem, idx) !== SC.LEAF_NODE) {
           ret.add(idx);
         }
@@ -479,7 +478,7 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
       return ret.get('length')>0 ? ret : null;
     }
   }.property('children').cacheable(),
-
+  
   /**
     Returns YES if the item itself should be shown, NO if only its children
     should be shown.  Normally returns YES unless the parentObject is null.
@@ -487,50 +486,50 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
   isHeaderVisible: function() {
     return !!this.get('parentObserver');
   }.property('parentObserver').cacheable(),
-
+  
   /**
     Get the current length of the tree item including any of its children.
   */
   length: 0,
-
+  
   // ..........................................................
   // SC.ARRAY SUPPORT
-  //
-
+  // 
+  
   /**
     Get the object at the specified index.  This will talk the tree info
-    to determine the proper place.  The offset should be relative to the
+    to determine the proper place.  The offset should be relative to the 
     start of this tree item.  Calls recursively down the tree.
-
+    
     This should only be called with an index you know is in the range of item
     or its children based on looking at the length.
-
+    
     @param {Number} index
     @param {Boolean} omitMaterializing
     @returns {Object}
   */
   objectAt: function(index, omitMaterializing) {
     var len   = this.get('length'),
-        item  = this.get('item'),
+        item  = this.get('item'), 
         cache = this._objectAtCache,
         cur   = index,
         loc   = 0,
         indexes, children;
-
+     
     if (index >= len) return undefined;
     if (this.get('isHeaderVisible')) {
       if (index === 0) return item;
       else cur--;
     }
-    item = null;
+    item = null; 
 
     if (!cache) cache = this._objectAtCache = [];
     if ((item = cache[index]) !== undefined) return item ;
 
     children = this.get('children');
     if (!children) return undefined; // no children - nothing to get
-
-    // loop through branch indexes, reducing the offset until it matches
+    
+    // loop through branch indexes, reducing the offset until it matches 
     // something we might actually return.
     if (indexes = this.get('branchIndexes')) {
       indexes.forEach(function(i) {
@@ -546,13 +545,13 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
           item = observer.objectAt(cur-i, omitMaterializing);
           cur  = -1;
         } else cur -= len-1 ;
-
+        
       },this);
     }
-
+    
     if (cur>=0) item = children.objectAt(cur, omitMaterializing); // get internal if needed
-    cache[index] = item ; // save in cache
-
+    cache[index] = item ; // save in cache 
+    
     return item ;
   },
 
@@ -560,27 +559,27 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
     Implements SC.Array.replace() primitive.  For this method to succeed, the
     range you replace must lie entirely within the same parent item, otherwise
     this will raise an exception.
-
+    
     h3. The Operation Parameter
-
+    
     Note that this replace method accepts an additional parameter "operation"
-    which is used when you try to insert an item on a boundary between
+    which is used when you try to insert an item on a boundary between 
     branches whether it should be inserted at the end of the previous group
-    after the group.  If you don't pass operation, the default is
+    after the group.  If you don't pass operation, the default is 
     SC.DROP_BEFORE, which is the expected behavior.
-
+    
     Even if the operation is SC.DROP_AFTER, you should still pass the actual
     index where you expect the item to be inserted.  For example, if you want
     to insert AFTER the last index of an 3-item array, you would still call:
-
+    
     {{{
       observer.replace(3, 0, [object1 .. objectN], SC.DROP_AFTER)
     }}}
-
+    
     The operation is simply used to disambiguate whether the insertion is
     intended to be AFTER the previous item or BEFORE the items you are
     replacing.
-
+    
     @param {Number} start the starting index
     @param {Number} amt the number of items to replace
     @param {SC.Array} objects array of objects to insert
@@ -592,12 +591,12 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
     var cur      = start,
         observer = null,
         indexes, len, max;
-
+        
     if (operation === undefined) operation = SC.DROP_BEFORE;
-
+    
     // adjust the start location based on branches, possibly passing on to an
     // observer.
-    if (this.get('isHeaderVisible')) cur--; // exclude my own header item
+    if (this.get('isHeaderVisible')) cur--; // exclude my own header item 
     if (cur < 0) throw "Tree Item cannot replace itself";
 
     // remove branch lengths.  If the adjusted start location lands inside of
@@ -607,8 +606,8 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
         if (observer || (i>=cur)) return ; // nothing to do
         if (!(observer = this.branchObserverAt(i))) return; // nothing to do
         len = observer.get('length');
-
-        // if this branch range is before the start loc, just remove it and
+        
+        // if this branch range is before the start loc, just remove it and 
         // go on.  If cur is somewhere inside of the range, then save to pass
         // on.  Note use of operation to determine the abiguous end op.
         if ((i+len === cur) && operation === SC.DROP_AFTER) cur -= i;
@@ -616,15 +615,15 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
         else {
           cur -= len-1; observer = null ;
         }
-      }, this);
+      }, this);      
     }
-
+      
     // if an observer was saved, pass on call.
     if (observer) {
       observer.replace(cur, amt, objects, operation);
       return this;
     }
-
+    
     // no observer was saved, which means cur points to an index inside of
     // our own range.  Now amt just needs to be adjusted to remove any
     // visible branches as well.
@@ -637,11 +636,11 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
         max -= len-1;
       }, this);
     }
-
+    
     // get amt back out.  if amt is negative, it means that the range passed
     // was not cleanly inside of this range.  raise an exception.
-    amt = max-cur;
-
+    amt = max-cur; 
+    
     // ok, now that we are adjusted, get the children and forward the replace
     // call on.  if there are no children, bad news...
     var children = this.get('children');
@@ -652,43 +651,43 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
     }
 
     children.replace(cur, amt, objects, operation);
-
+    
     // don't call enumerableContentDidChange() here because, as an observer,
     // we should be notified by the children array itself.
-
+    
     return this;
   },
-
+  
   /**
     Called whenever the content for the passed observer has changed.  Default
     version notifies the parent if it exists and updates the length.
-
+    
     The start, amt and delta params should reflect changes to the children
     array, not to the expanded range for the wrapper.
   */
   observerContentDidChange: function(start, amt, delta) {
-
+    
     // clear caches
     this.invalidateBranchObserversAt(start);
     this._objectAtCache = this._outlineLevelCache = null;
     this._disclosureStateCache = null;
     this._contentGroupIndexes = NO;
     this.notifyPropertyChange('branchIndexes');
-
+    
     var oldlen = this.get('length'),
         newlen = this._computeLength(),
         parent = this.get('parentObserver'), set;
-
+    
     // update length if needed
     if (oldlen !== newlen) this.set('length', newlen);
-
+    
     // if we have a parent, notify that parent that we have changed.
     if (!this._notifyParent) return this; // nothing more to do
-
+    
     if (parent) {
       set = SC.IndexSet.create(this.get('index'));
       parent._childrenRangeDidChange(parent.get('children'), null, '[]', set);
-
+      
     // otherwise, note the enumerable content has changed.  note that we need
     // to convert the passed change to reflect the computed range
     } else {
@@ -697,7 +696,7 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
         start = this.expandChildIndex(start);
         amt = amt - start ;
         delta = 0 ;
-
+        
       } else {
         start = this.expandChildIndex(start);
         amt   = newlen - start;
@@ -712,31 +711,31 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
     Accepts a child index and expands it to reflect any nested groups.
   */
   expandChildIndex: function(index) {
-
+    
     var ret = index;
     if (this.get('isHeaderVisible')) index++;
 
     // fast path
     var branches = this.get('branchIndexes');
     if (!branches || branches.get('length')===0) return ret;
-
+    
     // we have branches, adjust for their length
     branches.forEachIn(0, index, function(idx) {
       ret += this.branchObserverAt(idx).get('length')-1;
     }, this);
-
+    
     return ret; // add 1 for item header
   },
-
+  
   // ..........................................................
   // SC.COLLECTION CONTENT SUPPORT
-  //
+  // 
 
   _contentGroupIndexes: NO,
-
+  
   /**
-    Called by the collection view to return any group indexes.  The default
-    implementation will compute the indexes one time based on the delegate
+    Called by the collection view to return any group indexes.  The default 
+    implementation will compute the indexes one time based on the delegate 
     treeItemIsGrouped
   */
   contentGroupIndexes: function(view, content) {
@@ -744,73 +743,71 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
 
     var ret = this._contentGroupIndexes;
     if (ret !== NO) return ret ;
-
-    // If this is not the root item, never do grouping
+    
+    // if this is not the root item, never do grouping
     if (this.get('parentObserver')) return null;
-
-    var item = this.get('item'), group, indexes, cur, padding;
-
+    
+    var item = this.get('item'), group, indexes, len, cur, loc, children;
+    
     if (item && item.isTreeItemContent) group = item.get('treeItemIsGrouped');
     else group = !!this.delegate.get('treeItemIsGrouped');
-
-    // If grouping is enabled, build an index set with all of our local groups.
+    
+    // if grouping is enabled, build an index set with all of our local 
+    // groups.
     if (group) {
       ret      = SC.IndexSet.create();
       indexes  = this.get('branchIndexes');
-
+      children = this.get('children');
+      len      = children ? children.get('length') : 0;
+      cur = loc = 0;
+      
       if (indexes) {
-        // Start at the minimum index, which is equal for the tree and flat array
-        cur = indexes.min();
-
-        // Padding is the difference between the tree index and array index for the current tree index
-        padding = 0;
         indexes.forEach(function(i) {
-          ret.add(i + padding, 1);
-
-            var observer = this.branchObserverAt(i);
-            if (observer) {
-              padding += observer.get('length') - 1;
-              cur += padding;
-            }
-          }, this);
+          ret.add(cur, (i+1)-loc); // add loc -> i to set
+          cur += (i+1)-loc;
+          loc = i+1 ;
+          
+          var observer = this.branchObserverAt(i);
+          if (observer) cur += observer.get('length')-1;
+        }, this);
       }
-    } else {
-      ret = null;
-    }
 
+      if (loc<len) ret.add(cur, len-loc);
+    } else ret = null;
+    
     this._contentGroupIndexes = ret ;
     return ret;
   },
-
+  
   contentIndexIsGroup: function(view, content, idx) {
     var indexes = this.contentGroupIndexes(view, content);
     return indexes ? indexes.contains(idx) : NO ;
   },
-
+  
   /**
     Returns the outline level for the specified index.
   */
   contentIndexOutlineLevel: function(view, content, index) {
     if (content !== this) return -1; // only care about us
-
+    
     var cache = this._outlineLevelCache;
     if (cache && (cache[index] !== undefined)) return cache[index];
     if (!cache) cache = this._outlineLevelCache = [];
-
+    
     var len   = this.get('length'),
         cur   = index,
         loc   = 0,
         ret   = null,
         indexes, children, observer;
-
+    
     if (index >= len) return -1;
-
+     
     if (this.get('isHeaderVisible')) {
       if (index === 0) return cache[0] = this.get('outlineLevel')-1;
       else cur--;
     }
 
-    // loop through branch indexes, reducing the offset until it matches
+    // loop through branch indexes, reducing the offset until it matches 
     // something we might actually return.
     if (indexes = this.get('branchIndexes')) {
       indexes.forEach(function(i) {
@@ -826,12 +823,12 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
           ret  = observer.contentIndexOutlineLevel(view, observer, cur-i);
           cur  = -1;
         } else cur -= len-1 ;
-
+        
       },this);
     }
-
+    
     if (cur>=0) ret = this.get('outlineLevel'); // get internal if needed
-    cache[index] = ret ; // save in cache
+    cache[index] = ret ; // save in cache 
     return ret ;
   },
 
@@ -840,25 +837,25 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
   */
   contentIndexDisclosureState: function(view, content, index) {
     if (content !== this) return -1; // only care about us
-
+    
     var cache = this._disclosureStateCache;
     if (cache && (cache[index] !== undefined)) return cache[index];
     if (!cache) cache = this._disclosureStateCache = [];
-
+    
     var len   = this.get('length'),
         cur   = index,
         loc   = 0,
         ret   = null,
         indexes, children, observer;
-
+    
     if (index >= len) return SC.LEAF_NODE;
-
+     
     if (this.get('isHeaderVisible')) {
       if (index === 0) return cache[0] = this.get('disclosureState');
       else cur--;
     }
 
-    // loop through branch indexes, reducing the offset until it matches
+    // loop through branch indexes, reducing the offset until it matches 
     // something we might actually return.
     if (indexes = this.get('branchIndexes')) {
       indexes.forEach(function(i) {
@@ -874,12 +871,12 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
           ret  = observer.contentIndexDisclosureState(view, observer, cur-i);
           cur  = -1;
         } else cur -= len-1 ;
-
+        
       },this);
     }
-
+    
     if (cur>=0) ret = SC.LEAF_NODE; // otherwise its a leaf node
-    cache[index] = ret ; // save in cache
+    cache[index] = ret ; // save in cache 
     return ret ;
   },
 
@@ -891,42 +888,42 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
   contentIndexExpand: function(view, content, idx) {
 
     var indexes, cur = idx, children, item;
-
+    
     if (content !== this) return; // only care about us
     if (this.get('isHeaderVisible')) {
       if (idx===0) {
         this._expand(this.get('item'));
         return;
       } else cur--;
-    }
-
+    } 
+    
     if (indexes = this.get('branchIndexes')) {
       indexes.forEach(function(i) {
         if (i >= cur) return; // past end - nothing to do
         var observer = this.branchObserverAt(i), len;
-        if (!observer) return ;
-
+        if (!observer) return ; 
+        
         len = observer.get('length');
         if (i+len > cur) {
           observer.contentIndexExpand(view, observer, cur-i);
           cur = -1 ; //done
         } else cur -= len-1;
-
-      }, this);
+        
+      }, this);  
     }
-
+    
     // if we are still inside of the range then maybe pass on to a child item
     if (cur>=0) {
-      children = this.get('children');
+      children = this.get('children');  
       item     = children ? children.objectAt(cur) : null;
       if (item) this._expand(item, this.get('item'), cur);
     }
   },
-
+  
   /**
-    Called to collapse a content index item if it is currently in an open
-    disclosure state.  The default implementation does nothing.
-
+    Called to collapse a content index item if it is currently in an open 
+    disclosure state.  The default implementation does nothing.  
+    
     @param {SC.CollectionView} view the collection view
     @param {SC.Array} content the content object
     @param {Number} idx the content index
@@ -935,42 +932,42 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
   contentIndexCollapse: function(view, content, idx) {
 
     var indexes, children, item, cur = idx;
-
+        
     if (content !== this) return; // only care about us
     if (this.get('isHeaderVisible')) {
       if (idx===0) {
         this._collapse(this.get('item'));
         return;
       } else cur--;
-    }
-
-
+    } 
+    
+    
     if (indexes = this.get('branchIndexes')) {
       indexes.forEach(function(i) {
         if (i >= cur) return; // past end - nothing to do
         var observer = this.branchObserverAt(i), len;
-        if (!observer) return ;
-
+        if (!observer) return ; 
+        
         len = observer.get('length');
         if (i+len > cur) {
           observer.contentIndexCollapse(view, observer, cur-i);
           cur = -1 ; //done
         } else cur -= len-1;
-
-      }, this);
+        
+      }, this);  
     }
 
     // if we are still inside of the range then maybe pass on to a child item
     if (cur>=0) {
-      children = this.get('children');
+      children = this.get('children');  
       item     = children ? children.objectAt(cur) : null;
       if (item) this._collapse(item, this.get('item'), cur);
     }
   },
-
+  
   // ..........................................................
   // BRANCH NODES
-  //
+  //   
 
   /**
     Returns the branch item for the specified index.  If none exists yet, it
@@ -980,7 +977,7 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
     var byIndex = this._branchObserversByIndex,
         indexes = this._branchObserverIndexes,
         ret, parent, pitem, item, children, guid, del ;
-
+        
     if (!byIndex) byIndex = this._branchObserversByIndex = [];
     if (!indexes) {
       indexes = this._branchObserverIndexes = SC.IndexSet.create();
@@ -992,7 +989,7 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
     children = this.get('children');
     item   = children ? children.objectAt(index) : null ;
     if (!item) return null ; // can't create an observer for a null item
-
+    
     byIndex[index] = ret = SC.TreeItemObserver.create({
       item:     item,
       delegate: this.get('delegate'),
@@ -1004,7 +1001,7 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
     indexes.add(index); // save for later invalidation
     return ret ;
   },
-
+  
   /**
     Invalidates any branch observers on or after the specified index range.
   */
@@ -1014,60 +1011,57 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
 
     if (!byIndex || byIndex.length<=index) return this ; // nothing to do
     if (index < 0) index = 0 ;
-
+    
     // destroy any observer on or after the range
     indexes.forEachIn(index, indexes.get('max')-index, function(i) {
       var observer = byIndex[i];
       if (observer) observer.destroy();
     }, this);
-
+    
     byIndex.length = index; // truncate to dump extra indexes
-
+    
     return this;
   },
-
+  
   // ..........................................................
   // INTERNAL METHODS
-  //
-
+  // 
+  
   init: function() {
     arguments.callee.base.apply(this,arguments);
-
+    
     // begin all properties on item if there is one.  This will allow us to
     // track important property changes.
     var item = this.get('item');
     if (!item) throw "SC.TreeItemObserver.item cannot be null";
-
+    
     item.addObserver('*', this, this._itemPropertyDidChange);
     this._itemPropertyDidChange(item, '*');
     this._notifyParent = YES ; // avoid infinite loops
   },
-
+  
   /**
-    Called just before a branch observer is removed.  Should stop any
+    Called just before a branch observer is removed.  Should stop any 
     observering and invalidate any child observers.
   */
   destroy: function() {
     this.invalidateBranchObserversAt(0);
     this._objectAtCache = null ;
-    this._notifyParent = NO ; // parent doesn't care anymore
-
+    
     // cleanup observing
     var item = this.get('item');
     if (item) item.removeObserver('*', this, this._itemPropertyDidChange);
-
+    
     var children = this._children,
         ro = this._childrenRangeObserver;
     if (children && ro) children.removeRangeObserver(ro);
-
-    this.set('length', 0);
-
+    
     arguments.callee.base.apply(this,arguments);
   },
-
+  
   /**
     Called whenever a property changes on the item.  Determines if either the
-    children array or the disclosure state has changed and then notifies as
+    children array or the disclosure state has changed and then notifies as 
     necessary..
   */
   _itemPropertyDidChange: function(target, key) {
@@ -1075,18 +1069,18 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
         state    = this.get('disclosureState'),
         item     = this.get('item'),
         next ;
-
+        
     this.beginPropertyChanges();
-
+    
     next = this._computeDisclosureState(item);
     if (state !== next) this.set('disclosureState', next);
-
+    
     next = this._computeChildren(item);
     if (children !== next) this.set('children', next);
-
+    
     this.endPropertyChanges();
   },
-
+  
   /**
     Called whenever the children or disclosure state changes.  Begins or ends
     observing on the children array so that changes can propogate outward.
@@ -1096,21 +1090,21 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
         cur   = state === SC.BRANCH_OPEN ? this.get('children') : null,
         last  = this._children,
         ro    = this._childrenRangeObserver;
-
+        
     if (last === cur) return this; //nothing to do
     if (ro) last.removeRangeObserver(ro);
     if (cur) {
-      this._childrenRangeObserver =
+      this._childrenRangeObserver = 
           cur.addRangeObserver(null, this, this._childrenRangeDidChange);
     } else this._childrenRangeObserver = null;
-
+    
     this._children = cur ;
     this._childrenRangeDidChange(cur, null, '[]', null);
-
+    
   }.observes("children", "disclosureState"),
 
   /**
-    Called anytime the actual content of the children has changed.  If this
+    Called anytime the actual content of the children has changed.  If this 
     changes the length property, then notifies the parent that the content
     might have changed.
   */
@@ -1120,14 +1114,14 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
         min = indexes ? indexes.get('min') : 0,
         max = indexes ? indexes.get('max') : len,
         old = this._childrenLen || 0;
-
+        
     this._childrenLen = len; // save for future calls
     this.observerContentDidChange(min, max-min, len-old);
   },
-
+  
   /**
-    Computes the current disclosure state of the item by asking the item or
-    the delegate.  If no pitem or index is passed, the parentItem and idex
+    Computes the current disclosure state of the item by asking the item or 
+    the delegate.  If no pitem or index is passed, the parentItem and idex 
     will be used.
   */
   _computeDisclosureState: function(item, pitem, index) {
@@ -1135,13 +1129,13 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
 
     // no item - assume leaf node
     if (!item || !this._computeChildren(item)) return SC.LEAF_NODE;
-
+    
     // item implement TreeItemContent - call directly
     else if (item.isTreeItemContent) {
       if (pitem === undefined) pitem = this.get('parentItem');
       if (index === undefined) index = this.get('index');
       return item.treeItemDisclosureState(pitem, index);
-
+      
     // otherwise get treeItemDisclosureStateKey from delegate
     } else {
       key = this._treeItemIsExpandedKey ;
@@ -1153,9 +1147,9 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
       return item.get(key) ? SC.BRANCH_OPEN : SC.BRANCH_CLOSED;
     }
   },
-
+  
   /**
-    Collapse the item at the specified index.  This will either directly
+    Collapse the item at the specified index.  This will either directly 
     modify the property on the item or call the treeItemCollapse() method.
   */
   _collapse: function(item, pitem, index) {
@@ -1163,13 +1157,13 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
 
     // no item - assume leaf node
     if (!item || !this._computeChildren(item)) return this;
-
+    
     // item implement TreeItemContent - call directly
     else if (item.isTreeItemContent) {
       if (pitem === undefined) pitem = this.get('parentItem');
       if (index === undefined) index = this.get('index');
       item.treeItemCollapse(pitem, index);
-
+      
     // otherwise get treeItemDisclosureStateKey from delegate
     } else {
       key = this._treeItemIsExpandedKey ;
@@ -1180,12 +1174,12 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
       }
       item.setIfChanged(key, NO);
     }
-
+    
     return this ;
   },
 
   /**
-    Expand the item at the specified index.  This will either directly
+    Expand the item at the specified index.  This will either directly 
     modify the property on the item or call the treeItemExpand() method.
   */
   _expand: function(item, pitem, index) {
@@ -1193,13 +1187,13 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
 
     // no item - assume leaf node
     if (!item || !this._computeChildren(item)) return this;
-
+    
     // item implement TreeItemContent - call directly
     else if (item.isTreeItemContent) {
       if (pitem === undefined) pitem = this.get('parentItem');
       if (index === undefined) index = this.get('index');
       item.treeItemExpand(pitem, index);
-
+      
     // otherwise get treeItemDisclosureStateKey from delegate
     } else {
       key = this._treeItemIsExpandedKey ;
@@ -1210,22 +1204,22 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
       }
       item.setIfChanged(key, YES);
     }
-
+    
     return this ;
   },
-
+  
   /**
     Computes the children for the passed item.
   */
   _computeChildren: function(item) {
     var del, key;
-
+    
     // no item - no children
     if (!item) return null;
-
+    
     // item implement TreeItemContent - call directly
     else if (item.isTreeItemContent) return item.get('treeItemChildren');
-
+          
     // otherwise get treeItemChildrenKey from delegate
     else {
       key = this._treeItemChildrenKey ;
@@ -1237,7 +1231,7 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
       return item.get(key);
     }
   },
-
+  
   /**
     Computes the length of the array by looking at children.
   */
@@ -1256,32 +1250,31 @@ SC.TreeItemObserver = SC.Object.extend(SC.Array, SC.CollectionContent, {
           ret += observer.get('length')-1;
         }, this);
       }
-    }
+    } 
     return ret ;
   }
-
+    
 });
 
 
 /* >>>>>>>>>> BEGIN source/controllers/tree.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 sc_require('private/tree_item_observer');
 
 /**
   @class
 
-  A TreeController manages a tree of model objects that you might want to
+  A TreeController manages a tree of model objects that you might want to 
   display in the UI using a collection view.  For the most part, you should
   work with a TreeController much like you would an ObjectController, except
-  that the TreeController will also provide an arrangedObjects property that
+  that the TreeController will also provide an arrangedObjects property that 
   can be used as the content of a CollectionView.
-
+  
   TODO: Document More
 
   @extends SC.ObjectController
@@ -1293,41 +1286,41 @@ SC.TreeController = SC.ObjectController.extend(SC.SelectionSupport,
 
   // ..........................................................
   // PROPERTIES
-  //
-
+  // 
+  
   /**
     Set to YES if you want the top-level items in the tree to be displayed as
     group items in the collection view.
-
+    
     @property {Boolean}
   */
   treeItemIsGrouped: NO,
-
+  
   /**
     If your content support expanding and collapsing of content, then set this
-    property to the name of the key on your model that should be used to
-    determine the expansion state of the item.  The default is
+    property to the name of the key on your model that should be used to 
+    determine the expansion state of the item.  The default is 
     "treeItemIsExpanded"
-
+    
     @property {String}
   */
   treeItemIsExpandedKey: "treeItemIsExpanded",
-
+  
   /**
-    Set to the name of the property on your content object that holds the
+    Set to the name of the property on your content object that holds the 
     children array for each tree node.  The default is "treeItemChildren".
-
+    
     @property {String}
   */
   treeItemChildrenKey: "treeItemChildren",
-
+  
   /**
-    Returns an SC.Array object that actually will represent the tree as a
+    Returns an SC.Array object that actually will represent the tree as a 
     flat array suitable for use by a CollectionView.  Other than binding this
-    property as the content of a CollectionView, you generally should not
+    property as the content of a CollectionView, you generally should not 
     use this property directly.  Instead, work on the tree content using the
     TreeController like you would any other ObjectController.
-
+  
     @property {SC.Array}
   */
   arrangedObjects: function() {
@@ -1336,41 +1329,41 @@ SC.TreeController = SC.ObjectController.extend(SC.SelectionSupport,
       ret = SC.TreeItemObserver.create({ item: content, delegate: this });
     } else ret = null; // empty!
     this._sctc_arrangedObjects = ret ;
-
+    
     return ret ;
   }.property().cacheable(),
 
   // ..........................................................
   // PRIVATE
-  //
-
+  // 
+  
   /**
     @private
-
+    
     Manually invalidate the arrangedObjects cache so that we can teardown
-    any existing value.  We do it via an observer so that this will fire
-    immediately instead of waiting on some other component to get
+    any existing value.  We do it via an observer so that this will fire 
+    immediately instead of waiting on some other component to get 
     arrangedObjects again.
   */
   _sctc_invalidateArrangedObjects: function() {
     this.propertyWillChange('arrangedObjects');
-
+    
     var ret = this._sctc_arrangedObjects;
     if (ret) ret.destroy();
     this._sctc_arrangedObjects = null;
-
+    
     this.propertyDidChange('arrangedObjects');
   }.observes('content', 'treeItemIsExpandedKey', 'treeItemChildrenKey', 'treeItemIsGrouped'),
-
+  
   _sctc_arrangedObjectsContentDidChange: function() {
     this.updateSelectionAfterContentChange();
   }.observes('*arrangedObjects.[]'),
-
+  
   canSelectGroups: NO,
-
+  
   /**
     @private
-
+    
     Returns the first item in arrangeObjects that is not a group.  This uses
     a brute force approach right now; we assume you probably don't have a lot
     of groups up front.
@@ -1378,18 +1371,18 @@ SC.TreeController = SC.ObjectController.extend(SC.SelectionSupport,
   firstSelectableObject: function() {
     var objects = this.get('arrangedObjects'),
         indexes, len, idx     = 0;
-
+        
     if (!objects) return null; // fast track
-
+    
     // other fast track. if you want something fancier use collectionViewDelegate
     if(this.get('canSelectGroups')) return objects.get('firstObject');
-
+    
     indexes = objects.contentGroupIndexes(null, objects);
     len = objects.get('length');
     while(indexes.contains(idx) && (idx<len)) idx++;
     return idx>=len ? null : objects.objectAt(idx);
   }.property()
-
+  
 });
 
 
@@ -1397,9 +1390,10 @@ SC.TreeController = SC.ObjectController.extend(SC.SelectionSupport,
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            portions copyright @2009 Apple Inc.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
+
 /*global test */
 
 // TODO: IMPROVE CODE QUALITY.  This code was put together quickly in order to
@@ -1585,105 +1579,11 @@ SC.ControlTestPane.show = function() {
   });
 };
 
-/* >>>>>>>>>> BEGIN source/delegates/inline_text_field.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-/*
-* @delegate
-*
-* This is the default InlineEditorDelegate for SC.LabelView. The default editor
-* is an SC.InlineTextFieldView.
-*
-* Only one editor is allowed to be active at a time. If another view requests an
-* editor while an editor is already active, the delegate will first attempt to
-* commit the existing editor, then discard it if commit fails, and fail to
-* acquire if the active editor could not be discarded.
-*
-* Each time an editor is required, it instantiates it and appends it to the same
-* pane as the view being edited. The editor is responsible for positioning
-* itself correctly in its beginEditing method.
-*
-* @implements SC.InlineEditorDelegate
-*/
-SC.InlineTextFieldDelegate = {
-  /**
-    The current shared inline editor.
-
-    @property {SC.InlineTextFieldView}
-  */
-  editor: null,
-
-  /*
-  * @method
-  *
-  * If an editor is currently active, dismisses it by first attempting to commit
-  * and if that fails attempting to dismiss. If that fails, the acquire fails
-  * and returns null.
-  *
-  * Otherwise, it creates the editor as a child of the client view's pane and
-  * returns it.
-  *
-  * The default editor is an SC.InlineTextFieldView. The client view may
-  * customize this by setting a different inlineEditor as its exampleEditor
-  * property.
-  *
-  * @param {SC.InlineEditable} the label that is requesting an editor
-  * @returns {SC.InlineEditor} the editor the label should use to edit
-  */
-  acquireEditor: function(label) {
-    var editor = this.editor;
-
-    if(editor) {
-      // attempt to end editing on the previous editor and return null if unable
-      // to end editing successfully
-      if(editor.get('isEditing') && !editor.commitEditing() && !editor.discardEditing()) return null;
-
-      // now release it
-      this.releaseEditor(editor);
-    }
-
-    // default to SC.InlineTextFieldView
-    var exampleEditor = label.exampleEditor ? label.exampleEditor : SC.InlineTextFieldView,
-    pane = label.get('pane');
-
-    // set ourself as the delegate for the editor
-    editor = this.editor = pane.createChildView(exampleEditor, {
-      inlineEditorDelegate: this
-    });
-
-    pane.appendChild(editor);
-
-    return editor;
-  },
-
-  /*
-  * @method
-  *
-  * Cleans up the given editor by simply removing it from the view hierarchy. The
-  * client view should null any references to the editor so it may be garbage
-  * collected.
-  *
-  * @params {SC.InlineEditor} the editor that should be cleaned up
-  * @returns {Boolean} whether the cleanup succeeded
-  */
-  releaseEditor: function(editor) {
-    editor.removeFromParent();
-
-    this.editor = null;
-
-    return YES;
-  }
-};
-
-
 /* >>>>>>>>>> BEGIN source/system/gesture.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -2048,7 +1948,7 @@ SC.Gesture = SC.Object.extend({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 sc_require("system/gesture");
@@ -2130,7 +2030,7 @@ SC.PinchGesture = SC.Gesture.extend({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 sc_require("system/gesture");
@@ -2292,7 +2192,7 @@ SC.TapGesture = SC.Gesture.extend({
   tapDelay: 200,
 
   touchIsInGesture: function(touch, status) {
-    return !touch.tapFlunked;
+    return !status.tapFlunked
   },
 
   touchStart: function(touch) {
@@ -2360,12 +2260,8 @@ SC.TapGesture = SC.Gesture.extend({
   },
 
   _cancelTap: function(touch){
-    // We don't set this on the touchStatus because the status is
-    // linked to an individual view/gesture and we want this to be
-    // global. If it's not a tap somewhere, it's not a tap anywhere.
-    touch.tapFlunked = YES;
+    this.statusForTouch(touch).tapFlunked = YES;
 
-    this.release(touch);
     this.cancel(touch, this._tapCount);
 
     if (this._eventTimer) this._eventTimer.invalidate();
@@ -2423,7 +2319,7 @@ SC.TapGesture = SC.Gesture.extend({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -2460,13 +2356,6 @@ SC.AutoMixin = {
   }
 };
 /* >>>>>>>>>> BEGIN source/system/utils/string_measurement.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
 SC.mixin( /** @scope SC */ {
 
   _copy_computed_props: [
@@ -2719,69 +2608,53 @@ SC.mixin( /** @scope SC */ {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
 sc_require("system/utils/string_measurement");
 
 /**
-  @mixin
+  @namespace
   Use this mixin to make your view automatically resize based upon its value,
-  title, or other string property. Only works for views that support automatic
-  resizing.
-
-  Supporting Automatic Resizing
-  -------------------------------------
-  To support automatic resizing, your view must provide these properties:
-
-  - *`supportsAutoResize`.* Must be set to YES.
-
-  - *`autoResizeLayer`* A DOM element to use as a template for resizing the
-    view. Font sizes and other styles will be copied to the measuring element
-    SproutCore uses to measure the text.
-
-  - *`autoResizeText`.* The text to measure. A button view might make a proxy
-    to its `displayTitle`, for instance.
-
-  Your view may also supply:
-
-  - *`autoResizePadding`.* An amount to add to the measured size. This may be either
-    a single number to be added to both width and height, or a hash containing
-    separate `width` and `height` properties.
-
-
-  NOTE: these properties are not defined in the mixin itself because the supporting view,
-  rather than the user of SC.AutoResize, will be providing the properties, and mixing
-  SC.AutoResize into the view should not override these properties.
+  title, or other string property.
+  
+  The view uses SproutCore's text measuring API 
 */
 SC.AutoResize = {
-  /*@scope SC.AutoResize.prototype */
-
+  /**
+    Determines the property containing the string to measure.
+    
+    For efficiency, this may only be set _before_ initialization.
+    
+    @property {String}
+  */
+  autoResizeField: 'displayTitle',
+  
   /**
     If YES, automatically resizes the view (default). If NO, only measures,
     setting 'measuredSize' to the measured value (you can bind to measuredSize
     and update size manually).
-
+    
     @property {Boolean}
   */
   shouldAutoResize: YES,
-
+  
   /**
     If NO, prevents SC.AutoResize from doing anything at all.
-
+    
     @property {Boolean}
   */
   shouldMeasureSize: YES,
-
+  
   /**
     Determines if the view's width should be resized
     on calculation. Default is YES.
-
+    
     @property {Boolean}
   */
   shouldResizeWidth: YES,
-
+  
   /**
     Determines if the view's height should be resized
     on calculation. Default is NO to retain backwards
@@ -2800,282 +2673,531 @@ SC.AutoResize = {
     @property {Rect}
   */
   measuredSize: { width: 0, height: 0 },
-
+  
+  /**
+    An amount to add to the calculated width and height to ensure that any parts
+    not included in the measurement by the browser are covered (otherwise artifacts
+    can occur).
+    
+    @private
+  */
+  autoSizePadding: 10,
+  
   /**
     @private
     Begins observing the auto resize field.
   */
   initMixin: function() {
-    
-    if (!this.get('supportsAutoResize')) {
-      throw "View `%@` does not support automatic resize. See documentation for SC.AutoResize".fmt(this);
-    }
-    
+    this.addObserver(this.get('autoResizeField'), this, this._scar_valueDidChange);
   },
-
-  /**
-    Observe the autoResizePadding so we can update our measurements if it changes.
-
-    @private
-  */
-  _scar_autoResizePaddingDidChange: function() {
-    this.invokeOnce('measureSize');
-  }.observes('autoResizePadding'),
-
-
+  
   /**
     If this property is provided, all views that share the same value for this property will be resized as a batch for increased performance.
-
+    
     @property {String}
   */
   batchResizeId: null,
-
-  _scar_measurementPending: NO,
-  _scar_requestedBatchResizeId: null,
-
+  
+  _SCAR_measurementPending: NO,
+  _SCAR_requestedBatchResizeId: null,
+  
   // if the batch id changed while a request is out, we have to fix it
-  _scar_batchResizeIdDidChange: function() {
+  _SCAR_batchResizeIdDidChange: function() {
     var batchResizeId = this.get('batchResizeId'),
-    requestedBatchResizeId = this._scar_requestedBatchResizeId;
-
+    requestedBatchResizeId = this._SCAR_requestedBatchResizeId;
+    
     // check if a request is out and the id changed
-    if(this._scar_measurementPending && this._scar_requestedBatchResizeId !== batchResizeId) {
+    if(this._SCAR_measurementPending && this._SCAR_requestedBatchResizeId !== batchResizeId) {
       // if so, cancel the old request and make a new one
-      SC.AutoResizeManager.cancelMeasurementForView(this, requestedBatchResizeId);
-      SC.AutoResizeManager.scheduleMeasurementForView(this, batchResizeId);
+      SC.AutoResize.cancelResize(this, requestedBatchResizeId);
+      SC.AutoResize.requestResize(this, batchResizeId);
     }
   }.observes('batchResizeId'),
-
-  /**
-    Schedules a measurement to happen later, in batch mode. Only valid when the view
-    has a `batchResizeId`.
-  */
-  scheduleMeasurement: function() {
-    if (!this.get('shouldMeasureSize')) {
-      return;
-    }
-
+  
+  measureSizeLater: function() {
+    if (!this.get('shouldMeasureSize')) return;
+    
     var batchResizeId = this.get('batchResizeId');
-    SC.AutoResizeManager.scheduleMeasurementForView(this, batchResizeId);
-
-    this._scar_measurementPending = YES;
-    this._scar_requestedBatchResizeId = batchResizeId;
+    
+    SC.AutoResize.requestResize(this, batchResizeId);
+    
+    this._SCAR_measurementPending = YES;
+    this._SCAR_requestedBatchResizeId = batchResizeId;
   },
-
-  /**
-    Measures the size of the view.
-
-    @param batch For internal use during batch resizing.
-  */
+  
   measureSize: function(batch) {
-    var metrics, layer, value = this.get('autoResizeText'),
-        autoSizePadding, paddingHeight, paddingWidth;
-
-    // There are two special cases.
-    //   - empty: we should do nothing. The metrics are 0.
-    //   - batch mode: just call measureString.
-    //
-    // If we are in neither of those special cases, we should go ahead and
-    // resize normally.
-    //
-    if (SC.none(value) || value === "") {
-      metrics = { width: 0, height: 0 };
-    } else if (batch) {
-      metrics = SC.measureString(value);
-    } else {
-      // Normal resize pattern: get our own layer, pass it as a template to SC.metricsForString.
-      layer = this.get('autoResizeLayer');
-
-      if(!layer) {
-        return;
-      }
-
+    var metrics, layer, value = this.get(this.get('autoResizeField')), autoSizePadding, paddingHeight, paddingWidth;
+    
+    // if there's nothing to measure, don't bother actually measuring it
+    if(SC.none(value) || value === "") metrics = { width: 0, height: 0 };
+    
+    // get metrics in batch mode
+    else if(batch) metrics = SC.measureString(value);
+    
+    // do a singleton measurement using our own layer
+    else {
+      layer = this.kindOf(SC.TextFieldView) ? this.$input()[0] : this.get('layer');
+      if(!layer) return;
       metrics = SC.metricsForString(value, layer);
     }
-
-    // metrics should include padding
-    autoSizePadding = this.get('autoResizePadding') || 0;
-    if(SC.typeOf(autoSizePadding) === SC.T_NUMBER) {
-      paddingHeight = paddingWidth = autoSizePadding;
-    } else {
-      paddingHeight = autoSizePadding.height;
-      paddingWidth = autoSizePadding.width;
-    }
-
-    metrics.width += paddingWidth;
-    metrics.height += paddingHeight;
-
-    // In any case, we set measuredSize.
+    
     this.set('measuredSize', metrics);
-
+    
+    // if we are allowed to autoresize, add padding and adjust layout
     if (this.get('shouldAutoResize')) {
-      // if we are allowed to autoresize, adjust the layout
-      if (this.get('shouldResizeWidth')) {
-        this.adjust('width', metrics.width);
+      autoSizePadding = this.get('autoSizePadding');
+      
+      if(SC.typeOf(autoSizePadding) === SC.T_NUMBER) paddingHeight = paddingWidth = autoSizePadding;
+      else {
+        paddingHeight = autoSizePadding.height;
+        paddingWidth = autoSizePadding.width;
       }
-
-      if (this.get('shouldResizeHeight')) {
-        this.adjust('height', metrics.height);
-      }
-
+      
+      if (this.get('shouldResizeWidth')) this.adjust('width', metrics.width + paddingWidth);
+      if (this.get('shouldResizeHeight')) this.adjust('height', metrics.height + paddingHeight);
     }
-
-    this._scar_measurementPending = NO;
-
+    
+    this._SCAR_measurementPending = NO;
+    
     return metrics;
   },
-
-  /**
-    
-  */
+  
+  // we need to update the measurement when the value changes
   _scar_valueDidChange: function() {
-    this.scheduleMeasurement();
-  }.observes('autoResizeText'),
-
+    this.measureSizeLater();
+  },
+  
   /**
     @private
     When the layer is first created, measurement will need to take place.
   */
-  didCreateLayer: function(orig) {
-    orig();
-
-    this.scheduleMeasurement();
-  }.enhance()
-};
-
-/**
- * @private
- * @class
- * Manages batch auto resizing.
- *
- * This used to be part of SC.AutoResize, but we shouldn't mix these
- * methods/properties into each view.
- */
-SC.AutoResizeManager = {
-
-  /**
-    A hash of views needing resizing, mapped from batch resize ID to SC.CoreSets
-    of views.
-  */
-  viewsNeedingResize: null,
-
-  /**
-    Views queued for batch resizing, but with no batch resize id.
-
-    @property {SC.CoreSet}
-  */
+  didCreateLayer: function() {
+    this.measureSizeLater();
+  },
+  
+  needResize: null,
   untaggedViews: null,
 
-  /**
-    Schedules a re-measurement for the specified view in the batch with the
-    given id.
-
-    If a batch does not exist by that id, it will be created. If there is no id,
-    the view will be measured individually.
-
-    @param view The view to measure.
-    @param id The id of the batch to measure the view in.
-  */
-  scheduleMeasurementForView: function(view, id) {
+  requestResize: function(view, id) {
     // views with no tag just get put in their own list
     if(SC.none(id)) {
-      var untaggedViews = this.untaggedViews || (this.untaggedViews = SC.CoreSet.create());
-
+      var untaggedViews = SC.AutoResize.untaggedViews || (SC.AutoResize.untaggedViews = SC.CoreSet.create());
+      
       untaggedViews.add(view);
-
-    // views with a batch resize id set for each tag
+      
+    // views with a tag get a set for each tag
     } else {
-      var needResize = this.viewsNeedingResize || (this.viewsNeedingResize = {}),
+      var needResize = SC.AutoResize.needResize || (SC.AutoResize.needResize = {}),
       views = needResize[id] || (needResize[id] = SC.CoreSet.create());
-
+      
       views.add(view);
     }
 
-    SC.RunLoop.currentRunLoop.invokeLast(this.doBatchResize);
+    SC.RunLoop.currentRunLoop.invokeLast(SC.AutoResize.doBatchResize);
+  },
+  
+  cancelResize: function(view, id) {
+    var set = SC.none(id) ? SC.AutoResize.untaggedViews : SC.AutoResize.needResize[id];
+    
+    if(set) set.remove(view);
   },
 
-  /**
-    Cancels a scheduled measurement for a view in the named batch id.
-
-    @param view The view that was scheduled for measurement.
-    @param id The batch id the view was scheduled in.
-  */
-  cancelMeasurementForView: function(view, id) {
-    var set = SC.none(id) ? this.untaggedViews : this.viewsNeedingResize[id];
-
-    if(set) {
-      set.remove(view);
-    }
-  },
-
-  /**
-    Processes all autoResize batches. This will automatically be invoked at the
-    end of any run loop in which measurements were scheduled.
-  */
   doBatchResize: function() {
-    // make sure we are called from the correct scope.
-    // this will make our property references below clearer.
-    if (this !== SC.AutoResizeManager) {
-      return SC.AutoResizeManager.doBatchResize();
-    }
-
     var tag, views, view, layer, batches;
-
+    
     // first measure all the batched views
-    batches = this.viewsNeedingResize;
+    batches = SC.AutoResize.needResize;
     for(tag in batches) {
-      if (batches.hasOwnProperty(tag)) {
-        views = batches[tag];
-
-        // step through until you find one with a layer
-        while ((view = views.pop())) {
-          layer = view.get('autoResizeLayer');
-
-          // use the layer to prepare the measurement
-          if(layer) {
-            SC.prepareStringMeasurement(layer);
-            view.measureSize(YES);
-            break;
-          }
-        }
-
-        // now measure the rest using the same settings
-        while ((view = views.pop())) {
+      views = batches[tag];
+      
+      // step through until you find one with a layer
+      while(view = views.pop()) {
+        layer = view.get('layer');
+        
+        // use the layer to prepare the measurement
+        if(layer) {
+          SC.prepareStringMeasurement(layer);
           view.measureSize(YES);
+          break;
         }
-
-        SC.teardownStringMeasurement();
-
       }
-    }
+      
+      // now measure the rest using the same settings
+      while(view = views.pop()) {
+        view.measureSize(YES);
+      }
 
+      SC.teardownStringMeasurement();
+    }
+    
     // measure views with no batch id
-    views = this.untaggedViews;
-
-    if(!views) {
-      return;
-    }
-
-    while((view = views.pop())) {
+    views = SC.AutoResize.untaggedViews;
+    if(!views) return;
+    while(view = views.pop()) {
       view.measureSize();
     }
   }
-
 };
 
 /* >>>>>>>>>> BEGIN source/mixins/button.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
+/** @namespace
+
+  This mixin implements many of the basic state-handling attributes for 
+  button-like views, including an auto-updated title, and mapping the current
+  value to an isSelected state.
+  
+  Usually you will not work with this mixin directly.  Instead, you should use
+  a class that incorporates the mixin such as SC.ButtonView, SC.CheckboxView
+  or SC.RadioView.
+  
+  This mixin assumes you have already applied the SC.Control and 
+  SC.DelegateSupport mixins as well.
+  
+  @since SproutCore 1.0  
+*/
 SC.Button = {
   
-  initMixin: function(){
-    SC.Logger.warn("SC.Button is deprecated and does nothing. Subclass SC.ButtonView instead.");
-  }
+  // ..........................................................
+  // VALUE PROPERTIES
+  // 
+  
+  /**
+    Used to automatically update the state of the button view for toggle style
+    buttons.
+
+    for toggle style buttons, you can set the value and it will be used to
+    update the isSelected state of the button view.  The value will also
+    change as the user selects or deselects.  You can control which values
+    the button will treat as isSelected by setting the toggleOnValue and 
+    toggleOffValue.  Alternatively, if you leave these properties set to
+    YES or NO, the button will do its best to convert a value to an 
+    appropriate state:
+  
+    - null, false, 0  -> isSelected = false
+    - any other single value -> isSelected = true
+    - array -> if all values are the same state: that state.  otherwise MIXED.
+    
+    @property {Object}
+  */  
+  value: null,
+  
+  /**
+    Value of a selected toggle button.
+  
+    for a toggle button, set this to any object value you want.  The button
+    will be selected if the value property equals the targetValue.  If the
+    value is an array of multiple items that contains the targetValue, then
+    the button will be set to a mixed state.
+
+    default is YES
+    
+    @property {Object}
+  */
+  toggleOnValue: YES,
+
+  /**
+    Value of an unselected toggle button.
+  
+    For a toggle button, set this to any object value you want.  When the
+    user toggle's the button off, the value of the button will be set to this
+    value.
+  
+    default is NO 
+  
+    @property {Object}
+  */
+  toggleOffValue: NO,
+  
+  // ..........................................................
+  // TITLE 
+  // 
+  
+  /**
+    If YES, then the title will be localized.
+    
+    @property {Boolean}
+  */
+  localize: NO,
+  
+  /** @private */
+  localizeBindingDefault: SC.Binding.bool(),
+
+  /**
+    The button title.  If localize is YES, then this should be the localization key to display.  Otherwise, this will be the actual string displayed in the title.  This property is observable and bindable.
+    
+    @property {String}
+  */  
+  title: '',
+
+  /**
+    If you set this property, the title property will be updated automatically
+    from the content using the key you specify.
+    
+    @property {String}
+  */
+  contentTitleKey: null,
+  
+  /**
+    The button icon.  Set this to either a URL or a CSS class name (for 
+    spriting).  Note that if you pass a URL, it must contain at 
+    least one slash to be detected as such.
+    
+    @property {String}
+  */
+  icon: null,
+
+  /**
+    If you set this property, the icon will be updated automatically from the
+    content using the key you specify.
+    
+    @property {String}
+  */
+  contentIconKey: null,
+
+  /**
+    If YES, button will attempt to display an ellipsis if the title cannot 
+    fit inside of the visible area.  This feature is not available on all
+    browsers.
+    
+    @property {Boolean}
+  */
+  needsEllipsis: YES,
+  
+  /**
+    The computed display title.  This is generated by localizing the title 
+    property if necessary.
+    
+    @property {String}
+  */
+  displayTitle: function() {
+    var ret = this.get('title');
+    return (ret && this.get('localize')) ? ret.loc() : (ret || '');
+  }.property('title','localize').cacheable(),
+  
+  /**
+    The key equivalent that should trigger this button on the page.
+    
+    @property {String}
+  */
+  keyEquivalent: null,
+  
+  // ..........................................................
+  // METHODS
+  // 
+  
+  /**
+    Classes that include this mixin can invoke this method from their 
+    render method to render the proper title HTML.  This will include an 
+    icon if necessary along with any other standard markup.
+    
+    @param {SC.RenderContext} context the context to render
+    @param {Boolean} firstTime YES if first time rendering
+    @returns {SC.RenderContext} the context
+  */
+  renderTitle: function(context, firstTime) {
+    var icon = this.get('icon'),
+        image = '' ,
+        title = this.get('displayTitle') ,
+        needsTitle = (!SC.none(title) && title.length>0),
+        elem, htmlNode, imgTitle;
+        if(this.get('escapeHTML')) title = SC.RenderContext.escapeHTML(title) ;
+        
+    // get the icon.  If there is an icon, then get the image and update it.
+    // if there is no image element yet, create it and insert it just before
+    // title.
+    
+    if (icon) {
+      var blank = SC.BLANK_IMAGE_URL;
+
+      if (icon.indexOf('/') >= 0) {
+        image = '<img src="'+icon+'" alt="" class="icon" />';
+      } else {
+        image = '<img src="'+blank+'" alt="" class="'+icon+'" />';
+      }
+      needsTitle = YES ;
+    }
+    imgTitle = image + title;
+    if(firstTime){
+      if(this.get('needsEllipsis')){
+        context.push('<label class="sc-button-label ellipsis">'+imgTitle+'</label>'); 
+      }else{
+          context.push('<label class="sc-button-label">'+imgTitle+'</label>'); 
+      }  
+      this._ImageTitleCached = imgTitle;
+    }else{
+      elem = this.$('label');  
+      if ( (htmlNode = elem[0])){
+        if(needsTitle) { 
+          elem.setClass('ellipsis', this.get('needsEllipsis'));
+          if(this._ImageTitleCached !== imgTitle) {
+            this._ImageTitleCached = imgTitle; // Update the cache
+            htmlNode.innerHTML = imgTitle;
+          } 
+        }
+        else { htmlNode.innerHTML = ''; } 
+      }
+    }  
+    return context ;
+  },
+
+  /**
+    Updates the value, title, and icon keys based on the content object, if 
+    set.
+    
+    @property {Object} target the target of the object that changed
+    @property {String} key name of property that changed
+    @returns {SC.Button} receiver
+  */
+  contentPropertyDidChange: function(target, key) {
+    var del = this.get('displayDelegate'), 
+        content = this.get('content'), value ;
+
+    var valueKey = this.getDelegateProperty('contentValueKey', del) ;
+    if (valueKey && (key === valueKey || key === '*')) {
+      this.set('value', content ? (content.get ? content.get(valueKey) : content[valueKey]) : null) ;
+    }
+
+    var titleKey = this.getDelegateProperty('contentTitleKey', del) ;
+    if (titleKey && (key === titleKey || key === '*')) {
+      this.set('title', content ? (content.get ? content.get(titleKey) : content[titleKey]) : null) ;
+    }
+
+    var iconKey = this.getDelegateProperty('contentIconKey', del);
+    if (iconKey && (key === iconKey || key === '*')) {
+      this.set('icon', content ? (content.get ? content.get(iconKey) : content[iconKey]) : null) ;
+    }
+    
+    return this ;
+  },
+
+  /** @private - when title changes, dirty display. */
+  _button_displayObserver: function() {
+    this.displayDidChange();
+  }.observes('title', 'icon', 'value'),
+
+  /**
+    Handle a key equivalent if set.  Trigger the default action for the 
+    button.  Depending on the implementation this may vary.
+    
+    @param {String} keystring
+    @param {SC.Event} evt
+    @returns {Boolean}  YES if handled, NO otherwise
+  */
+  performKeyEquivalent: function(keystring, evt) {
+    //If this is not visible
+    if (!this.get('isVisibleInWindow')) return NO;
+
+    if (!this.get('isEnabled')) return NO;
+    var equiv = this.get('keyEquivalent');
+
+    // button has defined a keyEquivalent and it matches!
+    // if triggering succeeded, true will be returned and the operation will 
+    // be handeled (i.e performKeyEquivalent will cease crawling the view 
+    // tree)
+    if (equiv) {
+      if (equiv === keystring) return this.triggerAction(evt);
+    
+    // should fire if isDefault OR isCancel.  This way if isDefault AND 
+    // isCancel, responds to both return and escape
+    } else if ((this.get('isDefault') && (keystring === 'return')) ||
+        (this.get('isCancel') && (keystring === 'escape'))) {
+          return this.triggerAction(evt);
+    }
+
+    return NO; // did not handle it; keep searching
+  },
+
+  /**
+    Your class should implement this method to perform the default action on
+    the button.  This is used to implement keyboard control.  Your button
+    may make this change in its own way also.
+    
+    @property {SC.Event} evt the event
+    @returns {void}
+  */
+  triggerAction: function(evt) {
+    throw "SC.Button.triggerAction() is not defined in %@".fmt(this);
+  },
+
+  // ..........................................................
+  // VALUE <-> isSelected STATE MANAGEMNT
+  // 
+
+  /**
+    This is the standard logic to compute a proposed isSelected state for a
+    new value.  This takes into account the toggleOnValue/toggleOffValue 
+    properties, among other things.  It may return YES, NO, or SC.MIXED_STATE.
+    
+    @param {Object} value
+    @returns {Boolean} return state
+  */
+  computeIsSelectedForValue: function(value) {
+    var targetValue = this.get('toggleOnValue'), state, next ;
+    
+    if (SC.typeOf(value) === SC.T_ARRAY) {
+
+      // treat a single item array like a single value
+      if (value.length === 1) {
+        state = (value[0] == targetValue) ;
+        
+      // for a multiple item array, check the states of all items.
+      } else {
+        state = null;
+        value.find(function(x) {
+          next = (x == targetValue) ;
+          if (state === null) {
+            state = next ;
+          } else if (next !== state) state = SC.MIXED_STATE ;
+          return state === SC.MIXED_STATE ; // stop when we hit a mixed state.
+        });
+      }
+      
+    // for single values, just compare to the toggleOnValue...use truthiness
+    } else {
+      if(value === SC.MIXED_STATE) state = SC.MIXED_STATE;
+      else state = (value === targetValue) ;
+    }
+    return state ;
+  },
+  
+  /** @ignore */
+  initMixin: function() {
+    // if value is not null, update isSelected to match value.  If value is
+    // null, we assume you may be using isSelected only.  
+    if (!SC.none(this.get('value'))) this._button_valueDidChange();  
+  },
+  
+  /** @private
+    Whenever the button value changes, update the selected state to match.
+  */
+  _button_valueDidChange: function() {
+    var value = this.get('value'),
+        state = this.computeIsSelectedForValue(value);
+    this.set('isSelected', state) ; // set new state...
+  }.observes('value'),
+  
+  /** @private
+    Whenever the selected state is changed, make sure the button value is also updated.  Note that this may be called because the value has just changed.  In that case this should do nothing.
+  */
+  _button_isSelectedDidChange: function() {
+    var newState = this.get('isSelected'),
+        curState = this.computeIsSelectedForValue(this.get('value'));
+    
+    // fix up the value, but only if computed state does not match.
+    // never fix up value if isSelected is set to MIXED_STATE since this can
+    // only come from the value.
+    if ((newState !== SC.MIXED_STATE) && (curState !== newState)) {
+      var valueKey = (newState) ? 'toggleOnValue' : 'toggleOffValue' ;
+      this.set('value', this.get(valueKey));
+    }
+  }.observes('isSelected')
   
 } ;
 
@@ -3083,7 +3205,7 @@ SC.Button = {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -3195,233 +3317,7 @@ SC.ContentDisplay = {
   
 } ;
 
-/* >>>>>>>>>> BEGIN source/mixins/content_value_support.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2010 Sprout Systems, Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
-/*
-* @mixin
-*
-* This mixin allows a view to get its value from a content object based
-* on the value of its contentValueKey.
-*
-* {{{
-* myView = SC.View.create({
-*   content: {prop: "abc123"},
-*
-*   contentValueKey: 'prop'
-* });
-*
-* // myView.get('value') will be "abc123"
-* }}}
-*
-* This is useful if you have a nested record structure and want to have
-* it be reflected in a nested view structure. If your data structures
-* only have primitive values, consider using SC.Control instead.
-*/
-SC.ContentValueSupport = {
-  hasContentValueSupport: YES,
-
-  /** @private */
-  initMixin: function() {
-    this._control_contentDidChange() ; // setup content observing if needed.
-  },
-  
-  /**
-    The value represented by this control.
-    
-    Most controls represent a value of some type, such as a number, string
-    or image URL.  This property should hold that value.  It is bindable
-    and observable.  Changing this value will immediately change the
-    appearance of the control.  Likewise, editing the control 
-    will immediately change this value.
-    
-    If instead of setting a single value on a control, you would like to 
-    set a content object and have the control display a single property
-    of that control, then you should use the content property instead.
-
-    @property {Object}
-  */
-  value: null,
-  
-  /**
-    The content object represented by this control.
-    
-    Often you need to use a control to display some single aspect of an 
-    object, especially if you are using the control as an item view in a
-    collection view.
-    
-    In those cases, you can set the content and contentValueKey for the
-    control.  This will cause the control to observe the content object for
-    changes to the value property and then set the value of that property 
-    on the "value" property of this object.
-    
-    Note that unless you are using this control as part of a form or 
-    collection view, then it would be better to instead bind the value of
-    the control directly to a controller property.
-    
-    @property {SC.Object}
-  */
-  content: null,
-  
-  /**
-    The property on the content object that would want to represent the 
-    value of this control.  This property should only be set before the
-    content object is first set.  If you have a displayDelegate, then
-    you can also use the contentValueKey of the displayDelegate.
-    
-    @property {String}
-  */
-  contentValueKey: null,
-  
-  /**
-    Invoked whenever any property on the content object changes.  
-    
-    The default implementation will update the value property of the view
-    if the contentValueKey property has changed.  You can override this
-    method to implement whatever additional changes you would like.
-    
-    The key will typically contain the name of the property that changed or 
-    '*' if the content object itself has changed.  You should generally do
-    a total reset if '*' is changed.
-    
-    @param {Object} target the content object
-    @param {String} key the property that changes
-    @returns {void}
-    @test in content
-  */
-  contentPropertyDidChange: function(target, key) {
-    return this.updatePropertyFromContent('value', key, 'contentValueKey', target);
-  },
-  
-  /**
-    Helper method you can use from your own implementation of 
-    contentPropertyDidChange().  This method will look up the content key to
-    extract a property and then update the property if needed.  If you do
-    not pass the content key or the content object, they will be computed 
-    for you.  It is more efficient, however, for you to compute these values
-    yourself if you expect this method to be called frequently.
-    
-    @param {String} prop local property to update
-    @param {String} key the contentproperty that changed
-    @param {String} contentKey the local property that contains the key
-    @param {Object} content
-    @returns {SC.Control} receiver
-  */
-  updatePropertyFromContent: function(prop, key, contentKey, content) {
-    var del, v;
-    
-    if (contentKey === undefined) contentKey = "content"+prop.capitalize()+"Key";
-    
-    // prefer our own definition of contentKey
-    if(this[contentKey]) contentKey = this.get(contentKey);
-    // if we don't have one defined check the delegate
-    else if((del = this.displayDelegate) && (v = del[contentKey])) contentKey = del.get ? del.get(contentKey) : v;
-    // if we have no key we can't do anything so just short circuit out
-    else return this;
-    
-    // only bother setting value if the observer triggered for the correct key
-    if (key === '*' || key === contentKey) {
-      if (content === undefined) content = this.get('content');
-      
-      if(content) v = content.get ? content.get(contentKey) : content[contentKey];
-      else v = null;
-      
-      this.set(prop, v) ;
-    }
-    
-    return this ;
-  },
-  
-  /**
-    Relays changes to the value back to the content object if you are using
-    a content object.
-    
-    This observer is triggered whenever the value changes.  It will only do
-    something if it finds you are using the content property and
-    contentValueKey and the new value does not match the old value of the
-    content object.  
-    
-    If you are using contentValueKey in some other way than typically
-    implemented by this mixin, then you may want to override this method as
-    well.
-    
-    @returns {void}
-  */
-  updateContentWithValueObserver: function() {
-    var key = this.contentValueKey ?
-      this.get('contentValueKey') :
-      this.getDelegateProperty('contentValueKey', this.displayDelegate),
-      content = this.get('content');
-
-    if (!key || !content) return ; // do nothing if disabled
-
-    // get value -- set on content if changed
-    var value = this.get('value');
-
-    if (typeof content.setIfChanged === SC.T_FUNCTION) {
-      content.setIfChanged(key, value);
-    }
-
-    // avoid re-writing inherited props
-    else if (content[key] !== value) {
-      content[key] = value ;
-    }
-  }.observes('value'),
-  
-  /** @private
-    This should be null so that if content is also null, the
-    _contentDidChange won't do anything on init.
-  */
-  _control_content: null,
-
-  /** @private
-    Observes when a content object has changed and handles notifying 
-    changes to the value of the content object.
-  */
-  // TODO: observing * is unnecessary and inefficient, but a bunch of stuff in sproutcore depends on it (like button)
-  _control_contentDidChange: function() {
-    var content = this.get('content');
-    
-    if (this._control_content === content) return; // nothing changed
-    
-    var f = this.contentPropertyDidChange,
-    // remove an observer from the old content if necessary
-        old = this._control_content;
-
-    if (old && old.removeObserver) old.removeObserver('*', this, f) ;
-  
-    // update previous values
-    this._control_content = content ;
-  
-    // add observer to new content if necessary.
-    if (content && content.addObserver) content.addObserver('*', this, f) ;
-
-    // notify that value did change.
-    this.contentPropertyDidChange(content, '*') ;
-    
-  }.observes('content'),
-  
-  // since we always observe *, just call the update function
-  _control_contentValueKeyDidChange: function() {
-    // notify that value did change.
-    this.contentPropertyDidChange(this.get('content'), '*') ;
-  }.observes('contentValueKey'),
-};
-
-
 /* >>>>>>>>>> BEGIN source/mixins/string.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
 // These are basic enhancements to the string class used throughout
 // SproutCore.
 /** @private */
@@ -3818,12 +3714,11 @@ SC.supplement(String.prototype, SC.StringInflections) ;
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
 sc_require('mixins/string');
-sc_require('mixins/content_value_support');
 
 /**
   Option for controls to automatically calculate their size (should be default 
@@ -3925,9 +3820,14 @@ SC.TINY_CONTROL_SIZE = 'sc-tiny-size' ;
   
   @since SproutCore 1.0
 */
-SC.Control = SC.mixin(SC.clone(SC.ContentValueSupport), {
+SC.Control = {
   
   isControl: YES,
+  
+  /** @private */
+  initMixin: function() {
+    this._control_contentDidChange() ; // setup content observing if needed.
+  },
   
   /** 
     The selected state of this control.  Possible options are YES, NO or 
@@ -3954,6 +3854,144 @@ SC.Control = SC.mixin(SC.clone(SC.ContentValueSupport), {
   
   /** @private */
   isActiveBindingDefault: SC.Binding.oneWay().bool(),
+  
+  /**
+    The value represented by this control.
+    
+    Most controls represent a value of some type, such as a number, string
+    or image URL.  This property should hold that value.  It is bindable
+    and observable.  Changing this value will immediately change the
+    appearance of the control.  Likewise, editing the control 
+    will immediately change this value.
+    
+    If instead of setting a single value on a control, you would like to 
+    set a content object and have the control display a single property
+    of that control, then you should use the content property instead.
+
+    @property {Object}
+  */
+  value: null,
+  
+  /**
+    The content object represented by this control.
+    
+    Often you need to use a control to display some single aspect of an 
+    object, especially if you are using the control as an item view in a
+    collection view.
+    
+    In those cases, you can set the content and contentValueKey for the
+    control.  This will cause the control to observe the content object for
+    changes to the value property and then set the value of that property 
+    on the "value" property of this object.
+    
+    Note that unless you are using this control as part of a form or 
+    collection view, then it would be better to instead bind the value of
+    the control directly to a controller property.
+    
+    @property {SC.Object}
+  */
+  content: null,
+  
+  /**
+    The property on the content object that would want to represent the 
+    value of this control.  This property should only be set before the
+    content object is first set.  If you have a displayDelegate, then
+    you can also use the contentValueKey of the displayDelegate.
+    
+    @property {String}
+  */
+  contentValueKey: null,
+  
+  /**
+    Invoked whenever any property on the content object changes.  
+    
+    The default implementation will update the value property of the view
+    if the contentValueKey property has changed.  You can override this
+    method to implement whatever additional changes you would like.
+    
+    The key will typically contain the name of the property that changed or 
+    '*' if the content object itself has changed.  You should generally do
+    a total reset if '*' is changed.
+    
+    @param {Object} target the content object
+    @param {String} key the property that changes
+    @returns {void}
+    @test in content
+  */
+  contentPropertyDidChange: function(target, key) {
+    return this.updatePropertyFromContent('value', key, 'contentValueKey', target);
+  },
+  
+  /**
+    Helper method you can use from your own implementation of 
+    contentPropertyDidChange().  This method will look up the content key to
+    extract a property and then update the property if needed.  If you do
+    not pass the content key or the content object, they will be computed 
+    for you.  It is more efficient, however, for you to compute these values
+    yourself if you expect this method to be called frequently.
+    
+    @param {String} prop local property to update
+    @param {String} key the contentproperty that changed
+    @param {String} contentKey the local property that contains the key
+    @param {Object} content
+    @returns {SC.Control} receiver
+  */
+  updatePropertyFromContent: function(prop, key, contentKey, content) {
+    var del, v;
+    
+    if (contentKey === undefined) contentKey = "content"+prop.capitalize()+"Key";
+    
+    // prefer our own definition of contentKey
+    if(this[contentKey]) contentKey = this.get(contentKey);
+    // if we don't have one defined check the delegate
+    else if((del = this.displayDelegate) && (v = del[contentKey])) contentKey = del.get ? del.get(contentKey) : v;
+    // if we have no key we can't do anything so just short circuit out
+    else return this;
+    
+    // only bother setting value if the observer triggered for the correct key
+    if (key === '*' || key === contentKey) {
+      if (content === undefined) content = this.get('content');
+      
+      if(content) v = content.get ? content.get(contentKey) : content[contentKey];
+      else v = null;
+      
+      this.set(prop, v) ;
+    }
+    
+    return this ;
+  },
+  
+  /**
+    Relays changes to the value back to the content object if you are using
+    a content object.
+    
+    This observer is triggered whenever the value changes.  It will only do
+    something if it finds you are using the content property and
+    contentValueKey and the new value does not match the old value of the
+    content object.  
+    
+    If you are using contentValueKey in some other way than typically
+    implemented by this mixin, then you may want to override this method as
+    well.
+    
+    @returns {void}
+  */
+  updateContentWithValueObserver: function() {
+    var key = this.contentValueKey ?
+      this.get('contentValueKey') :
+      this.getDelegateProperty('contentValueKey', this.displayDelegate),
+      content = this.get('content') ;
+    if (!key || !content) return ; // do nothing if disabled
+    
+    // get value -- set on content if changed
+    var value = this.get('value');
+    if (typeof content.setIfChanged === SC.T_FUNCTION) {
+      content.setIfChanged(key, value);
+    } else {
+      // avoid re-writing inherited props
+      if (content[key] !== value) content[key] = value ;
+    }
+  }.observes('value'),
   
   /**
     The name of the property this control should display if it is part of an
@@ -4038,23 +4076,13 @@ SC.Control = SC.mixin(SC.clone(SC.ContentValueSupport), {
     names.active = this.get('isActive') ;
 
     var controlSize = this.get("controlSize");
-    if (!controlSize) {
-      controlSize = SC.REGULAR_CONTROL_SIZE;
-    }
 
     if (firstTime) {
       context.setClass(names);
-
-      // delegates handle adding 'controlSize' on their own. We only support it
-      // here for backwards-compatibility.
-      if (!this.get('renderDelegate')) {
-        context.addClass(controlSize);
-      }
+      if (controlSize !== SC.AUTO_CONTROL_SIZE) context.addClass(controlSize);
     } else {
       context.$().setClass(names);
-      if (!this.get('renderDelegate')) {
-        context.$().addClass(controlSize);
-      }
+      if (controlSize !== SC.AUTO_CONTROL_SIZE) context.$().addClass(controlSize);
     }
 
     // if the control implements the $input() helper, then fixup the input
@@ -4066,14 +4094,51 @@ SC.Control = SC.mixin(SC.clone(SC.ContentValueSupport), {
       }
     }
   },
-});
-
+  
+  /** @private
+    This should be null so that if content is also null, the
+    _contentDidChange won't do anything on init.
+  */
+  _control_content: null,
+  
+  /** @private
+    Observes when a content object has changed and handles notifying 
+    changes to the value of the content object.
+  */
+  // TODO: observing * is unnecessary and inefficient, but a bunch of stuff in sproutcore depends on it (like button)
+  _control_contentDidChange: function() {
+    var content = this.get('content');
+    
+    if (this._control_content === content) return; // nothing changed
+    
+    var f = this.contentPropertyDidChange,
+    // remove an observer from the old content if necessary
+        old = this._control_content ;
+    if (old && old.removeObserver) old.removeObserver('*', this, f) ;
+  
+    // update previous values
+    this._control_content = content ;
+  
+    // add observer to new content if necessary.
+    if (content && content.addObserver) content.addObserver('*', this, f) ;
+    
+    // notify that value did change.
+    this.contentPropertyDidChange(content, '*') ;
+    
+  }.observes('content'),
+  
+  // since we always observe *, just call the update function
+  _control_contentValueKeyDidChange: function() {
+    // notify that value did change.
+    this.contentPropertyDidChange(this.get('content'), '*') ;
+  }.observes('contentValueKey')
+};
 
 /* >>>>>>>>>> BEGIN source/mixins/editable.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -4112,6 +4177,8 @@ SC.Control = SC.mixin(SC.clone(SC.ContentValueSupport), {
   
 */
 SC.Editable = {
+  editorDelegate: null,
+
   /**
     Indicates whether a view is editable or not.  You can optionally 
     implement the methods in this mixin to disallow editing is isEditable is
@@ -4155,7 +4222,7 @@ SC.Editable = {
     // begin editing
     this.beginPropertyChanges();
     this.set('isEditing', YES) ;
-    this.becomeFirstResponder();
+    this.becomeFirstResponder() ;
     this.endPropertyChanges();
     
     return YES ;
@@ -4218,7 +4285,9 @@ SC.Editable = {
   commitEditing: function() {
     if (!this.get('isEditing')) return YES;
     this.set('isEditing', NO) ;
-    this.resignFirstResponder();
+    this.resignFirstResponder() ;
+    
+    this.invokeDelegateMethod(this.get('editorDelegate'), 'inlineEditorShouldCommitEditing', this, this.get('value'));
     
     return YES ;
   }
@@ -4229,7 +4298,7 @@ SC.Editable = {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -4343,8 +4412,11 @@ SC.FlowedLayout = {
     since our last record of it.
   */
   layoutDidChangeFor: function(c) {
+    // if we have not flowed yet, ignore as well
+    if (!this._scfl_itemLayouts) return arguments.callee.base.apply(this,arguments);
+    
     // now, check if anything has changed
-    var l = c._scfl_lastLayout, cl = c.get('layout'), f = c.get('frame');
+    var l = this._scfl_itemLayouts[SC.guidFor(c)], cl = c.get('layout'), f = c.get('frame');
     if (!l) return arguments.callee.base.apply(this,arguments);
     
     var same = YES;
@@ -4401,7 +4473,7 @@ SC.FlowedLayout = {
     Determines whether the specified child view should be included in the flow layout.
     By default, if it has isVisible: NO or useAbsoluteLayout: YES, it will not be included.
   */
-  shouldIncludeChildInFlow: function(idx, c) {
+  shouldIncludeChildInFlow: function(c) {
     return c.get('isVisible') && !c.get('useAbsoluteLayout');
   },
   
@@ -4409,7 +4481,7 @@ SC.FlowedLayout = {
     Returns the flow spacings for a given view. By default, returns the view's flowSpacing,
     and if they don't exist, the defaultFlowSpacing for this view.
   */
-  flowSpacingForChild: function(idx, view) {
+  flowSpacingForView: function(idx, view) {
     var spacing = view.get("flowSpacing");
     if (SC.none(spacing)) spacing = this.get("defaultFlowSpacing");
     
@@ -4426,14 +4498,14 @@ SC.FlowedLayout = {
   },
   
   /**
-    Returns the flow size for a given view, excluding spacing. The default version 
-    checks the view's calculatedWidth/Height, then its frame.
+    Returns the flow size for a given view. The default version checks the view's
+    calculatedWidth/Height, then its frame.
     
     For spacers, this returns an empty size.
     
     This should return a structure like: { width: whatever, height: whatever }
   */
-  flowSizeForChild: function(idx, view) {
+  flowSizeForView: function(idx, view) {
     var cw = view.get('calculatedWidth'), ch = view.get('calculatedHeight');
     
     var calc = {}, f = view.get('frame');
@@ -4444,14 +4516,30 @@ SC.FlowedLayout = {
     if (cw) {
       calc.width = cw;
     } else {
-      calc.width = f.width;
+      // if the width is not calculated, we can't just use the frame because
+      // we may have altered the frame. _scfl_cachedFlowSize is valid, however,
+      // if the frame width is equal to _scfl_cachedCalculatedFlowSize.width, as 
+      // that means the width has not been recomputed.
+      //
+      // Keep in mind that if we are the ones who recomputed it, we can use our
+      // original value. If it was recomputed by the view itself, then its value
+      // should be ok and unmanipulated by us, in theory.
+      if (view._scfl_cachedCalculatedFlowSize && view._scfl_cachedCalculatedFlowSize.width == f.width) {
+        calc.width = view._scfl_cachedFlowSize.width;
+      } else {
+        calc.width = f.width;
+      }
     }
     
     // same for calculated height
     if (ch) {
       calc.height = ch;
     } else {
-      calc.height = f.height;
+      if (view._scfl_cachedCalculatedFlowSize && view._scfl_cachedCalculatedFlowSize.height == f.height) {
+        calc.height = view._scfl_cachedFlowSize.height;
+      } else {
+        calc.height = f.height;
+      }
     }
     
     // if it is a spacer, we must set the dimension that it
@@ -4476,396 +4564,319 @@ SC.FlowedLayout = {
     return calc;
   },
   
+  /**
+    Takes a row and positions everything within the row, calling updateLayout.
+    It should return the row height.
+  */
+  flowRow: function(row, rowOffset, rowSize, availableRowLength, padding, primary, secondary, align) {
+    
+    // we deal with values already offset for padding
+    // therefore, we must adjust availableRowLength
+    if (primary === 'left') availableRowLength -= padding['left'] + padding['right'];
+    else availableRowLength -= padding['top'] + padding['bottom'];
+    
+    // if it is justified, we'll add spacing between ALL views.
+    var item, len = row.length, idx, layout, rowLength = 0, totalSpaceUnits = 0, spacePerUnit = 0;
+    
+    // first, determine the width of all items, and find out how many virtual spacers there are
+    // this width includes spacing
+    for (idx = 0; idx < len; idx++) {
+      item = row[idx];
+      if (item.get("isSpacer")) totalSpaceUnits += item.get("spaceUnits") || 1;
+      else rowLength += item._scfl_cachedSpacedSize[primary === "left" ? "width" : "height"];
+    }
+    
+    // add space units for justification
+    // when justifying, we give one space unit between each item
+    if (len > 1 && align === SC.ALIGN_JUSTIFY) {
+      totalSpaceUnits += len - 1;
+    }
+    
+    // calculate space per unit if needed
+    if (totalSpaceUnits > 0) {
+      spacePerUnit = (availableRowLength - rowLength) / totalSpaceUnits;
+      rowLength = availableRowLength;
+    }
+    
+    // prepare.
+    // we will setup x, y
+    // we _may_ set up width and/or height, if the view is a spacer or has
+    // fillHeight/fillWidth.
+    var x = padding['left'], y = padding['top'], width, height, itemSize = 0;
+    
+    if (primary === 'left') y = rowOffset;
+    else x = rowOffset;
+    
+    // handle align
+    if (align === SC.ALIGN_RIGHT || align === SC.ALIGN_BOTTOM) {
+      if (primary === 'left') x = (availableRowLength - rowLength - padding.right);
+      else y = (availableRowLength - rowLength - padding.bottom);
+    } else if (align === SC.ALIGN_CENTER || align === SC.ALIGN_MIDDLE) {
+      if (primary === 'left') x = (availableRowLength - padding.top - padding.bottom) / 2 - rowLength / 2;
+      else y = (availableRowLength - padding.top - padding.bottom) / 2 - rowLength / 2;
+    }
+    
+    // position
+    for (idx = 0; idx < len; idx++) {
+      item = row[idx];
+      
+      width = undefined; height = undefined;
+      
+      // sometimes a view wants to fill the row; that is, if we flow horizontally,
+      // be the full height, and vertically, fill the width. This only applies if
+      // we are not wrapping...
+      //
+      // Since we still position with spacing, we have to set the width to the total row
+      // size minus the spacing. The spaced size holds only the spacing because the
+      // flow size method returns 0.
+      if (item.get("fillHeight") && primary === "left") {
+        height = rowSize - item._scfl_cachedSpacedSize.height;
+      }
+      if (item.get("fillWidth") && primary === "top") {
+        width = rowSize - item._scfl_cachedSpacedSize.width;
+      }
+      
+      // update offset
+      if (item.get('isSpacer')) {
+        // the cached size is the minimum size for the spacer
+        itemSize = item._scfl_cachedSpacedSize[primary === 'left' ? 'width' : 'height'];
+        
+        // get the spacer size
+        itemSize = Math.max(itemSize, spacePerUnit * (item.get('spaceUnits') || 1));
+        
+        // and finally, set back the cached flow size value--
+        // not including spacing (this is the view size for rendering)
+        // spacers include 
+        if (primary === "left") {
+          width = itemSize;
+        } else {
+          height = itemSize;
+        }
+      } else {
+        if (primary === "left") {
+          itemSize = item._scfl_cachedSpacedSize.width;
+        } else {
+          itemSize = item._scfl_cachedSpacedSize.height;
+        }
+      }
+      
+      this.flowPositionView(idx, item, x, y, width, height);
+      
+      if (primary === 'left') x += itemSize;
+      else y += itemSize;
+      
+      // update justification
+      if (align === SC.ALIGN_JUSTIFY) {
+        if (primary === 'left') x += spacePerUnit;
+        else y += spacePerUnit;
+      }
+    }
+    
+    if (primary === 'left') return x;
+    return y;
+  },
+  
+  flowPositionView: function(idx, item, x, y, width, height) {
+    var last = this._scfl_itemLayouts[SC.guidFor(item)],
+        spacing = item._scfl_cachedSpacing;
+    var l = {
+      left: x + spacing.left,
+      top: y + spacing.top
+    };
+    
+    if (width !== undefined) l.width = width;
+    if (height !== undefined) l.height = height;
+
+    // we must set this first, or it will think it has to update layout again, and again, and again
+    // and we get a crash.
+    this._scfl_itemLayouts[SC.guidFor(item)] = l;
+
+    // Also, never set if the same. We only want to compare layout properties, though
+    if (last && 
+      last.left == l.left && last.top == l.top && 
+      last.width == l.width && l.width !== undefined && 
+      last.height == l.height && l.height !== undefined
+    ) {
+      return;
+    }
+    
+    item.adjust(l);
+  },
+  
+  // hacky, but only way to allow us to use calculatedWidth/Height and avoid clobbering
+  // our own layout (interfering with our tiling) while still allowing scrolling.
+  renderMixin: function(context) {
+    context.css('minWidth', this.get('calculatedWidth'));
+    context.css('minHeight', this.get('calculatedHeight'));
+  },
+  
   clippingFrame: function() {
-    return { left: 0, top: 0, width: this.get('calculatedWidth'), height: this.get('calculatedHeight') };
+    var ret = arguments.callee.base.apply(this,arguments),
+    cw = this.get('calculatedWidth'), ch = this.get('calculatedHeight');
+    
+    if(cw) ret.width = cw;
+    if(ch) ret.height = ch;
+    
+    return ret;
   }.property('calculatedWidth', 'calculatedHeight'),
   
   _scfl_calculatedSizeDidChange: function() {
-    if(this.get('autoResize')) {
-      if(this.get('shouldResizeWidth')) this.adjust('minWidth', this.get('calculatedWidth'));
-      if(this.get('shouldResizeHeight')) this.adjust('minHeight', this.get('calculatedHeight'));
-    }
-  }.observes('autoResize', 'shouldResizeWidth', 'calculatedWidth', 'shouldResizeHeight', 'calculatedHeight'),
-  
-  /**
-    @private
-    Creates a plan, initializing all of the basic properties in it, but not
-    doing anything further.
+    var elem = this.$(),
+    cw = this.get('calculatedWidth'), ch = this.get('calculatedHeight');
     
-    Other methods should be called to do this:
-    
-    - _scfl_distributeChildrenIntoRows distributes children into rows.
-    - _scfl_positionChildrenInRows positions the children within the rows.
-      - this calls _scfl_positionChildrenInRow
-    - _scfl_positionRows positions and sizes rows within the plan.
-    
-    The plan's structure is defined inside the method.
-    
-    Some of these methods may eventually be made public and/or delegate methods.
-  */
-  _scfl_createPlan: function() {
-    var layoutDirection = this.get('layoutDirection'),
-        flowPadding = this.get('_scfl_validFlowPadding'),
-        frame = this.get('frame');
-    
-    var isVertical = (layoutDirection === SC.LAYOUT_VERTICAL);
-    
-    // A plan hash contains general information about the layout, and also,
-    // the collection of rows.
-    //
-    // This method only fills out a subset of the properties in a plan.
-    // 
-    var plan = {
-      // The rows array starts empty. It will get filled out by the method
-      // _scfl_distributeChildrenIntoRows.
-      rows: undefined,
-      
-      // These properties are calculated once here, but later used by
-      // the various methods.
-      isVertical: layoutDirection === SC.LAYOUT_VERTICAL,
-      isHorizontal: layoutDirection === SC.LAYOUT_HORIZONTAL,
-      
-      flowPadding: flowPadding,
-      
-      planStartPadding: flowPadding[isVertical ? 'left' : 'top'],
-      planEndPadding: flowPadding[isVertical ? 'right' : 'bottom'],
-      
-      rowStartPadding: flowPadding[isVertical ? 'top' : 'left'],
-      rowEndPadding: flowPadding[isVertical ? 'bottom' : 'right'],
-      
-      maximumRowLength: undefined, // to be calculated below
-      
-      // if any rows need to fit to fill, this is the size to fill
-      fitToPlanSize: undefined,
-      
-      
-      align: this.get('align')
-    };
-    
-    if (isVertical) {
-      plan.maximumRowLength = frame.height - plan.rowStartPadding - plan.rowEndPadding;
-      plan.fitToPlanSize = frame.width - plan.planStartPadding - plan.planEndPadding;
-    } else {
-      plan.maximumRowLength = frame.width - plan.rowStartPadding - plan.rowEndPadding;
-      plan.fitToPlanSize = frame.height - plan.planStartPadding - plan.planEndPadding;
-    }
-    
-    return plan;
-  },
-  
-  _scfl_distributeChildrenIntoRows: function(plan) {
-    var children = this.get('childViews'), child, idx, len = children.length,
-        isVertical = plan.isVertical, rows = [], lastIdx;
-    
-    lastIdx = -1; idx = 0;
-    while (idx < len && idx !== lastIdx) {
-      lastIdx = idx;
-      
-      var row = {
-        // always a referene to the plan
-        plan: plan,
-        
-        // the combined size of the items in the row. This is used, for instance,
-        // in justification or right-alignment.
-        rowLength: undefined,
-        
-        // the size of the row. When flowing horizontally, this is the height;
-        // it is the opposite dimension of rowLength. It is calculated
-        // both while positioning items in the row and while positioning the rows
-        // themselves.
-        rowSize: undefined,
-        
-        // whether this row should expand to fit any available space. In this case,
-        // the size is the row's minimum size.
-        shouldExpand: undefined,
-        
-        // to be decided by _scfl_distributeItemsIntoRows
-        items: undefined,
-        
-        // to be decided by _scfl_positionRows
-        position: undefined
-      };
-      
-      idx = this._scfl_distributeChildrenIntoRow(children, idx, row);
-      rows.push(row);
-    }
-    
-    plan.rows = rows;
-  },
-  
-  /**
-    @private
-    Distributes as many children as possible into a single row, stating
-    at the given index, and returning the index of the next item, if any.
-  */
-  _scfl_distributeChildrenIntoRow: function(children, startingAt, row) {
-    var idx, len = children.length, plan = row.plan, child, childSize, spacing, childSpacedSize, 
-        items = [], itemOffset = 0, isVertical = plan.isVertical, itemSize, itemLength,
-        canWrap = this.get('canWrap'),
-        newRowPending = NO;
-    
-    var max = row.plan.maximumRowLength;
-    
-    for (idx = startingAt; idx < len; idx++) {
-      child = children[idx];
-
-      // this must be set before we check if the child is included because even
-      // if it isn't included, we need to remember that there is a line break
-      // for later
-      newRowPending = newRowPending || (idx !== startingAt && child.get('startsNewRow'));
-
-      if (!this.shouldIncludeChildInFlow(idx, child)) continue;
-      
-      childSize = this.flowSizeForChild(idx, child);
-      spacing = this.flowSpacingForChild(idx, child);
-      childSpacedSize = {
-        width: childSize.width + spacing.left + spacing.right,
-        height: childSize.height + spacing.top + spacing.bottom
-      };
-      
-      itemLength = childSpacedSize[isVertical ? 'height' : 'width'];
-      itemSize = childSpacedSize[isVertical ? 'width' : 'height'];
-      
-      // there are two cases where we must start a new row: if the child or a
-      // previous child in the row that wasn't included has
-      // startsNewRow === YES, and if the item cannot fit. Neither applies if there
-      // is nothing in the row yet.
-      if ((newRowPending || (canWrap && itemOffset + itemLength > max)) && items.length > 0) {
-        break;
-      }
-      
-      var item = {
-        child: child,
-        
-        itemLength: itemLength,
-        itemSize: itemSize,
-        
-        spacing: spacing,
-        
-        // The position in the row.
-        //
-        // note: in one process or another, this becomes left or top.
-        // but before that, it is calculated.
-        position: undefined,
-        
-        // whether this item should attempt to fill to the row's size
-        fillRow: isVertical ? child.get('fillWidth') : child.get('fillHeight'),
-        
-        // whether this item is a spacer, and thus should be resized to its itemLength
-        isSpacer: child.get('isSpacer'),
-        
-        // these will get set if necessary during the positioning code
-        left: undefined, top: undefined,
-        width: undefined, height: undefined
-      };
-      
-      items.push(item);
-      itemOffset += itemLength;
-    }
-    
-    row.rowLength = itemOffset;
-    row.items = items;
-    return idx;
-  },
-  
-  _scfl_positionChildrenInRows: function(plan) {
-    var rows = plan.rows, len = rows.length, idx;
-    
-    for (idx = 0; idx < len; idx++) {
-      this._scfl_positionChildrenInRow(rows[idx]);
-    }
-  },
-  
-  /**
-    @private
-    Positions items within a row. The items are already in the row, this just
-    modifies the 'position' property.
-    
-    This also marks a tentative size of the row, and whether it should be expanded
-    to fit in any available extra space. Note the term 'size' rather than 'length'...
-  */
-  _scfl_positionChildrenInRow: function(row) {
-    var items = row.items, len = items.length, idx, item, position, rowSize = 0,
-        spacerCount = 0, spacerSize, align = row.plan.align, shouldExpand = YES;
-    
-    // 
-    // STEP ONE: DETERMINE SPACER SIZE + COUNT
-    // 
-    for (idx = 0; idx < len; idx++) {
-      item = items[idx];
-      if (item.isSpacer) spacerCount += item.child.get('spaceUnits') || 1;
-    }
-    
-    // justification is like adding a spacer between every item. We'll actually account for
-    // that later, but for now...
-    if (align === SC.ALIGN_JUSTIFY) spacerCount += len - 1;
-    
-    // calculate spacer size
-    spacerSize = Math.max(0, row.plan.maximumRowLength - row.rowLength) / spacerCount;
-    
-    //
-    // STEP TWO: ADJUST FOR ALIGNMENT
-    // Note: if there are spacers, this has no effect, because they fill all available
-    // space.
-    //
-    position = 0;
-    if (spacerCount === 0 && (align === SC.ALIGN_RIGHT || align === SC.ALIGN_BOTTOM)) {
-      position = row.plan.maximumRowLength - row.rowLength;
-    } else if (spacerCount === 0 && (align === SC.ALIGN_CENTER || align === SC.ALIGN_MIDDLE)) {
-      position = (row.plan.maximumRowLength / 2) - (row.rowLength / 2);
-    }
-    
-    position += row.plan.rowStartPadding;
-    // 
-    // STEP TWO: LOOP + POSITION
-    // 
-    for (idx = 0; idx < len; idx++) {
-      item = items[idx];
-      
-      if (item.isSpacer) {
-        item.itemLength += spacerSize * (item.child.get('spaceUnits') || 1);
-      }
-      
-      // if the item is not a fill-row item, this row has a size that all fill-row
-      // items should expand to
-      if (!item.fillRow) shouldExpand = NO;
-      rowSize = Math.max(item.itemSize, rowSize);
-      
-      item.position = position;
-      position += item.itemLength;
-      
-      // if justification is on, we have one more spacer
-      // note that we check idx because position is used to determine the new rowLength.
-      if (align === SC.ALIGN_JUSTIFY && idx < len - 1) position += spacerSize;
-    }
-    
-    row.shouldExpand = shouldExpand;
-    row.rowLength = position - row.plan.rowStartPadding; // row length does not include padding
-    row.rowSize = rowSize;
-    
-  },
-
-  _scfl_positionRows: function(plan) {
-    var rows = plan.rows, len = rows.length, idx, row, position,
-        fillRowCount = 0, planSize = 0, fillSpace;
-    
-    // first, we need a count of rows that need to fill, and the size they
-    // are filling to (the combined size of all _other_ rows).
-    for (idx = 0; idx < len; idx++) {
-      if (rows[idx].shouldExpand) fillRowCount++;
-      planSize += rows[idx].rowSize;
-    }
-    
-    fillSpace = plan.fitToPlanSize - planSize;
-    
-    // now, position+size the rows
-    position = plan.planStartPadding;
-    for (idx = 0; idx < len; idx++) {
-      row = rows[idx];
-      
-      if (row.shouldExpand && fillSpace > 0) {
-        row.rowSize += fillSpace / fillRowCount;
-        fillRowCount--;
-      }
-      
-      row.position = position;
-      position += row.rowSize;
-    }
-  },
-  
-  /**
-    @private
-    Positions all of the child views according to the plan.
-  */
-  _scfl_applyPlan: function(plan) {
-    var rows = plan.rows, rowIdx, rowsLen, row, longestRow = 0, totalSize = 0,
-        items, itemIdx, itemsLen, item, layout,
-        
-        isVertical = plan.isVertical;
-    
-    rowsLen = rows.length;
-    for (rowIdx = 0; rowIdx < rowsLen; rowIdx++) {
-      row = rows[rowIdx];
-      longestRow = Math.max(longestRow, row.rowLength);
-      totalSize += row.rowSize;
-      
-      items = row.items; itemsLen = items.length;
-      
-      for (itemIdx = 0; itemIdx < itemsLen; itemIdx++) {
-        item = items[itemIdx];
-        item.child.beginPropertyChanges();
-        
-        layout = {};
-        
-        // we are _going_ to set position. that much is certain.
-        layout.left = item.spacing.left + (isVertical ? row.position : item.position);
-        layout.top = item.spacing.top + (isVertical ? item.position : row.position);
-        
-        // the size is more questionable: we only change that if the
-        // item wants.
-        if (item.fillRow) {
-          layout[isVertical ? 'width' : 'height'] = row.rowSize;
-        }
-        if (item.isSpacer) {
-          layout[isVertical ? 'height' : 'width'] = item.itemLength;
-        }
-        
-        if (layout.width !== undefined) {
-          layout.width -= item.spacing.left + item.spacing.right;
-        }
-        if (layout.height !== undefined) {
-          layout.height -= item.spacing.top + item.spacing.bottom;
-        }
-        
-        item.child.adjust(layout);
-        item.child._scfl_lastLayout = layout;
-        
-        item.child.endPropertyChanges();
-      }
-    }
-    
-    totalSize += plan.planStartPadding + plan.planEndPadding;
-    longestRow += plan.rowStartPadding + plan.rowEndPadding;
-    
-    this.beginPropertyChanges();
-
-    this.set('calculatedHeight', isVertical ? longestRow : totalSize);
-
-    this.set('calculatedWidth', isVertical ? totalSize : longestRow);
-
-    this.endPropertyChanges();
-  },
+    if(cw) elem.css('minWidth', this.get('calculatedWidth'));
+    if(ch) elem.css('minHeight', this.get('calculatedHeight'));
+  }.observes('calculatedWidth', 'calculatedHeight'),
   
   _scfl_tile: function() {
-    // first, do the plan
-    var plan = this._scfl_createPlan();
-    this._scfl_distributeChildrenIntoRows(plan);
-    this._scfl_positionChildrenInRows(plan);
-    this._scfl_positionRows(plan);
-    this._scfl_applyPlan(plan);
+    if (!this._scfl_itemLayouts) this._scfl_itemLayouts = {};
     
-    // second, observe all children, and stop observing any children we no longer
-    // should be observing.
-    var previouslyObserving = this._scfl_isObserving || SC.CoreSet.create(),
+    var isObserving = this._scfl_isObserving || SC.CoreSet.create(),
         nowObserving = SC.CoreSet.create();
     
-    var children = this.get('childViews'), len = children.length, idx, child;
-    for (idx = 0; idx < len; idx++) {
-      child = children[idx];
+    var children = this.get('childViews'), child, idx, len = children.length,
+        rows = [], row = [],
+        startRowSize = 0, rowSize = 0, 
+        startsNewRow, newRowPending = NO,
+        rowOffset = 0, itemOffset = 0, 
+        width = this.get('frame').width,
+        height = this.get('frame').height,
+        canWrap = this.get('canWrap'),
+        layoutDirection = this.get('layoutDirection'),
+        padding = this.get('_scfl_validFlowPadding'),
+        childSize, childSpacing, childSpacedSize, align = this.get('align'),
+        longestRow = 0;
+    
+    
+    var primary, primary_os, primary_d, secondary, secondary_os, secondary_d, flowLimit, availableRowLength;
+    if (layoutDirection === SC.LAYOUT_HORIZONTAL) {
+      availableRowLength = width;
+      flowLimit = width - padding["right"];
       
-      if (!previouslyObserving.contains(child)) {
-        this.observeChildLayout(child);
-      } else {
-        previouslyObserving.remove(child);
-      }
+      primary = "left"; secondary = "top";
+      primary_os = "right"; secondary_os = "bottom";
+      primary_d = "width"; secondary_d = "height";
+    } else {
+      availableRowLength = height;
+      flowLimit = height - padding["bottom"];
       
-      nowObserving.add(child);
+      primary = "top"; secondary = "left";
+      primary_os = "bottom"; secondary_os = "right";
+      primary_d = "height"; secondary_d = "width";
     }
     
-    len = previouslyObserving.length;
-    for (idx = 0; idx < len; idx++) {
-      this.unobserveChildLayout(previouslyObserving[idx]);
+    rowOffset = padding[secondary];
+    itemOffset = padding[primary];
+    /*
+    // if we cannot wrap, the row size is our frame (minus padding)
+    if (!canWrap) {
+      if (layoutDirection === SC.LAYOUT_HORIZONTAL) {
+        rowSize = startRowSize = height - padding.top - padding.bottom;
+      } else {
+        rowSize = startRowSize = width - padding.right - padding.left;
+      }
     }
+      */  
+    // now, loop through all child views and group them into rows.
+    // note that we are NOT positioning.
+    // when we are done with a row, we call flowRow to finish it.
+    for (idx = 0; idx < len; idx++) {
+      // get a child.
+      child = children[idx];
+      
+      // update observing lists
+      isObserving.remove(SC.guidFor(child));
+      nowObserving.add(child);
+      
+      // we need to check if it manually starts a new row, because if it does this is remembered even if the child isn't visible
+      startsNewRow = child.get('startsNewRow');
+      
+      // skip positioning of items with isVisible === NO or isHidden === YES
+      if (!this.shouldIncludeChildInFlow(child)) {
+        // if the hidden view started a new row, remember it for later
+        newRowPending = startsNewRow || newRowPending;
+        continue;
+      }
+      
+      // get spacing, size, and cache
+      childSize = this.flowSizeForView(idx, child);
+            
+      childSpacing = this.flowSpacingForView(idx, child);
+      childSpacedSize = {
+        width: childSize.width + childSpacing.left + childSpacing.right,
+        height: childSize.height + childSpacing.top + childSpacing.bottom
+      };
+      
+      // flowRow will use this; it's purely here for performance
+      child._scfl_cachedFlowSize = childSize;
+      child._scfl_cachedSpacedSize = childSpacedSize;
+      child._scfl_cachedSpacing = childSpacing;
+      
+      // determine if the item can fit in the row including the collapsed right margin+padding or if it explicitly starts a new row
+      if (startsNewRow || newRowPending || (canWrap && row.length > 0 && itemOffset + childSize[primary_d] >= flowLimit)) {
+        // regardless of why we just created a new row, so the flag needs to be reset
+        newRowPending = NO;
+        
+        // first, flow this row
+        this.flowRow(row, rowOffset, rowSize, availableRowLength, padding, primary, secondary, align);
+
+        // We need another row.
+        row = [];
+        rows.push(row);
+        rowOffset += rowSize;
+        rowSize = startRowSize;
+        itemOffset = padding[primary];
+      
+      }
+
+      // add too row and update row size+item offset
+      row.push(child);
+      rowSize = Math.max(childSpacedSize[secondary_d], rowSize);
+      itemOffset += childSpacedSize[primary_d];
+      longestRow = Math.max(longestRow, itemOffset);
+    }
+    
+    
+    // flow last row
+    itemOffset = this.flowRow(row, rowOffset, rowSize, availableRowLength, padding, primary, secondary, align);
+    longestRow = Math.max(longestRow, itemOffset);
+
+    
+    // update calculated width/height
+    this._scfl_lastFrameSize = this.get('frame');
+    
+    // size is now calculated the same whether canWrap is on or not
+    if (this.get('autoResize')) {
+      if(longestRow) {
+        if (layoutDirection === SC.LAYOUT_HORIZONTAL) {
+          if(this.get('shouldResizeWidth')) this.set('calculatedWidth', longestRow + padding[primary_os]);
+        } else {
+          if(this.get('shouldResizeHeight')) this.set('calculatedHeight', longestRow + padding[primary_os]);
+        }
+      }
+      
+      if(rowOffset + rowSize) {
+        if (layoutDirection === SC.LAYOUT_HORIZONTAL) {
+          if(this.get('shouldResizeHeight')) this.set('calculatedHeight', rowOffset + rowSize + padding[secondary_os]);
+        } else {
+          if(this.get('shouldResizeWidth')) this.set('calculatedWidth', rowOffset + rowSize + padding[secondary_os]);
+        }
+      }
+    }
+    
+    
+    // cleanup on aisle 7
+    len = isObserving.length;
+    for (idx = 0; idx < len; idx++) {
+      this.unobserveChildLayout(isObserving[idx]);
+    }
+
+    len = nowObserving.length;
+    for (idx = 0; idx < len; idx++) {
+      this.observeChildLayout(nowObserving[idx]);
+    }
+    
+    this._scfl_isObserving = nowObserving;
   },
   
   _scfl_frameDidChange: function() {
@@ -4917,7 +4928,7 @@ SC.FlowedLayout = {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -5132,691 +5143,239 @@ SC.Gesturable = {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-/*
-* @mixin
-*
-* This mixin is used for views that show a seperate editor view to edit.
-* For example, the default behavior of SC.LabelView if isEditable is set
-* to YES is to popup an SC.InlineTextFieldView when double clicked. This is a
-* seperate text input that will handle the editing and save its value back to
-* the label when it is finished.
-*
-* To use this functionality, all you have to do is apply this mixin to
-* your view. You may define your own SC.InlineEditorDelegate to further
-* customize editing behavior.
-*
-* {{{
-*   MyProject.MyView = SC.View.extend(SC.InlineEditable, {
-*     inlineEditorDelegate: myDelegate
-*   });
-* }}}
-*
-* The delegate methods will default to your view unless the
-* inlineEditorDelegate implements them. Simple views do not require a
-* seperate delegate. If your view has a more complicated editing
-* interaction, you may also implement a custom delegate. For example, if
-* you have a form with several views that all edit together, you might
-* set the parent view as the delegate so it can manage the lifecycle and
-* layout of the editors.
-*
-* See SC.InlineEditorDelegate for more information on using a delegate to
-* customize your view's edit behavior.
-*
-* Your view can now be edited by calling beginEditing() on it.
-*
-* {{{
-*   myView.beginEditing();
-* }}}
-*
-* This will create an editor for the view. You can then end the editing process
-* by calling commitEditing() or discardEditing() on either the view or the
-* editor. commitEditing() will save the value and discard will revert to the
-* original value.
-*
-* {{{
-*   myView.commitEditing();
-*   myView.discardEditing();
-* }}}
-*
-* Note that the editor is a private property of the view, so the only views that
-* should be able to access the methods on it are the editor itself, the view it
-* is editing, and their delegates.
+/**
+  This mixin is used for views that show a seperate editor view to edit. If your view is itself editable, use SC.Editable.
+  
+  To use this, you must also implement an InlineEditorDelegate to manage the editor view and an InlineEditableDelegate to manage the result of editing. For simplicity these may all be implemented by your view itself, but for more complex views or editors they should be kept seperate.
 */
+// TODO: ask juan if this should be combined with SC.Editable
 SC.InlineEditable = {
-  /*
-  * Walk like a duck.
-  *
-  * @type {Boolean}
-  */
-  isInlineEditable: YES,
-
-  /*
-  * Flag to enable or disable editing.
-  *
-  * @type {Boolean}
+  
+  editorDelegate: null,
+  /**
+    Enables editing using the inline editor.
   */
   isEditable: YES,
 
-  /*
-  * The view that will be used to edit this view. Defaults to
-  * SC.InlineTextFieldView, which is simply a text field that positions itself
-  * over the view being edited.
-  *
-  * @type {SC.InlineEditor}
-  */
-  exampleEditor: SC.InlineTextFieldView,
-
-  /*
-  * Indicates whether the view is currently editing. Attempting to
-  * beginEditing a view that is already editing will fail.
-  *
-  * @type {Boolean}
+  /**
+    YES if currently editing label view.
   */
   isEditing: NO,
-
-  /*
-  * Delegate that will be notified of events related to the editing
-  * process. Also responsible for managing the lifecycle of the editor.
-  *
-  * @type {SC.InlineEditorDelegate}
-  */
-  inlineEditorDelegate: SC.InlineTextFieldDelegate,
-
-  /*
-  * @private
-  *
-  * The editor responsible for editing this view.
-  *
-  * @type {SC.InlineEditor}
-  */
-  _editor: null,
-
-  /*
-  * @method
-  *
-  * Tells the view to start editing. This will create an editor for it
-  * and transfer control to the editor.
-  *
-  * Will fail if the delegate returns NO to inlineEditorShouldBeginEditing.
-  *
-  * @returns {Boolean} whether the view succesfully entered edit mode
+  
+  /**
+    Opens the inline text editor (closing it if it was already open for 
+    another view).
+    
+    @return {Boolean} YES if did begin editing
   */
   beginEditing: function() {
-    var del;
-
-    del = this.delegateFor('inlineEditorShouldBeginEditing', this.inlineEditorDelegate);
-    if(del && !del.inlineEditorShouldBeginEditing(this, this.get('value'))) return NO;
-
-    this._editor = this.invokeDelegateMethod(this.inlineEditorDelegate, 'acquireEditor', this);
-
-    if(this._editor) return this._editor.beginEditing(this);
-    else return NO;
+    if(this.get('isEditing')) return YES;
+    
+    return this.invokeDelegateMethod(this.get('editorDelegate'), 'beginEditingFor', this, this.get('value'));
   },
-
-  /*
-  * @method
-  *
-  * Tells the view to save the value currently in the editor and finish
-  * editing. The delegate will be consulted first by calling
-  * inlineEditorShouldCommitEditing, and the operation will not be
-  * allowed if the delegate returns NO.
-  *
-  * Will fail if the delegate returns NO to inlineEditorShouldCommitEditing.
-  *
-  * @returns {Boolean} whether the delegate allowed the value to be committed
-  */
-  commitEditing: function() {
-    return this._editor ? this._editor.commitEditing() : NO;
-  },
-
-  /*
-  * @method
-  *
-  * Tells the view to leave edit mode and revert to the value it had
-  * before editing. May fail if the delegate returns NO to
-  * inlineEditorShouldDiscardEditing. It is possible for the delegate to
-  * return false to inlineEditorShouldDiscardEditing but true to
-  * inlineEditorShouldCommitEditing, so a client view may attempt to
-  * call commitEditing in case discardEditing fails.
-  *
-  * Will fail if the delegate returns NO to inlineEditorShouldDiscardEditing.
-  *
-  * @returns {Boolean} whether the delegate allowed the view to discard its value
+  
+  /**
+    Cancels the current inline editor and then exits editor. 
+    
+    @return {Boolean} NO if the editor could not exit.
   */
   discardEditing: function() {
-    return this._editor ? this._editor.discardEditing() : NO;
+    if (!this.get('isEditing')) return YES;
+    
+    return this.invokeDelegateMethod(this.get('editorDelegate'), 'discardEditingFor', this);
   },
-
-  /*
-  * @method
-  *
-  * Allows the view to begin editing if it is editable and it is not
-  * already editing.
-  *
-  * @returns {Boolean} if the view is allowed to begin editing
+  
+  /**
+    Commits current inline editor and then exits editor.
+    
+    @return {Boolean} NO if the editor could not exit
   */
-  inlineEditorShouldBeginEditing: function() {
-    return !this.isEditing && this.isEditable;
+  commitEditing: function() {
+    if (!this.get('isEditing')) return YES;
+    
+    return this.invokeDelegateMethod(this.get('editorDelegate'), 'commitEditingFor', this);
   },
-
-  // TODO: implement validator
-  /*
-  * @method
-  *
-  * By default, the editor starts with the value of the view being edited.
-  *
-  * @params {SC.InlineEditable} the view being edited
-  * @params {SC.InlineEditor} the editor for the view
-  * @params {Object} the initial value of the editor
+  
+  /** @private
+    Set editing to true so edits will no longer be allowed.
   */
-  inlineEditorWillBeginEditing: function(editor, value, editable) {
-    editor.set('value', this.get('value'));
-  },
-
-  /*
-  * @method
-  *
-  * Sets isEditing to YES once editing has begun.
-  *
-  * @params {SC.InlineEditable} the view being edited
-  * @params {SC.InlineEditor} the editor for the view
-  * @params {Object} the initial value of the editor
-  */
-  inlineEditorDidBeginEditing: function(editor, value, editable) {
+  inlineEditorWillBeginEditing: function(editor) {
     this.set('isEditing', YES);
   },
 
-  /*
-  * @method
-  *
-  * Calls inlineEditorWillEndEditing for backwards compatibility.
-  *
-  * @params {SC.InlineEditable} the view being edited
-  * @params {SC.InlineEditor} the editor for the view
-  * @params {Object} the initial value of the editor
+  /** @private 
+    Hide the label view while the inline editor covers it.
   */
-  inlineEditorWillCommmitEditing: function(editor, value, editable) {
-    if(this.inlineEditorWillEndEditing) this.inlineEditorWillEndEditing(editor, value);
+  inlineEditorDidBeginEditing: function(editor) {
+    return YES;
   },
-
-  /*
-  * @method
-  *
-  * By default, commiting editing simply sets the value that the editor
-  * returned and cleans up.
-  *
-  * @params {SC.InlineEditable} the view being edited
-  * @params {SC.InlineEditor} the editor for the view
-  * @params {Object} the initial value of the editor
-  */
-  inlineEditorDidCommitEditing: function(editor, value, editable) {
-    editable.setIfChanged('value', value);
-
-    if(this.inlineEditorDidEndEditing) this.inlineEditorDidEndEditing(editor, value);
-
-    this._endEditing();
+  
+  // TODO: use validator
+  inlineEditorShouldCommitEditing: function(editor, finalValue) {
+    this.setIfChanged('value', finalValue) ;
+    return YES;
   },
-
-  /*
-  * @method
-  *
-  * Calls inlineEditorWillEndEditing for backwards compatibility.
-  *
-  * @params {SC.InlineEditable} the view being edited
-  * @params {SC.InlineEditor} the editor for the view
-  * @params {Object} the initial value of the editor
+  
+  /** @private
+    Update the field value and make it visible again.
   */
-  inlineEditorWillDiscardEditing: function(editor, editable) {
-    if(this.inlineEditorWillEndEditing) this.inlineEditorWillEndEditing(editor, this.get('value'));
-  },
-
-  /*
-  * @method
-  *
-  * Calls inlineEditorDidEndEditing for backwards compatibility and then
-  * cleans up.
-  *
-  * @params {SC.InlineEditable} the view being edited
-  * @params {SC.InlineEditor} the editor for the view
-  * @params {Object} the initial value of the editor
-  */
-  inlineEditorDidDiscardEditing: function(editor, editable) {
-    if(this.inlineEditorDidEndEditing) this.inlineEditorDidEndEditing(editor, this.get('value'));
-
-    this._endEditing();
-  },
-
-  /*
-  * @method
-  * @private
-  *
-  * Shared code used to cleanup editing after both discarding and commiting.
-  */
-  _endEditing: function() {
-    // _editor may be null if we were called using the
-    // SC.InlineTextFieldView class methods
-    if(this._editor) {
-      this.invokeDelegateMethod(this.inlineEditorDelegate, 'releaseEditor', this._editor);
-      this._editor = null;
-    }
-
-    this.set('isEditing', NO);
+  inlineEditorDidEndEditing: function(editor, finalValue) {
+    this.inlineEditorShouldCommitEditing(editor, finalValue);
+    this.set('isEditing', NO) ;
+    return YES;
   }
 };
-
-
-/* >>>>>>>>>> BEGIN source/mixins/inline_editor.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2010 Sprout Systems, Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
-/*
-* @mixin
-*
-* This mixin is for a view that is editable but is acting as a proxy to
-* edit another view. For example, a calendar picker that pops up over
-* top of a date display.
-*
-* Instantiation and destruction will be handled by the InlineEditorDelegate
-* defined on the InlineEditable view.
-*
-* Any runtime configuration should be handled by the delegate's
-* inlineEditorWillBeginEditing method. This will be done at the start of the
-* beginEditing function, so your view should be able to handle having value
-* changed by this method.
-*
-* Your view should also be sure to cleanup completely when editing is finished,
-* because the delegate may decide to reuse the same editor elsewhere.
-*
-* See SC.InlineTextFieldView for an example of an implementation of
-* SC.InlineEditor.
-*/
-SC.InlineEditor = {
-  /*
-  * Walk like a duck.
-  *
-  * @type {Boolean}
-  */
-  isInlineEditor: YES,
-
-  /*
-  * Indicates the view is currently editing. For a typical editor, this
-  * will always be true as long as the view exists, but some
-  * InlineEditorDelegates may have more complex lifecycles in which
-  * editors are reused.
-  *
-  * @type {Boolean}
-  */
-  isEditing: NO,
-
-  /*
-  * The delegate responsible for the editors lifecycle as well as the
-  * target for notifications. This property should be set when the
-  * delegate creates the editor and does not need to be in the view
-  * definition.
-  *
-  * @type {SC.InlineEditorDelegate}
-  */
-  inlineEditorDelegate: null,
-
-  /*
-  * @private
-  *
-  * The view that this view is responsible for editing.
-  *
-  * @type {SC.InlineEditable}
-  */
-  _target: null,
-
-  /*
-  * @method
-  *
-  * Tells the editor to begin editing another view with the given starting value.
-  * Editors may be reused so make sure that the editor is fully cleaned
-  * up and reinitialized.
-  *
-  * Sets isEditing to YES.
-  *
-  * Will fail if the editor is already editing.
-  *
-  * If you override this method, be sure to call arguments.callee.base.apply(this,arguments) at the beginning of
-  * you function so that the delegate will be able to configure the view when it
-  * is notified of the inlineEditorWillBeginEditing event.
-  *
-  * @param {SC.View} the view being edited
-  * @returns {Boolean} whether the editor was able to successfully begin editing
-  */
-  beginEditing:function(editable) {
-    if(this.get('isEditing') || !editable) return NO;
-
-    var del, target;
-
-    target = this._target = editable;
-
-    del = this.delegateFor('inlineEditorWillBeginEditing', this.inlineEditorDelegate, target);
-    if(del) del.inlineEditorWillBeginEditing(this, this.get('value'), target);
-
-    this.set('isEditing', YES);
-
-    // needs to be invoked last because it needs to run after the view becomes
-    // first responder
-    this.invokeLast(this._callDidBegin);
-
-    return YES;
-  },
-
-  /*
-  * @method
-  * @private
-  *
-  * Notifies the delegate of the didBeginEditing event. Needs to be invoked last
-  * because becoming first responder doesn't happen until the end of the runLoop
-  * and didBegin is supposed to occur after the editor becomes first responder.
-  */
-  _callDidBegin: function() {
-    var target = this._target;
-
-    del = this.delegateFor('inlineEditorDidBeginEditing', this.inlineEditorDelegate, target);
-    if(del) del.inlineEditorDidBeginEditing(this, this.get('value'), target);
-  },
-
-  /*
-  * @method
-  *
-  * Tells the editor to save its value back to its target view and end
-  * editing. Since the editor is a private property of the view it is
-  * editing for, this function should only be called from the editor
-  * itself. For example, you may want your editor to handle the enter
-  * key by calling commitEditing on itself.
-  *
-  * Will fail if the editor is not editing or if the delegate returns NO to
-  * inlineEditorShouldCommitEditing.
-  *
-  * @returns {Boolean} whether the editor was allowed to successfully commit its value
-  */
-  commitEditing:function() {
-    if(!this.get('isEditing')) return NO;
-
-    var del, target = this._target;
-
-    del = this.delegateFor('inlineEditorShouldCommitEditing', this.inlineEditorDelegate, target);
-    if(del && !del.inlineEditorShouldCommitEditing(this, this.get('value'), target)) return NO;
-
-    del = this.delegateFor('inlineEditorWillCommitEditing', this.inlineEditorDelegate, target);
-    if(del) del.inlineEditorWillCommitEditing(this, this.get('value'), target);
-
-    this._endEditing();
-
-    del = this.delegateFor('inlineEditorDidCommitEditing', this.inlineEditorDelegate, target);
-    if(del) del.inlineEditorDidCommitEditing(this, this.get('value'), target);
-
-    return YES;
-  },
-
-  /*
-  * #method
-  *
-  * Tells the editor to discard its value and end editing. Like
-  * commitEditing, this should only be called by other methods of the
-  * editor. For example, the handle for the escape key might call
-  * discardEditing.
-  *
-  * Will fail if the editor is not editing or if the delegate returns NO to
-  * inlineEditorShouldDiscardEditing.
-  *
-  * @returns {Boolean} whether the editor was allowed to discard its value
-  */
-  discardEditing:function() {
-    if(!this.get('isEditing')) return NO;
-
-    var del, target = this._target;
-
-    del = this.delegateFor('inlineEditorShouldDiscardEditing', this.inlineEditorDelegate, target);
-    if(del && !del.inlineEditorShouldDiscardEditing(this, target)) return NO;
-
-    del = this.delegateFor('inlineEditorWillDiscardEditing', this.inlineEditorDelegate, target);
-    if(del) del.inlineEditorWillDiscardEditing(this, target);
-
-    this._endEditing();
-
-    del = this.delegateFor('inlineEditorDidDiscardEditing', this.inlineEditorDelegate, target);
-    if(del) del.inlineEditorDidDiscardEditing(this, target);
-
-    return YES;
-  },
-
-  /*
-  * @method
-  * @private
-  *
-  * Performs the cleanup functionality shared between discardEditing and
-  * commitEditing.
-  */
-  _endEditing: function() {
-    this.set('isEditing', NO);
-
-    this._target = null;
-
-  }
-};
-
 
 /* >>>>>>>>>> BEGIN source/mixins/inline_editor_delegate.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
 /**
-  @protocol
-  
-  This delegate is consulted by view implementing SC.InlineEditable and
-  SC.InlineEditor and controls the lifecycle of the editor as well as begin
-  notified of events in the editing process.
+  This delegate controls the editing capability of a view. It allows you to customize when a view that uses it is allowed to begin and end editing, as well as the type of editor it uses.
   
   By default it edits an SC.LabelView using an SC.InlineTextFieldView.
-
-  All methods will be attempted to be called on the inlineEditorDelegate of the
-  inlineEditor or inlineEditable first and then the target view if it didn't exist
-  on the delegate. This allows you to implement default delegate handlers on your
-  editable view.
   
   @since SproutCore 1.0
 */
 SC.InlineEditorDelegate = {
-  /** REQUIRED FUNCTIONS **/
-  /*
-  * @method
-  *
-  * Acquires an editor for the view. This may simply create one and return it,
-  * or you may implement more complex lifecycle management like pooling of
-  * editors.
-  *
-  * May return null if for some reason an editor could not be required.
-  *
-  * @params {SC.InlineEditable} the view that is begin edited
-  * @returns {SC.InlineEditor} an editor for the view
-  */
-  acquireEditor:function(editable) {},
+  // quack
+  isInlineEditorDelegate: YES,
 
-  /*
-  * @method
-  *
-  * Releases an editor. This may simply remove it from its parent and dispose of
-  * it, or you may implement more complex lifecycle management like pooling of
-  * editors.
-  *
-  * @params {SC.InlineEditor} the editor being released
-  * @returns {Boolean} YES if it was successfully released
-  */
-  releaseEditor:function(editor) {},
+  /**
+    The exampleInlineTextFieldView property is by default a 
+    SC.InlineTextFieldView but it can be set to a customized inline text field
+    view.
 
-  /** OPTIONAL FUNCTIONS **/
-  /*
-  * @method
-  *
-  * Determines if the view should be allowed to begin editing and returns YES if
-  * so. Isn't passed the editor because it hasn't been created yet. If this
-  * method is not defined the editor will assume it is always allowed to begin
-  * editing.
-  *
-  * @params {SC.InlineEditable} the view that is attempting to begin editing
-  * @params {Object} the current value of the view
-  * @returns {Boolean} YES if the view is allowed to edit
+    @property
+    @type {SC.View}
+    @default {SC.InlineTextFieldView}
   */
-  inlineEditorShouldBeginEditing: function(editable, value) {},
+  exampleInlineTextFieldView: SC.InlineTextFieldView,
+  
+  inlineEditorClassName: null,
 
-  /*
-  * @method
-  *
-  * Notifies the delegate that the view was allowed to begin editing and the
-  * editor has been acquired, but hasn't actually done any setup. Most views will
-  * set their current value as the starting value of the editor here, and
-  * depending on the editor other configuration options may be available.
-  *
-  * Since the editor's value hasn't been configured with, the value passed here will be
-  * the default value of the editor.
-  *
-  * @params {SC.InlineEditable} the view being edited
-  * @params {SC.InlineEditor} the editor for the view
-  * @params {Object} the value the editor will start with
+  /**
+    If you want the inline editor to be multiline set this property to YES.
+  
+    @type {Boolean}
+    @default {NO}
   */
-  inlineEditorWillBeginEditing:function(editor, value, editable) {},
+  isInlineEditorMultiline: NO,
 
-  /*
-  * @method
-  *
-  * Notifies the delegate that the editor has finished setting up itself and is
-  * now editing.
-  *
-  * @params {SC.InlineEditable} the view being edited
-  * @params {SC.InlineEditor} the editor for the view
-  * @params {Object} the value the editor started with
+  /**
+    Call to tell the delegate to begin editing the given view. Returns YES if it was able to begin editing.
+  
+    @param {SC.View} the view the user is trying to edit
+    @param {Object} the current value of the view
+    @returns {Boolean} YES if the view began editing
   */
-  inlineEditorDidBeginEditing:function(editor, value, editable) {},
+  beginEditingFor: function(view, startingValue) {
+    if(!view.get('isEditable')) return NO;
+    if(view.get('isEditing')) return YES;
+    
+    var el = view.$(),
+        value = view.get('value') || '',
+        f = SC.viewportOffset(el[0]),
+        frameTemp = view.convertFrameFromView(view.get('frame'), null),
+        exampleEditor = this.get('exampleInlineTextFieldView');
+        f.width=frameTemp.width;
+        f.height=frameTemp.height;
+    
+    view.inlineEditorWillBeginEditing();
+    
+    exampleEditor.beginEditing({
+      pane: view.get('pane'),
+      frame: f,
+      layout: view.get('layout'),
+      exampleInlineTextFieldView: exampleEditor,
+      delegate: this,
+      inlineEditorClassName: this.get('inlineEditorClassName'),
+      exampleElement: el,
+      value: startingValue,
+      multiline: this.get('isInlineEditorMultiline'),
+      isCollection: NO
+    });
+    
+    exampleEditor.editor._target = view;
+  },
 
-  /*
-  * @method
-  *
-  * Determines if the editor is allowed to end editing and store its value back
-  * to the view being edited. If this method is not defined the editor will
-  * assume it is always allowed to commit.
-  *
-  * @params {SC.InlineEditable} the view being edited
-  * @params {SC.InlineEditor} the editor for the view
-  * @params {Object} the value the editor is attempting to commit
+  /**
+    The view the editor view should attach itself to as child. For example if you are editing a row of a formview inside a scrollview, you should attach to the scrollview's containerview or the formview's div, not the label itself. This way you will scroll with the target view but also be above it so editors can reuse views.
+  
+    @param {SC.View} the view attempting to begin editing
+    @returns {SC.View} the view that the editor should be a child of
   */
-  inlineEditorShouldCommitEditing:function(editor, value, editable) {},
+  parentViewForEditor: function(view) {
+    return view.get('parentView');
+  },
 
-  /*
-  * @method
-  *
-  * Notifies the delegate that the editor was allowed to commit and is going to
-  * commit but hasn't actually performed any cleanup yet.
-  *
-  * @params {SC.InlineEditable} the view being edited
-  * @params {SC.InlineEditor} the editor for the view
-  * @params {Object} the value the editor ended with
+  /**
+    Called to tell the editor associated with the given view that the user wants to end editing and save their changes.
+  
+    @param {SC.View} the view whose edit mode is being commited
+    @param {Object} the current value of the view
+    @returns {Boolean} YES if the editor was able to end and commit
   */
-  inlineEditorWillCommitEditing:function(editor, value, editable) {},
-
-  /*
-  * @method
-  *
-  * Notifies the delegate that the editor was allowed to commit and finished
-  * performing any cleanup necessary. This is where you should save the final
-  * value back to your view after performing any necessary transforms to it.
-  *
-  * @params {SC.InlineEditable} the view being edited
-  * @params {SC.InlineEditor} the editor for the view
-  * @params {Object} the value the editor ended with
+  commitEditingFor: function(view) {
+    if(!view.get('isEditing')) return NO;
+    
+    // TODO: figure out how a validator works without a form
+    return SC.InlineTextFieldView.commitEditing();
+  },
+  
+  /**
+    Called to tell the editor associated with the given view that the user wants to end editing and discard their changes.
+  
+    @param {SC.View} the view whose edit mode is ending
+    @param {Object} the current value of the view
+    @returns {Boolean} YES if the editor was able to end
   */
-  inlineEditorDidCommitEditing:function(editor, value, editable) {},
+  discardEditingFor: function(view) {
+    if(!view.get('isEditing')) return NO;
+    
+    return SC.InlineTextFieldView.discardEditing();
+  },
+  
+  /*************
+    Calls from the editor to the view
+    These only have did, not will, because the delegate decides what to do with them.
+  *************/
+  // notify the view that its editor began editing
+  inlineEditorDidBeginEditing: function(editor) {
+    var view = editor._target;
 
-  /*
-  * @method
-  *
-  * Determines if the editor is allowed to discard its current value and end
-  * editing. If this method is undefined the editor will assume it is always
-  * allowed to discard.
-  *
-  * @params {SC.InlineEditable} the view being edited
-  * @params {SC.InlineEditor} the editor for the view
-  */
-  inlineEditorShouldDiscardEditing:function(editor, editable) {},
-
-  /*
-  * @method
-  *
-  * Notifies the delegate that the view was allowed to discard editing but
-  * hasn't performed any cleanup yet.
-  *
-  * @params {SC.InlineEditable} the view being edited
-  * @params {SC.InlineEditor} the editor for the view
-  */
-  inlineEditorWillDiscardEditing:function(editor, editable) {},
-
-  /*
-  * @method
-  *
-  * Notifies the delegate that the editor has finished cleaning up after
-  * discarding editing.
-  *
-  * @params {SC.InlineEditable} the view being edited
-  * @params {SC.InlineEditor} the editor for the view
-  */
-  inlineEditorDidDiscardEditing:function(editor, editable) {},
-
-  /** BACKWARDS COMPATIBILITY **/
-  /*
-  * @method
-  *
-  * Notifies the delegate that the editor will end editing but hasn't cleaned up
-  * yet. This can be caused by both commit or discard. If it was a discard, the
-  * value will be the same as the current value of the editable view. Otherwise,
-  * it was a commit and the value will be the value of the editor.
-  *
-  * This method is for backwards compatibility and should not be used.
-  *
-  * @params {SC.InlineEditable} the view being edited
-  * @params {SC.InlineEditor} the editor for the view
-  * @params {Object} the final value of the edit
-  */
-  inlineEditorWillEndEditing: function(editor, value, editable) {},
-
-  /*
-  * @method
-  *
-  * Notifies the delegate that the editor has cleaned up after editing. This can
-  * be caused by both commit or discard. If it was a discard, the value will be
-  * the same as the current value of the editable view. Otherwise, it was a
-  * commit and the value will be the value of the editor.
-
-  *
-  * This method is for backwards compatibility and should not be used.
-  *
-  * @params {SC.InlineEditable} the view being edited
-  * @params {SC.InlineEditor} the editor for the view
-  * @params {Object} the final value of the edit
-  */
-  inlineEditorDidEndEditing: function(editor, value, editable) {}
+    return view.inlineEditorDidBeginEditing(editor);
+  },
+  
+  // returns true if the finalvalue is valid, false otherwise
+  // this is seperate function from inlineEditorDidCommitEditing because it could just be validiting without actually commiting, for example if a field validates as you type
+  inlineEditorShouldCommitEditing: function(editor, finalValue) {
+    var view = editor._target;
+    
+    return view.inlineEditorShouldCommitEditing(editor, finalValue);
+  },
+  
+  // ask the view if finalvalue is valid, and then commit it and cleanup the editor
+  inlineEditorDidEndEditing: function(editor, finalValue) {
+    var view = editor._target;
+    
+    return view.inlineEditorDidEndEditing(editor, finalValue);
+  }
 };
-
 
 /* >>>>>>>>>> BEGIN source/mixins/validatable.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -6007,7 +5566,7 @@ SC.Validatable = {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -6346,7 +5905,7 @@ SC.FieldView = SC.View.extend(SC.Control, SC.Validatable,
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -6451,7 +6010,7 @@ SC.TextSelection = SC.Object.extend(SC.Copyable, SC.Freezable,
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -6530,7 +6089,7 @@ SC.StaticLayout = {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -6577,14 +6136,6 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
   */
   applyImmediately: YES,
 
-  /*
-  * Flag indicating whether the editor should automatically commit if you click
-  * outside it.
-  *
-  * @type {Boolean}
-  */
-  commitOnBlur: YES,
-
   /**
     If YES, the field will hide its text from display. The default value is NO.
     
@@ -6617,7 +6168,7 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
   formattedHint: function() {
     var hint = this.get('hint');
 
-    return typeof(hint) === 'string' && this.get('localize') ? hint.loc() : hint;
+    return this.get('localize') ? hint.loc() : hint;
   }.property('hint', 'localize').cacheable(),
 
   /*
@@ -6746,19 +6297,7 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
     @type Boolean
   */
   shouldRenderBorder: YES,
-
-  //
-  // SUPPORT FOR AUTOMATIC RESIZING
-  //
-  supportsAutoResize: YES,
-  autoResizeLayer: function() { return this.$input()[0]; }
-  .property('layer').cacheable(),
-
-  autoResizeText: function() { return this.get('value'); }
-  .property('value').cacheable(),
-
-  autoResizePadding: SC.propertyFromRenderDelegate('autoResizePadding', 20),
-
+  
   /** @private
     Whether to show hint or not
   */
@@ -7286,8 +6825,6 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
   },
   
   fieldDidFocus: function(evt) {
-    this.becomeFirstResponder();
-
     this.beginEditing(evt);
     
     // We have to hide the intercept pane, as it blocks the events. 
@@ -7309,9 +6846,7 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
   },
   
   fieldDidBlur: function(evt) {
-    this.resignFirstResponder() ;
-
-    if(this.get('commitOnBlur')) this.commitEditing(evt);
+    this.commitEditing(evt);
     
     // get the pane we hid intercept pane for (if any)
     var touchPane = this._didHideInterceptForPane;
@@ -7626,13 +7161,6 @@ SC.TextFieldView = SC.FieldView.extend(SC.StaticLayout, SC.Editable,
 });
 
 /* >>>>>>>>>> BEGIN source/system/utils/misc.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
 SC.mixin( /** @scope SC */ {
   _downloadFrames: 0, // count of download frames inserted into document
 
@@ -7746,56 +7274,39 @@ SC.mixin( /** @scope SC */ {
       height = elem.innerHeight();
 
       // Adjust offset to account for top & left borders
-      offset.x += window.parseInt(elem.css('border-top-width').replace('px', ''));
-      offset.y += window.parseInt(elem.css('border-left-width').replace('px', ''));
+      offset.top += window.parseInt(elem.css('border-top-width').replace('px', ''));
+      offset.left += window.parseInt(elem.css('border-left-width').replace('px', ''));
     } else {
       width = elem.outerWidth(includeFlag === 'margin');
       height = elem.outerHeight(includeFlag === 'margin');
 
       if (includeFlag === 'margin') {
         // Adjust offset to account for top & left margins
-        offset.x -= window.parseInt(elem.css('margin-top').replace('px', ''));
-        offset.y -= window.parseInt(elem.css('margin-left').replace('px', ''));
+        offset.top -= window.parseInt(elem.css('margin-top').replace('px', ''));
+        offset.left -= window.parseInt(elem.css('margin-left').replace('px', ''));
       }
     }
 
     rect = {
-      x: offset.x,
-      y: offset.y,
+      x: offset.left,
+      y: offset.top,
       width: width,
       height: height
     };
 
     return SC.pointInRect(point, rect);
-  },
-  
-  
-  /**
-    Switch the scale of your app. Useful when vizualizing apps not designed
-    for iphone.
-  */
-  switchScale: function() {
-    $('head meta[name=viewport]').remove();
-    if(window.innerWidth === window.screen.width){
-      $('head').prepend('<meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5, user-scalable=0" />');
-    }else{
-      $('head').prepend('<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=0" />');
-    }
-  },
+  }
 
 });
 
 /* >>>>>>>>>> BEGIN source/mixins/inline_text_field.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
+// ========================================================================
+// SproutCore
+// copyright 2006-2011 Strobe Inc.
+// ========================================================================
 
 sc_require('views/text_field') ;
 sc_require('system/utils/misc') ;
-sc_require('delegates/inline_text_field');
 
 /**
   @class
@@ -7810,63 +7321,55 @@ sc_require('delegates/inline_text_field');
   
   h2. Using the Inline Editor in Your Own Views
 
-  To use the inlineEditor on a custom view you should mixin SC.InlineEditable on
-  it. SC.InlineTextFieldView is the default editor so you do not need to do any
-  other setup. The class methods beginEditing, commitEditing, and discardEditing
-  still exist for backwards compatibility but should not be used on new views.
-
-  {{{
-    MyProject.MyView = SC.View.extend(SC.InlineEditable, {
-    });
-  }}}
+  If you need to use the inline editor with custom views you have written,
+  you will need to work with the class methods to begin, commit, and discard
+  editing changes.
   
   h3. Starting the Editor
   
   The inline editor works by positioning itself over the top of your view 
-  with the same offset, width, and font information.
-
-  To start it simply call beginEditing on your view.
-
-  {{{
-    myView.beginEditing();
-  }}}
+  with the same offset, width, and font information.  As the user types, the
+  field will automatically resize vertically to make room for the user's text.
   
-  By default, if the inline editor is currently in use elsewhere, it will automatically
-  close itself over there and begin editing for your view instead. This behavior
-  is defined by the inlineEditorDelegate of your view, and can be changed by using
-  one other than the default.
+  To activate the inline editor you must call beginEdition() with at least 
+  the target view you want the editor to position itself on top of:
+  
+  {{{
+    SC.InlineTextFieldView.beginEditing({
+      target: view, validator: validator
+    }) ;
+  }}}
 
-  h2. Customizing the editor
+  You can pass a variety of options to this method to configure the inline
+  editor behavior, including:
 
-  The editor has several parameters that can be used to customize it to your
-  needs. These options should be set on the editor passed to your delegate's (or
-  view's) inlineEditorWillBeginEditing method:
-
-  - *exampleFrame* The editors initial frame in viewport coordinates.
+  - *frame* The editors initial frame in viewport coordinates. (REQ)
+  - *delegate* Delegate to receive update notices. (REQ)
   - *value* Initial value of the edit field.
   - *exampleElement* A DOM element to use when copying styles.
   - *multiline* If YES then the hitting return will add to the value instead of exiting the inline editor.
+  - *selectedRange* The range of text that should be selected.  If omitted, then the insertion point will be placed at the end of the value.
   - *commitOnBlur* If YES then blurring will commit the value, otherwise it will discard the current value.  Defaults to YES.
   - *validator* Validator to be attached to the field.
-
-  For backwards compatibility, calling the class method beginEditing with an
-  options hash will translate the values in the hash to the correct settings on
-  the editor.
+  
+  If the inline editor is currently in use elsewhere, it will automatically
+  close itself over there and begin editing for your view instead.  The 
+  editor expects your source view to implement the InlineTextFieldViewDelegate
+  protocol.
 
   h2. Committing or Discarding Changes
   
   Normally the editor will automatically commit or discard its changes 
-  whenever the user exits the edit mode by pressing enter, escape, or clicking
-  elsewhere on the page. If you need to force the editor to end editing, you can
-  do so by calling commitEditing() or discardEditing():
+  whenever the user exits the edit mode.  If you need to force the editor to
+  end editing, you can do so by calling commitEditing() or discardEditing():
   
   {{{
-    myView.commitEditing();
-    myView.discardEditing();
+    SC.InlineTextFieldView.commitEditing();
+    SC.InlineTextFieldView.discardEditing();
   }}}
   
   Both methods will try to end the editing context and will call the 
-  relevant delegate methods on the inlineEditorDelegate set on your view.
+  relevant delegate methods on the delegate you passed to beginEditing().
   
   Note that it is possible an editor may not be able to commit editing 
   changes because either the delegate disallowed it or because its validator
@@ -7878,260 +7381,200 @@ sc_require('delegates/inline_text_field');
   @extends SC.TextFieldView
   @since SproutCore 1.0
 */
-SC.InlineTextFieldView = SC.TextFieldView.extend(SC.InlineEditor,
+SC.InlineTextFieldView = SC.TextFieldView.extend(
 /** @scope SC.InlineTextFieldView.prototype */ {
-  classNames: ['inline-editor'],
+
   /**
     Over-write magic number from SC.TextFieldView
   */
   _topOffsetForFirefoxCursorFix: 0,
 
-  /*
-  * @private
-  * @method
-  *
-  * Scans the given element for presentation styles from css.
-  *
-  * @params {element} the dom element to scan
-  * @returns {String} a style string that was copied from the element
+  /**
+    Invoked by the class method to begin editing on an inline editor.
+    
+    You generally should call the class method beginEditing() instead of
+    this one since it will make sure to create and use the shared editor
+    instance.
+
+    @params options {Hash} hash of options for editing
+    @returns {SC.InlineTextFieldView|Boolean} this if editor began editing, 
+      NO if it failed.
   */
-  _updateViewStyle: function(el) {
-    var styles = '',
-        s=SC.getStyle(el,'font-size');
+  beginEditing: function(options) {
 
-    if(s && s.length>0) styles = styles + "font-size: "+ s + " !important; ";
+    // options are required
+    //@if(debug)
+    if (!options) throw "InlineTextField.beginEditing() requires options";
+    //@end
 
-    s=SC.getStyle(el,'font-family');
-    if(s && s.length>0) styles = styles + "font-family: " + s + " !important; ";
+    // can't begin editing again if already editing
+    if (this.get('isEditing')) return NO ;
+    
+    var layout={}, pane, tarLayout, paneElem, del;
 
-    s=SC.getStyle(el,'font-weight');
-    if(s && s.length>0) styles = styles + "font-weight: " + s + " !important; ";
+    del = options.delegate ;
+    this.set('editorDelegate', del) ;
+    
+    this.beginPropertyChanges();
+    
+    this.set('isEditing', YES) ;
+    this.set('escapeHTML', options.escapeHTML) ;
+    
+    this._optframe = options.frame ;
+    this._optIsCollection = options.isCollection;
+    this._exampleElement = options.exampleElement ;
 
-    s=SC.getStyle(el,'z-index');
-    if(s && s.length>0) styles = styles + "z-index: " + s + " !important; ";
-
-    s=SC.getStyle(el,'line-height');
-    if(s && s.length>0) styles = styles + "line-height: " + s + " !important; ";
-
-    s=SC.getStyle(el,'text-align');
-    if(s && s.length>0) styles = styles + "text-align: " + s + " !important; ";
-
-    s=SC.getStyle(el,'top-margin');
-    if(s && s.length>0) styles = styles + "top-margin: " + s + " !important; ";
-
-    s=SC.getStyle(el,'bottom-margin');
-    if(s && s.length>0) styles = styles + "bottom-margin: " + s + " !important; ";
-
-    s=SC.getStyle(el,'left-margin');
-    if(s && s.length>0) styles = styles + "left-margin: " + s + " !important; ";
-
-    s=SC.getStyle(el,'right-margin');
-    if(s && s.length>0) styles = styles + "right-margin: " + s + " !important; ";
-
-    return styles;
-  },
-
-  /*
-  * @private
-  * @method
-  *
-  * Scans the given element for positioning styles from css.
-  *
-  * @params {element} the dom element to scan
-  * @returns {String} a style string copied from the element
-  */
-  _updateViewPaddingStyle: function(el) {
-    var styles = '',
-    s=SC.getStyle(el,'padding-top');
-
-    if(s && s.length>0) styles = styles + "top: "+ s + " !important; ";
-
-    s=SC.getStyle(el,'padding-bottom');
-    if(s && s.length>0) styles = styles + "bottom: " + s + " !important; ";
-
-    s=SC.getStyle(el,'padding-left');
-    if(s && s.length>0) styles = styles + "left: " + s + " !important; ";
-
-    s=SC.getStyle(el,'padding-right');
-    if(s && s.length>0) styles = styles + "right: " + s + " !important; ";
-
-    return styles;
-	},
-
-  /*
-  * @private
-  * @method
-  *
-  * Scans the given element for styles and copies them into a style element in
-  * the head. This allows the styles to be overriden by css matching classNames
-  * on the editor.
-  *
-  * @params {element} the dom element to copy
-  */
-	updateStyle: function(exampleElement) {
-    if(exampleElement.length) exampleElement = exampleElement[0];
-
-    // the styles are placed into a style element so that they can be overridden
-    // by your css based on the editor className
-    var styleElement = document.getElementById('sc-inline-text-field-style'),
-		s = this._updateViewStyle(exampleElement),
-		p = this._updateViewPaddingStyle(exampleElement),
-
-		str = ".inline-editor input{"+s+"}" +
-					".inline-editor textarea{"+s+"}" +
-					".inline-editor .padding{"+p+"}";
-
-    // the style element is lazily created
-    if(!styleElement) {
-      var head = document.getElementsByTagName('head')[0];
-      styleElement = document.createElement('style');
-
-      styleElement.type= 'text/css';
-      styleElement.media= 'screen';
-      styleElement.id = 'sc-inline-text-field-style';
-
-      head.appendChild(styleElement);
+    if (!this._optframe || !del) {
+      throw "At least frame and delegate options are required for inline editor";
     }
 
-    // now that we know the element exists, write the styles
+    this._originalValue = options.value;
 
-    // IE method
-    if(styleElement.styleSheet) styleElement.styleSheet.cssText= str;
-    // other browsers
-    else styleElement.innerHTML = str;
-	},
-
-  /*
-  * @method
-  *
-  * Positions the editor over the passed view.
-  *
-  * If you want to tweak the positioning of the editor, you may pass a custom
-  * frame for it to position itself on.
-  *
-  * Additionally, if your view is a member of a collectionView, the isCollection
-  * flag should be set to YES.
-  *
-  * @param {SC.View} the view to be positioned over
-  * @param {Hash} optional custom frame
-  * @param {Boolean} if the view is a member of a collection
-  */
-	positionOverTargetView: function(target, isCollection, pane, frame, elem) {
-    if(!pane) pane = target.get('pane');
-
-    if(!elem) elem = target.$()[0];
-
-    // if we weren't given a frame, build one from the target
-    if(!frame) {
-      var tempFrame = target.get('frame');
-
-      frame = SC.offset(elem);
-
-      frame.height = tempFrame.height;
-      frame.width = tempFrame.width;
+    if (SC.none(this._originalValue)){
+      this._originalValue = "";
     }
+    this._multiline = (options.multiline !== undefined) ? options.multiline : NO ;
+    if (this._multiline) {
+      this.set('isTextArea', YES);
+    } else {
+      this.set('isTextArea', NO);
+    }
+    this._commitOnBlur =  (options.commitOnBlur !== undefined) ? options.commitOnBlur : YES ;
 
-    var layout={},
-		paneElem = pane.$()[0],
-		tarLayout = target.get('layout');
+    // set field values
+    this.set('validator', options.validator) ;
+    this.set('value', this._originalValue) ;
+    //this.set('selectedRange', options.selectedRange || { start: this._originalValue.length, length: 0 }) ;
 
-    layout.height = frame.height;
-    layout.width = frame.width;
+    // add to window.
 
-    if (isCollection && tarLayout.left) {
-      layout.left=frame.x-tarLayout.left-paneElem.offsetLeft-1;
+
+    // First try to find the pane in the options hash.
+    // If it's not available, ask the delegate for it.
+    pane = options.pane;
+    if (!pane) {
+      pane = del.get('pane');
+    }
+    paneElem = pane.$()[0];
+
+    layout.height = this._optframe.height;
+    layout.width=this._optframe.width;
+
+    tarLayout = options.layout;
+    if (!tarLayout) {
+      tarLayout = del.get('layout');
+    }
+    if (this._optIsCollection && tarLayout.left) {
+      layout.left=this._optframe.x-tarLayout.left-paneElem.offsetLeft-1;
       if(SC.browser.msie==7) layout.left--;
     } else {
-      layout.left=frame.x-paneElem.offsetLeft-1;
+      layout.left=this._optframe.x-paneElem.offsetLeft-1;
       if(SC.browser.msie==7) layout.left--;
     }
-
-    if (isCollection && tarLayout.top) {
-      layout.top=frame.y-tarLayout.top-paneElem.offsetTop;
+    
+    if (this._optIsCollection && tarLayout.top) {
+      layout.top=this._optframe.y-tarLayout.top-paneElem.offsetTop;
       if(SC.browser.msie==7) layout.top=layout.top-2;
     } else {
-      layout.top=frame.y-paneElem.offsetTop;
-      if(SC.browser.msie==7) layout.top=layout.top-2;
+      layout.top=this._optframe.y-paneElem.offsetTop;
+      if(SC.browser.msie==7) layout.top=layout.top-2;  
     }
 
     this.set('layout', layout);
-	},
-
-  /*
-  * Flag indicating whether the editor is allowed to use multiple lines.
-  * If set to yes it will be rendered using a text area instead of a text input.
-  *
-  * @type {Boolean}
-  */
-  multiline: NO,
-
-  /*
-  * Translates the multiline flag into something TextFieldView understands.
-  *
-  * @type {Boolean}
-  */
-  isTextArea: function() {
-    return this.get('multiline');
-  }.property('multiline').cacheable(),
-
-  /*
-  * Begins editing the given view, positions the editor on top of the view, and
-  * copies the styling of the view onto the editor.
-  *
-  * @params {SC.InlineEditable} the view being edited
-  *
-  * @returns {Boolean} YES on success
-  */
-  beginEditing: function(original, label) {
-		if(!original(label)) return NO;
-
-    var pane = label.get('pane'), elem = this.get('exampleElement');
-
-    this.beginPropertyChanges();
-
-    // if we have an exampleElement we need to make sure it's an actual
-    // DOM element not a jquery object
-    if(elem) {
-      if(elem.length) elem = elem[0];
+  
+    this.set('parentNode', pane);
+    // get style for view.
+   
+    pane.appendChild(this);
+    
+    this._className = options.inlineEditorClassName;
+    if(this._className && !this.hasClassName(this._className)) {
+      this.setClassName(this._className,true);
     }
-
-    // if we don't have an element we need to get it from the target
-    else {
-      elem = label.$()[0];
-    }
-
-    this.updateStyle(elem);
-
-    this.positionOverTargetView(label, this.get('isCollection'), pane, this.get('exampleFrame'), elem);
+    
+    // this.resizeToFit(this.getFieldValue()) ;
 
     this._previousFirstResponder = pane ? pane.get('firstResponder') : null;
     this.becomeFirstResponder();
     this.endPropertyChanges() ;
-
+    
+    // TODO: remove? if(SC.browser.mozilla)this.invokeOnce(this.becomeFirstResponder) ;
+      
+    // Become first responder and notify the delegate after run loop completes
+    this.invokeLast(function() {
+      del.inlineEditorDidBeginEditing(this);
+    });
+    
     return YES;
-  }.enhance(),
+  },
+  
+  
+  /**
+    Tries to commit the current value of the field and end editing.  
+    
+    Do not use this method, use the class method instead.
+    
+    @param {Event} evt that triggered the commit to happen
+    @returns {Boolean}
+  */
+  commitEditing: function(evt) {
+    // try to validate field.  If it fails, return false.  
+    if (!SC.$ok(this.validateSubmit())) return NO ;
+    return this._endEditing(this.get('value'), evt) ;
+  },
+  
+  /**
+    Tries to discard the current value of the field and end editing.
+    
+    Do not use this method, use the class method instead.
 
+    @returns {Boolean}
+  */
+  discardEditing: function() {
+    return this._endEditing(this._originalValue) ;
+  },
+  
   /**
     Invoked whenever the editor loses (or should lose) first responder 
     status to commit or discard editing.
     
     @returns {Boolean}
   */
-  // TODO: this seems to do almost the same thing as fieldDidBlur
   blurEditor: function(evt) {
     if (!this.get('isEditing')) return YES ;
-    return this.commitOnBlur ? this.commitEditing() : this.discardEditing();
+    return this._commitOnBlur ? this.commitEditing(evt) : this.discardEditing(evt);
   },
   
-  /** 
-    @method
-    @private
-
+  /** @private
     Called by commitEditing and discardEditing to actually end editing.
     
+    @param {String} finalValue that will be set as value
+    @param {Event} evt that triggered the end editing to occur
+    @param {Boolean} didDiscard if called from discardEditing
+    @returns {Boolean} NO if editing did not exit
   */
-  _endEditing: function(original) {
-    var ret = original();
+  _endEditing: function(finalValue, evt, didDiscard) {
+    // get permission from the delegate.
+    var del = this.get('editorDelegate') ;
+    
+    if (!this.get('isEditing') || !del) return YES ;
+    
+    if (!del.inlineEditorShouldCommitEditing(this, finalValue)) {
+      //@if(debug)
+      SC.Logger.warn('InlineTextField._endEditing() cannot end without inlineEditorShouldCommitEditing() on the delegate.');
+      //@end
+      return NO;
+    }
+    // OK, we are allowed to end editing.  Notify delegate of final value
+    // and clean up.
+    del.inlineEditorDidEndEditing(this, finalValue);
+
+    // If the delegate set a class name, let's clean it up:
+    if(this._className) this.setClassName(this._className, false);
+    
+    // cleanup cached values
+    this._originalValue = this._delegate = this._exampleElement =  this._optframe = this._className = null ;
+    this.set('isEditing', NO) ;
 
     // resign first responder if not done already.  This may call us in a 
     // loop but since isEditing is already NO, nothing will happen.
@@ -8142,12 +7585,50 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.InlineEditor,
       } else this.resignFirstResponder();
     }
     this._previousFirstResponder = null ; // clearout no matter what
-
-    return ret;
-  }.enhance(),
-
-  // TODO: make textArea automatically resize to fit content
-
+    
+    if (this.get('parentNode')) this.removeFromParent() ;  
+    
+    return YES ;
+  },
+  
+  /**
+    YES if the editor is currently visible and editing.
+  
+    @property {Boolean}
+  */
+  isEditing: NO,
+  
+  // TODO: make this function work for 1.0
+  // /**
+  //   Resizes the visible textarea to fix the actual text in the text area.
+  //   
+  //   This method works by keeping a div positioned immediately beneath the 
+  //   text area with an opacity of 0 that contains the same text as the 
+  //   input text field itself.  This is then used to calculate the required 
+  //   size for the text area.
+  // */
+  // resizeToFit: function(newValue)
+  // {
+  //   
+  // 
+  // 
+  // var sizer  = this.outlet('sizer');
+  //     var field  = this.outlet('field');
+  //     
+  //     // XSS attack waiting to happen... escape the form input;
+  //     var text = (newValue || '').escapeHTML();
+  // 
+  //     // convert the textarea's newlines into something comparable for the sizer 
+  //     // div appending a space to give a line with no text a visible height.
+  //     text = text.replace((/ {2}/g), "&nbsp; ").replace(/\n/g, "<br />&nbsp;");
+  //     
+  //     // get the text size
+  //     sizer.set('innerHTML', text || "&nbsp;");
+  //     sizer.recacheFrames() ;
+  //     var h = sizer.get('frame').height;
+  //     this.set('frame', { height: h }) ;
+  // },
+  
   /** @private */
   mouseDown: function(e) {
     arguments.callee.base.call(this, e) ;
@@ -8226,7 +7707,7 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.InlineEditor,
   // edit.
   /** @private */
   insertNewline: function(evt) { 
-    if (this.get('isTextArea')) {
+    if (this._multiline) {
       evt.allowDefault();
       return arguments.callee.base.call(this, evt) ;
     } else {
@@ -8247,11 +7728,11 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.InlineEditor,
   // editable, begins editing.
   /** @private */
   insertTab: function(evt) {
-    var target = this.target; // removed by commitEditing()
+    var delegate = this._delegate; // removed by commitEditing()
     this.resignFirstResponder();
     this.commitEditing() ;
-    if(target){
-      var next = target.get('nextValidKeyView');
+    if(delegate){
+      var next = delegate.get('nextValidKeyView');
       if(next && next.beginEditing) next.beginEditing();
     }
     return YES ;
@@ -8259,11 +7740,11 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.InlineEditor,
 
   /** @private */
   insertBacktab: function(evt) {
-    var target = this.target; // removed by commitEditing()
+    var delegate = this._delegate; // removed by commitEditing()
     this.resignFirstResponder();
     this.commitEditing() ;
-    if(target){
-      var prev = target.get('previousValidKeyView');
+    if(delegate){
+      var prev = delegate.get('previousValidKeyView');
       if(prev && prev.beginEditing) prev.beginEditing();
     }
     return YES ;
@@ -8280,171 +7761,140 @@ SC.InlineTextFieldView = SC.TextFieldView.extend(SC.InlineEditor,
     evt.allowDefault();
     return YES ;
   }
+  
 });
 
-/*
-* These class methods allow you to manage an editor without implementing
-* SC.Editable. They exist for backwards compatibility and should no longer be
-* used.
-*/
-SC.mixin(SC.InlineTextFieldView, {
-  inlineEditorDelegate: SC.InlineTextFieldDelegate,
 
-  label: null,
-  editor: null,
+SC.InlineTextFieldView.mixin(
+/** @scope SC.InlineTextFieldView */ {
+  
+  /** Call this method to make the inline editor begin editing for your view.
+      
+      If the inline editor is already being used for another value it will
+      try to dismiss itself from the other editor and attach itself to the
+      new view instead.  If this process fails for some reason (for example
+      if the other view did not allow the view to end editing) then this
+      method will return false.
 
-  /*
-  * @method
-  *
-  * This method creates a singleton editor editing your view. Delegate methods
-  * will be called on your view as normal.
-  *
-  * To trigger compatibility mode, call this method with a hash of options. The
-  * required options are:
-  *
-    {{{
-      SC.InlineTextFieldView.beginEditing({
-        delegate: myView,
-        frame: myView.get('frame'),
-        exampleElement: myView.$()
-      }) ;
-    }}}
-  *
-    - *delegate* The view that should be notified of events on the editor.
-    - *frame* The frame of the view that you want the editor to position itself over.
-    - *exampleElement* A DOM element to use when copying styles.
-
-  * Other options may be passed to further customize the editor:
-  *
-    - *multiline* If YES then the hitting return will add to the value instead of exiting the inline editor.
-    - *commitOnBlur* If YES then blurring will commit the value, otherwise it will discard the current value.  Defaults to YES.
-    - *validator* Validator to be attached to the field.
-
-    The editor expects your source view to implement the InlineTextFieldViewDelegate protocol.
-
-    @params {Object} a hash of options or the view to edit
-    @returns {Boolean} whether editing began successfully
+      You should pass a set of options that at least includes the target
+      view.  See class definition for options.
+      
+      @params options {Hash} hash of options for editing
+      @returns {Boolean} YES if editor began editing, NO if it failed.
   */
-  beginEditing: function(label) {
-    var del, editor, options, value, labelProxy;
-
-    // for backwards compatibility, we allow you to pass an options hash with options that will be set on the editor
-    if(SC.typeOf(label) === SC.T_HASH) {
-      options = label;
-
-      if(!options.delegate || !options.exampleElement || !options.frame) {
-        SC.error("Delegate, exampleElement, and frame options are required.");
-        return NO;
-      }
-
-      label = options.delegate;
-      value = options.value;
-    }
-
-    else {
-      value = label.get('value');
-    }
-
-    labelProxy = SC.beget(label);
-
-    // these functions may have side effects, so they need to have their
-    // this reference assigned to the original object before proxying
-    labelProxy.mixin({
-      inlineEditorWillBeginEditing: function() {
-        if(label.inlineEditorWillBeginEditing) label.inlineEditorWillBeginEditing.apply(label, arguments);
-      },
-
-      inlineEditorDidBeginEditing: function() {
-        if(label.inlineEditorDidBeginEditing) label.inlineEditorDidBeginEditing.apply(label, arguments);
-      },
-
-      inlineEditorWillCommitEditing: function(editor, value, editable) {
-        if(label.inlineEditorWillCommitEditing) label.inlineEditorWillCommitEditing(editor, value, editable);
-        if(label.inlineEditorWillEndEditing) label.inlineEditorWillEndEditing(editor, value);
-      },
-
-      inlineEditorDidCommitEditing: function(editor, value, editable) {
-        if(label.inlineEditorDidCommitEditing) label.inlineEditorDidCommitEditing(editor, value, editable);
-        if(label.inlineEditorDidEndEditing) label.inlineEditorDidEndEditing(editor, value);
-
-        SC.InlineTextFieldView._endEditing();
-      },
-
-      inlineEditorWillDiscardEditing: function(editor, editable) {
-        if(label.inlineEditorWillDiscardEditing) label.inlineEditorWillDiscardEditing(editor, editable);
-        if(label.inlineEditorWillEndEditing) label.inlineEditorWillEndEditing(editor, this.get('value'));
-      },
-
-      inlineEditorDidDiscardEditing: function(editor, editable) {
-        if(label.inlineEditorDidDiscardEditing) label.inlineEditorDidDiscardEditing(editor, editable);
-        if(label.inlineEditorDidEndEditing) label.inlineEditorDidEndEditing(editor, this.get('value'));
-
-        SC.InlineTextFieldView._endEditing();
-      }
-    });
-
-    if(label.inlineEditorShouldBeginEditing && !label.inlineEditorShouldBeginEditing(label, value)) return NO;
-
-    this.editor = editor = this.inlineEditorDelegate.acquireEditor(label);
-
-    editor.set('value', value);
-
-    if(options) {
-      editor.set('exampleElement', options.exampleElement);
-      editor.set('exampleFrame', options.frame);
-      editor.set('multiline', options.multiline);
-      editor.set('escapeHTML', options.escapeHTML);
-      editor.set('isCollection', options.isCollection);
-      editor.set('commitOnBLur', options.commitOnBlur);
-      editor.set('validator', options.validator);
-    }
-
-    if(editor) return editor.beginEditing(labelProxy);
-    else return NO;
+  beginEditing: function(options) {
+    this._exampleElement = options.exampleElement ;
+    
+    // If exampleInlineTextFieldView is set, load this class otherwise use
+    // the default, this.
+    var klass = options.exampleInlineTextFieldView 
+              ? options.exampleInlineTextFieldView : this,
+        layout = options.layout,
+        s = this.updateViewStyle(),
+        p = this.updateViewPaddingStyle();
+    
+    var str= ".inline-editor input{"+s+"} ";
+    str= str+".inline-editor textarea{"+s+"} .inline-editor .padding{"+p+"}";
+    var pa= document.getElementsByTagName('head')[0],
+    el= document.createElement('style');
+    el.type= 'text/css';
+    el.media= 'screen';
+    if(el.styleSheet) el.styleSheet.cssText= str;// IE method
+    else el.appendChild(document.createTextNode(str));// others
+    pa.appendChild(el);
+    
+    this.editor = klass.create({ classNames: 'inline-editor', layout: layout}) ;
+    return this.editor.beginEditing(options) ;
+    
   },
-
-  /*
-  * @method
-  *
-  * Ends editing on the current editor and saves the value back to the
-  * view being edited.
-  *
-  * @returns {Boolean} whether the editor was allowed to commit successfully
+  
+  /** Save the current value of the inline editor and exit edit mode.
+  
+    If the inline editor is being used it will try to end the editing and
+    close.  If the inline editor could not end for some reason (for example
+    if the delegate did not allow the editing to end) then this method will
+    return NO.
+    
+    @returns {Boolean} YES if the inline editor ended or no edit was in 
+      progress.
   */
   commitEditing: function() {
-    return this.inlineEditorDelegate.editor ? this.inlineEditorDelegate.editor.commitEditing() : NO;
+    return this.editor ? this.editor.commitEditing() : YES ;
   },
 
-  /*
-  * @method
-  *
-  * Ends editing on the current editor without saving the value.
-  *
-  * @returns {Boolean} whether the editor was allowed to discard successfully
+  /** Discard the current value of the inline editor and exit edit mode.
+  
+    If the inline editor is in use, this method will try to end the editing,
+    restoring the original value of the target view.  If the inline editor
+    could not end for some reason (for example if the delegate did not 
+    allow editing to end) then this method will return NO.
+    
+    @returns {Boolean} YES if the inline editor ended or no edit was in progress.
   */
   discardEditing: function() {
-    return this.inlineEditorDelegate.editor ? this.inlineEditorDelegate.editor.discardEditing() : NO;
+    return this.editor ? this.editor.discardEditing() : YES ;  
+  },
+  
+  /** @private */
+  updateViewStyle: function() {
+    var el = this._exampleElement[0],
+        styles = '',
+        s=SC.getStyle(el,'font-size');
+    if(s && s.length>0) styles = styles + "font-size: "+ s + " !important; ";
+    s=SC.getStyle(el,'font-family');
+    if(s && s.length>0) styles = styles + "font-family: " + s + " !important; ";
+    s=SC.getStyle(el,'font-weight');
+    if(s && s.length>0) styles = styles + "font-weight: " + s + " !important; ";
+    s=SC.getStyle(el,'z-index');
+    if(s && s.length>0) styles = styles + "z-index: " + s + " !important; ";
+    s=SC.getStyle(el,'line-height');
+    if(s && s.length>0) styles = styles + "line-height: " + s + " !important; ";
+    s=SC.getStyle(el,'text-align');
+    if(s && s.length>0) styles = styles + "text-align: " + s + " !important; ";
+    s=SC.getStyle(el,'top-margin');
+    if(s && s.length>0) styles = styles + "top-margin: " + s + " !important; ";
+    s=SC.getStyle(el,'bottom-margin');
+    if(s && s.length>0) styles = styles + "bottom-margin: " + s + " !important; ";
+    s=SC.getStyle(el,'left-margin');
+    if(s && s.length>0) styles = styles + "left-margin: " + s + " !important; ";
+    s=SC.getStyle(el,'right-margin');
+    if(s && s.length>0) styles = styles + "right-margin: " + s + " !important; ";
+    
+    return styles;
   },
 
-  /*
-  * @private
-  * @method
-  *
-  * Cleans up the current editor and editing context.
+  /** @private */
+  updateViewPaddingStyle: function() {
+    var el = this._exampleElement[0] ;   
+    var styles = '';
+    var s=SC.getStyle(el,'padding-top');
+    if(s && s.length>0) styles = styles + "top: "+ s + " !important; ";
+    s=SC.getStyle(el,'padding-bottom');
+    if(s && s.length>0) styles = styles + "bottom: " + s + " !important; ";
+    s=SC.getStyle(el,'padding-left');
+    if(s && s.length>0) styles = styles + "left: " + s + " !important; ";
+    s=SC.getStyle(el,'padding-right');
+    if(s && s.length>0) styles = styles + "right: " + s + " !important; ";
+    
+    return styles;
+  },
+
+  
+  /**
+    The current shared inline editor.  This property will often remain NULL
+    until you actually begin editing for the first time.
+    
+    @property {SC.InlineTextFieldView}
   */
-  _endEditing: function() {
-    this.inlineEditorDelegate.releaseEditor(this.editor);
-
-    this.editor = null;
-  }
-});
-
+  editor: null
+  
+}) ;
 
 /* >>>>>>>>>> BEGIN source/mixins/inner_frame.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -8629,390 +8079,20 @@ SC.InnerFrame = {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
 /**
   @class
   Base class for all render delegates.
-
-  You should use SC.RenderDelegate or a subclass of it as the base for all 
-  of your render delegates. SC.RenderDelegate offers many helper methods 
-  and can be simpler to subclass between themes than `SC.Object`.
-
-  Creating & Subclassing
-  ============================
-  You create render delegates just like you create SC.Objects:
-
-      MyTheme.someRenderDelegate = SC.RenderDelegate.create({ ... });
-
-  You can subclass a render delegate and use that:
-
-      MyTheme.RenderDelegate = SC.RenderDelegate.extend({ ... });
-      MyTheme.someRenderDelegate = MyTheme.RenderDelegate.create({});
-
-  And you can even subclass instances or SC.RenderDelegate:
-
-      MyTheme.someRenderDelegate = SC.RenderDelegate.create({ ... });
-      MyTheme.otherRenderDelegate = MyTheme.someRenderDelegate.create({ ... });
-
-      // this allows you to subclass another theme's render delegate:
-      MyTheme.buttonRenderDelegate = SC.BaseTheme.buttonRenderDelegate.create({ ... });
-
-  For render delegates, subclassing and instantiating are the same.
-
-  NOTE: Even though `.extend` and `.create` technically do the same thing, 
-  convention dictates that you use `.extend` for RenderDelegates that 
-  will be used primarily as base classes, and `create` for RenderDelegates
-  that you expect to be instances.
-
-  Rendering and Updating
-  =========================
-  Render delegates are most commonly used for two things: rendering and updating
-  DOM representations of controls.
-
-  Render delegates use their `render` and `update` methods to do this:
-
-      render: function(dataSource, context) {
-        // rendering tasks here
-        // example:
-        context.begin('div').addClass('title')
-          .text(dataSource.get('title')
-        .end();
-      },
-
-      update: function(dataSource, jquery) {
-        // updating tasks here
-        // example:
-        jquery.find('.title').text(dataSource.get('title'));
-      }
-
-  Variables
-  ==========================
-  The data source provides your render delegate with all of the information
-  needed to render. However, the render delegate's consumer--usually a view--
-  may need to get information back.
-
-  For example, `SC.AutoResize` resizes controls to fit their text. You can use
-  it to size a button to fit its title. But it can't just make the button
-  have the same width as its title: it needs to be a little larger to make room
-  for the padding to the left and right sides of the title.
-
-  This padding will vary from theme to theme.
   
-  You can specify properties on the render delegate like any other property:
-
-      MyRenderDelegate = SC.RenderDelegate.create({
-        autoSizePadding: 10
-        ...
-      });
-
-  But there are multiple sizes of buttons; shouldn't the padding change as
-  well? You can add hashes for the various control sizes and override properties:
-
-      SC.RenderDelegate.create({
-        autoSizePadding: 10,
-
-        'sc-jumbo-size': {
-          autoResizePadding: 20
-        }
-
-  For details, see the discussion on size helpers below.
-
-  You can also calculate values for the data source. In this example, we calculate
-  the autoSizePadding to equal half the data source's height:
-
-      SC.RenderDelegate.create({
-        autoSizePaddingFor: function(dataSource) {
-          if (dataSource.get('frame')) {
-            return dataSource.get('frame').height / 2;
-          }
-        }
-
-
-  When SC.ButtonView tries to get `autoSizePadding`, the render delegate will look for
-  `autoSizePaddingFor`. It will be called if it exists. Otherwise, the property will
-  be looked up like normal.
-
-  Note: To support multiple sizes, you must also render the class name; see size
-  helper discussion below.
-
-  Helpers
-  =====================
-  SC.RenderDelegate have "helper methods" to assist the rendering process.
-  There are a few built-in helpers, and you can add your own.
-
-  Slices
-  ----------------------
-  Chance provides the `includeSlices` method to easily slice images for
-  use in the SproutCore theme system.
-
-      includeSlices(dataSource, context, slices);
-
-  You can call this to add DOM that matches Chance's `@include slices()`
-  directive. For example:
-
-      MyTheme.buttonRenderDelegate = SC.RenderDelegate.create({
-        name: 'button',
-        render: function(dataSource, context) {
-          this.includeSlices(dataSource, context, SC.THREE_SLICE);
-        }
-      });
-
-  DOM elements will be added as necessary for the slices. From your CSS, you
-  can match it like this:
-
-      $theme.button {
-        @include slices('button.png', $left: 3, $right: 3);
-      }
-
-  See the Chance documentation at http://guides.sproutcore.com/chance.html
-  for more about Chance's `@include slices` directive.
-
-  Sizing Helpers
-  -------------------------
-  As discussed previously, you can create hashes of properties for each size. 
-  However, to support sizing, you must render the size's class name.
-
-  Use the `addSizeClassName` and `updateSizeClassName` methods:
-
-      SC.RenderDelegate.create({
-        render: function(dataSource, context) {
-          // if you want to include a class name for the control size
-          // so you can style it via CSS, include this line:
-          this.addSizeClassName(dataSource, context);
-
-          ...
-        },
-
-        update: function(dataSource, jquery) {
-          // and don't forget to use its companion in update as well:
-          this.updateSizeClassName(dataSource, jquery);
-
-          ...
-        }
-      });
-
-  Controls that allow multiple sizes should also be able to automatically choose
-  the correct size based on the `layout` property supplied by the user. To support
-  this, you can add properties to your size hashes:
-
-      'sc-regular-size': {
-        // to match _only_ 24px-high buttons
-        height: 24,
-
-        // or, alternatively, to match ones from 22-26:
-        minHeight: 20, maxHeight: 26,
-
-        // you can do the same for width if you wanted
-        width: 100
-      }
-
-  The correct size will be calculated automatically when `addSlizeClassName` is
-  called. If the view explicitly supplies a control size, that size will be used;
-  otherwise, it will be calculated automatically based on the properties in your
-  size hash.
-
-  Adding Custom Helpers
-  ---------------------
-  You can mix your own helpers into this base class by calling 
-  SC.RenderDelegate.mixin; they will be available to all render delegates:
-
-      SC.RenderDelegate.mixin({
-        myHelperMethod: function(dataSource) { ... }
-      });
-
-
-  You can then use the helpers from your render delegates:
-
-      MyTheme.someRenderDelegate = SC.RenderDelegate.create({
-        name: 'some-thingy',
-        render: function(dataSource, context) {
-          this.myHelperMethod(dataSource);
-        }
-      });
-
-
-  By convention, all render delegate methods should take a `dataSource` as 
-  their first argument. If they do any rendering or updating, their second
-  argument should be the `SC.RenderContext` or `jQuery` object to use.
-
-  In addition, helpers like these are only meant for methods that should
-  be made available to _all_ render delegates. If your method is specific
-  to just one, add it directly; if it is specific to just a few in your
-  own theme, consider just using mixins or subclassing SC.RenderDelegate:
-
-      // If you use it in a couple of render delegates, perhaps a mixin
-      // would be best:
-      MyTheme.MyRenderHelper = {
-        helper: function(dataSource) {
-          ...
-        }
-      };
-
-      MyTheme.myRenderDelegate = SC.RenderDelegate.create(MyTheme.MyRenderHelper, {
-        render: function(dataSource, context) { ... }
-      });
-
-
-      // If you use it in all render delegates in your theme, perhaps it
-      // would be better to create an entire subclass of
-      // SC.RenderDelegate:
-      MyTheme.RenderDelegate = SC.RenderDelegate.extend({
-        helper: function(dataSource) {
-          ...
-        }
-      });
-
-      MyTheme.myRenderDelegate = MyTheme.RenderDelegate.create({
-        render: function(dataSource, context) { ... }
-      });
-
-  Data Sources
-  ====================
-  Render delegates get the content to be rendered from their data sources.
-
-  A data source can be any object, so long as the object implements
-  the following methods:
-
-  - `get(propertyName)`: Returns a value for a given property.
-  - `didChangeFor(context, propertyName)`: Returns YES if any properties
-    listed have changed since the last time `didChangeFor` was called with
-    the same context.
-
-  And the following properties (to be accessed through `.get`):
-
-  - `theme`: The theme being used to render.
-  - `renderState`: An empty hash for the render delegate to save state in.
-    While render delegates are _usually_ completely stateless, there are
-    cases where they may need to save some sort of state.
+  You can mix helpers into this base class; they will be available to all
+  render delegates.
 */
-SC.RenderDelegate = {
-  // docs will look more natural if these are all considered instance
-  // methods/properties.
-  /*@scope SC.RenderDelegate.prototype*/
-
-  /**
-    Creates a new render delegate based on this one. When you want to
-    create a render delegate, you call this:
-   
-        MyTheme.myRenderDelegate = SC.RenderDelegate.create({
-          name: 'my-render-delegate',
-          render: function(dataSource, context) {
-            // your code here...
-          }
-        })
-  */
-  create: function() {
-    var ret = SC.beget(this);
-
-    var idx, len = arguments.length;
-    for (idx = 0; idx < len; idx++) {
-      ret.mixin(arguments[idx]);
-    }
-
-    return ret;
-  },
-
-  /**
-    Adds extra capabilities to this render delegate.
-   
-    You can use this to add helpers to all render delegates:
-   
-        SC.RenderDelegate.reopen({
-          myHelperMethod: function(dataSource) { ... }
-        });
-   
-  */
-  reopen: function(mixin) {
-    var i, v;
-    for (i in mixin) {
-      v = mixin[i];
-      if (!mixin.hasOwnProperty(i)) {
-        continue;
-      }
-
-      if (typeof v === 'function' && v !== this[i]) {
-        v.base = this[i] || SC.K;
-      }
-
-      if (v && v.isEnhancement && v !== this[i]) {
-        v = SC._enhance(this[i] || K, v);
-      }
-
-      this[i] = v;
-    }
-  },
-
-  /**
-    Returns the specified property from this render delegate.
-    Implemented to match SC.Object's API.
-  */
-  get: function(propertyName) { return this[propertyName]; },
-
-  /**
-    Gets or generates the named property for the specified
-    dataSource. If a method `propertyName + 'For'` is found,
-    it will be used to compute the value, `dataSource`
-    being passed as an argument. Otherwise, it will simply
-    be looked up on the render delegate.
-    
-    NOTE: this implementation is a reference implementation. It
-    is overriden in the sizing code (helpers/sizing.js) to be
-    size-sensitive.
-  */
-  getPropertyFor: function(dataSource, propertyName) {
-    if (this[propertyName + 'For']) {
-      return this[propertyName + 'For'](dataSource, propertyName);
-    }
-
-    return this[propertyName];
-  },
-
-  /**
-    All render delegates should have a name. Any time a render delegate is
-    used, this name should be added as a class name (`SC.View`s do this
-    automatically).
-  */
-  name: undefined,
-
-  /**
-    Writes the DOM representation of this render delegate to the
-    supplied `SC.RenderContext`, using the supplied `dataSource`
-    for any data needed.
-    
-    @method
-    @param {DataSource} dataSource An object from which to get
-    data. See documentation on data sources above.
-    @param {SC.RenderContext} context A context to render DOM into.
-  */
-  render: function(dataSource, context) {
-
-  },
-
-  /**
-    Updates the DOM representation of this render delegate using
-    the supplied `jQuery` instance and `dataSource`.
-    
-    @method
-    @param {DataSource} dataSource An object from which to get
-    data. See documentation on data sources above.
-    @param {jQuery} jquery A jQuery instance containing the DOM
-    element to update. This will be the DOM generated by `render()`.
-  */
-  update: function(dataSource, jQuery) {
-
-  }
-};
-
-// create and extend are technically identical.
-SC.RenderDelegate.extend = SC.RenderDelegate.create;
-
-// and likewise, as this is both a class and an instance, mixin makes
-// sense instead of reopen...
-SC.RenderDelegate.mixin = SC.RenderDelegate.reopen;
-
+SC.RenderDelegate = SC.Object.extend({
+  
+});
 /* >>>>>>>>>> BEGIN source/render_delegates/canvas_image.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
@@ -9129,7 +8209,7 @@ SC.BaseTheme.canvasImageRenderDelegate = SC.RenderDelegate.create({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -9142,182 +8222,6 @@ SC.BaseTheme.containerRenderDelegate = SC.RenderDelegate.create({
   
   update: function() {
 
-  }
-});
-
-/* >>>>>>>>>> BEGIN source/render_delegates/helpers/sizing.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2009 Sprout Systems, Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
-SC.RenderDelegate.reopen({
-  /**
-    A list of size names to look for when automatically determining
-    control size. By default, this has all of the SproutCore control sizes.
-  */
-  sizes: [
-    SC.TINY_CONTROL_SIZE, SC.SMALL_CONTROL_SIZE,
-    SC.REGULAR_CONTROL_SIZE, SC.LARGE_CONTROL_SIZE,
-    SC.HUGE_CONTROL_SIZE, SC.JUMBO_CONTROL_SIZE
-  ],
-
-  /**
-    Determines the correct size for the given data source, and returns the
-    hash, if any, representing it.
-   
-    The hashes to choose from are properties on the render delegate. You define
-    them with the same name as you would use for styling. For example,
-    SC.REGULAR_CONTROL_SIZE uses a property name 'sc-regular-size':
-   
-        SC.RenderDelegate.create({
-          'sc-regular-size': {
-            // my properties here
-          }
-   
-    If no matching size is found, the hash (if any) for SC.REGULAR_CONTROL_SIZE
-    will be returned.
-   
-    @param {DataSource} dataSource The data source in which to find `controlSize`
-    or `frame` and to determine the size for.
-   
-    @returns {Hash undefined}
-  */
-  sizeFor: function(dataSource) {
-    var controlSize = dataSource.get('controlSize'), size, idx, len;
-
-    // if there is a control size set on the control
-    // then we need to use it, and give an error if we
-    // don't have it.
-    if (controlSize) {
-      if (!this[controlSize]) {
-        // create a hash for the control size
-        this[controlSize] = {};
-      }
-
-      size = this[controlSize];
-
-      // make sure there's a name on the size for use as class name
-      if (!size.name) {
-        size.name = controlSize;
-      }
-
-      return size;
-    }
-
-    // try to determine control size for the supplied frame
-    // TODO: cache this in dataSource.renderState
-    var frame = dataSource.get('frame');
-    if (!frame) {
-      size = this['sc-regular-size'];
-
-      // create the size hash if needed
-      if (!size) { size = this['sc-regular-size'] = {}; }
-      if (!size.name) { size.name = 'sc-regular-size'; }
-      return size;
-    }
-
-    // loop to automatically find size
-    for (idx = 0; idx < len; idx++) {
-      key = sizes[idx];
-      size = this[key];
-
-      // when the size is not defined, skip it.
-      if (!size) {
-        continue;
-      }
-
-      if (
-        // if no auto-size-selection params are supplied, then we cannot
-        // automatically select a size...
-        (
-          size.width === undefined && size.height === undefined && 
-          size.minHeight === undefined && size.minWidth === undefined &&
-          size.maxHeight === undefined && size.maxWidth === undefined
-        ) ||
-
-        // otherwise, if any are defined and are non-equal
-        (size.width !== undefined && frame.width !== size.width) ||
-        (size.minWidth !== undefined && frame.width < size.minWidth) ||
-        (size.maxWidth !== undefined && frame.width > size.maxWidth) ||
-
-        (size.height !== undefined && frame.height !== size.height) ||
-        (size.minHeight !== undefined && frame.height < size.minHeight) ||
-        (size.maxHeight !== undefined && frame.height < size.maxHeight)
-      ) {
-        continue;
-      }
-
-      // the size needs a name to use as a class name. If one is not already
-      // present, set it to the key.
-      if (!size.name) {
-        size.name = key;
-      }
-
-      return size;
-    }
-
-    // hardcoded to return regular size if defined
-    size = this['sc-regular-size'];
-
-    // create the size hash if needed
-    if (!size) { size = this['sc-regular-size'] = {}; }
-    if (!size.name) { size.name = 'sc-regular-size'; }
-
-
-    return size;
-  },
-
-  /**
-    Determines the proper size for the dataSource, and then renders the class
-    name corresponding to that size.
-  */
-  addSizeClassName: function(dataSource, context) {
-    var size = this.sizeFor(dataSource);
-    if (size) {
-      context.addClass(size.name);
-    }
-  },
-
-  /**
-    Determines the proper size for the dataSource, and then updates
-    the DOM to include that size's class name.
-  */
-  updateSizeClassName: function(dataSource, jquery) {
-    var size = this.sizeFor(dataSource);
-    if (size) {
-      jquery.addClass(size.name);
-    }
-  },
-
-  /**
-    Retrieves the given property for the specified data source. This property
-    may be static, or may be computed specifically for this data source. This
-    version fo `getPropertyFor` will check in your size hashes to see if any
-    properties have been overriden.
-    
-    @param {DataSource} dataSource The data source to get the property
-    for. Some properties may differ based on the data source; for instance,
-    some may have different values depending on size.
-    @param {String} propertyName The name of the property to retrieve.
-  */
-  getPropertyFor: function(dataSource, propertyName) {
-    var size = this.sizeFor(dataSource);
-    if (size) {
-      if (size[propertyName + 'For']) {
-        return size[propertyName + 'For'](dataSource, propertyName);
-      } else if (size[propertyName] !== undefined) {
-        return size[propertyName];
-      }
-    }
-
-    if (this[propertyName + 'For']) {
-      return this[propertyName + 'For'];
-    }
-
-    return this[propertyName];
   }
 });
 
@@ -9424,7 +8328,7 @@ SC.BaseTheme.imageRenderDelegate = SC.RenderDelegate.create({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -9461,20 +8365,28 @@ SC.BaseTheme.labelRenderDelegate = SC.RenderDelegate.create({
   name: 'label',
   
   render: function(dataSource, context) {
-    this.addSizeClassName(dataSource, context);
+    var view = dataSource.get('view'),
+        ariaLabeledBy;
 
-    /*
-      TODO [CC @ 1.5] These properties have been deprecated. We should remove them
-            in the next release
-    */
+    if(view) {
+      ariaLabeledBy = view.get('ariaLabeledBy');
+    }
+
+    // CONSIDER DEPRECATING THESE PROPERTIES BECAUSE THEY ARE
+    // ANNOYING PAINS IN THE BUTT THAT EVERYONE HATES
     context.addStyle({
-      fontWeight: dataSource.get('fontWeight') || null,
-      textAlign: dataSource.get('textAlign') || null
+      'textAlign': dataSource.get('textAlign'),
+      'fontWeight': dataSource.get('fontWeight')
     });
     
     context.setClass('ellipsis', dataSource.get('needsEllipsis') || NO);
     context.setClass('icon', dataSource.get('icon') || NO);
 
+    //addressing accessibility
+    if(ariaLabeledBy && ariaLabeledBy !== "") {
+      context.attr('aria-labelledby', ariaLabeledBy);
+    }
+    
     var html = this._htmlForTitleAndIcon(dataSource);
     context.push(html);
     
@@ -9485,18 +8397,26 @@ SC.BaseTheme.labelRenderDelegate = SC.RenderDelegate.create({
   },
   
   update: function(dataSource, jquery) {
-    this.updateSizeClassName(dataSource, jquery);
+    var view = dataSource.get('view'),
+        ariaLabeledBy;
 
-    /*
-      TODO [CC @ 1.5] These properties have been deprecated. We should remove them
-            in the next release
-    */
+    if(view) {
+      ariaLabeledBy = view.get('ariaLabeledBy');
+    }
+
+    // CONSIDER DEPRECATING THESE PROPERTIES BECAUSE THEY ARE
+    // ANNOYING PAINS IN THE BUTT THAT EVERYONE HATES
     jquery.css({
-      fontWeight: dataSource.get('fontWeight') || null,
-      textAlign: dataSource.get('textAlign') || null
+      'textAlign': dataSource.get('textAlign') || null,
+      'fontWeight': dataSource.get('fontWeight') || null
     });
     
     jquery.setClass('ellipsis', dataSource.get('needsEllipsis') || NO);
+
+    //addressing accessibility
+    if(ariaLabeledBy && ariaLabeledBy !== "") {
+      jquery.attr('aria-labelledby', ariaLabeledBy);
+    }
 
     var html = this._htmlForTitleAndIcon(dataSource);
     if (dataSource.get('renderState')._lastHTMLForTitleAndIcon !== html) {
@@ -9540,12 +8460,11 @@ SC.BaseTheme.labelRenderDelegate = SC.RenderDelegate.create({
   }
   
 });
-
 /* >>>>>>>>>> BEGIN source/system/benchmark.js */
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 /*globals $A */
@@ -10265,7 +9184,7 @@ SC.Benchmark = SC.Benchmark;
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -10284,7 +9203,7 @@ SC.Task = SC.Object.extend({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -10503,12 +9422,6 @@ SC.ready(SC.chance, 'preloadImages');
 
 /* >>>>>>>>>> BEGIN source/system/cookie.js */
 // ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-// ==========================================================================
 // SC.Cookie
 // ==========================================================================
 
@@ -10680,14 +9593,7 @@ SC.CookieMonster = {
   }
 };
 /* >>>>>>>>>> BEGIN source/system/core_query.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
- SC.mixin(SC.$.fn, /** @scope SC.$.prototype */ {
+SC.mixin(SC.$.fn, /** @scope SC.$.prototype */ {
 
   /**
     You can either pass a single class name and a boolean indicating whether
@@ -10748,7 +9654,7 @@ SC.CookieMonster = {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -10837,7 +9743,7 @@ SC.ExceptionHandler = {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -11272,7 +10178,7 @@ SC.imageQueue = SC.Object.create(/** @scope SC.imageQueue.prototype */ {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -11331,7 +10237,7 @@ SC.Math = SC.Object.create({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -11353,32 +10259,31 @@ SC.LOG_MODULE_LOADING = YES;
 
 SC.Module = SC.Object.create(/** @scope SC.Module */ {
 
-  /**
-    Returns YES if the module is ready; NO if it is not loaded or its
-    dependencies have not yet loaded.
+	/**
+		Returns YES if the module is ready; NO if it is not loaded or its
+		dependencies have not yet loaded.
 
-    @param {String} moduleName the name of the module to check
-    @returns {Boolean}
-  */
-  isModuleReady: function(moduleName) {
-    var moduleInfo = SC.MODULE_INFO[moduleName] ;
-    return moduleInfo ? !!moduleInfo.isReady : NO ;
-  },
+		@param {String} moduleName the name of the module to check
+		@returns {Boolean}
+	*/
+	isModuleReady: function(moduleName) {
+		var moduleInfo = SC.MODULE_INFO[moduleName] ;
+		return moduleInfo ? !!moduleInfo.isReady : NO ;
+	},
 
-  /**
-    Asynchronously loads a module if it is not already loaded. If you pass
-    a function, or a target and action, it will be called once the module
-    has finished loading.
+	/**
+		Asynchronously loads a module if it is not already loaded. If you pass
+		a function, or a target and action, it will be called once the module
+		has finished loading.
 
-    If the module you request has dependencies (as specified in the Buildfile)
-    that are not yet loaded, it will load them first before executing the
-    requested module.
+		If the module you request has dependencies (as specified in the Buildfile)
+		that are not yet loaded, it will load them first before executing the
+		requested module.
 
-    @param moduleName {String}
-    @param target {Function}
-    @param method {Function}
-    @returns {Boolean} YES if already loaded, NO otherwise
-  */
+		@param moduleName {String}
+		@param target {Function}
+		@param method {Function}
+	*/
   loadModule: function(moduleName, target, method) {
     var module = SC.MODULE_INFO[moduleName], callbacks, targets;
     var args   = SC.A(arguments).slice(3);
@@ -11428,8 +10333,6 @@ SC.Module = SC.Object.create(/** @scope SC.Module */ {
           });
         }
       }
-
-      return YES;
     }
     // The module is not yet loaded, so register the callback and, if necessary, begin loading
     // the code.
@@ -11458,8 +10361,6 @@ SC.Module = SC.Object.create(/** @scope SC.Module */ {
         this._loadJavaScriptForModule(moduleName);
         module.isLoading = YES;
       }
-
-      return NO;
     }
   },
 
@@ -11732,9 +10633,6 @@ SC.Module = SC.Object.create(/** @scope SC.Module */ {
       if (!method) {
         if (SC.LAZY_INSTANTIATION[moduleName]) {
           this._executeLazilyInstantiatedModule(moduleName, targetName, methodName);
-
-          target = this._targetForTargetName(targetName);
-          method = this._methodForMethodNameInTarget(methodName, target);
         } else {
           throw "SC.Module: could not find callback for '%@'".fmt(moduleName);
         }
@@ -11924,7 +10822,7 @@ SC.ready(function() {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 /*global ActiveXObject */
@@ -12476,7 +11374,7 @@ SC.XHRResponse = SC.Response.extend({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -12506,21 +11404,23 @@ SC.Request = SC.Object.extend(SC.Copyable, SC.Freezable,
   // PROPERTIES
   // 
   
-/**
-  Sends the request asynchronously instead of blocking the browser.  You
-  should almost always make requests asynchronous.  You can change this 
-  options with the async() helper option (or simply set it directly).
-
-	@default YES
-  @property {Boolean}
-*/
-isAsynchronous: YES,
+  /**
+    Sends the request asynchronously instead of blocking the browser.  You
+    should almost always make requests asynchronous.  You can change this 
+    options with the async() helper option (or simply set it directly).
+    
+    Defaults to YES. 
+    
+    @property {Boolean}
+  */
+  isAsynchronous: YES,
 
   /**
     Processes the request and response as JSON if possible.  You can change
     this option with the json() helper method.
 
-    @default NO 
+    Defaults to NO 
+    
     @property {Boolean}
   */
   isJSON: NO,
@@ -12529,7 +11429,8 @@ isAsynchronous: YES,
     Process the request and response as XML if possible.  You can change this
     option with the xml() helper method.
     
-    @default NO
+    Defaults to NO
+  
     @property {Boolean}
   */
   isXML: NO,
@@ -12557,7 +11458,6 @@ isAsynchronous: YES,
     only supported option is SC.XHRResponse which uses a traditional
     XHR transport.
     
-		@default SC.XHRResponse
     @property {SC.Response}
   */
   responseClass: SC.XHRResponse,
@@ -12565,7 +11465,6 @@ isAsynchronous: YES,
   /**
     The original request for copied requests.
     
-		@default null
     @property {SC.Request}
   */
   source: null,
@@ -12573,15 +11472,13 @@ isAsynchronous: YES,
   /**
     The URL this request to go to.
     
-		@default null
-    @property {String}
+    @param {String}
   */
   address: null,
   
   /**
     The HTTP method to use.
     
-		@default GET
     @param {String}
   */
   type: 'GET',
@@ -12597,7 +11494,6 @@ isAsynchronous: YES,
     An exception will be thrown if you try to invoke send() on a request that
     has both a timeout and isAsyncronous set to NO.
     
-		@default null
     @property {Number}
   */
   timeout: null,
@@ -12605,15 +11501,11 @@ isAsynchronous: YES,
   /**
     The body of the request.  May be an object is isJSON or isXML is set,
     otherwise should be a string.
-
-		@property {Object|String}
   */
   body: null,
   
   /**
     The body, encoded as JSON or XML if needed.
-
-		@property {Object|String}
   */
   encodedBody: function() {
     // TODO: support XML
@@ -12633,8 +11525,8 @@ isAsynchronous: YES,
     
     If you do not want the request to actually send, call cancel().
     
-    @param {SC.Request} request A copy of the request object, not frozen
-    @param {SC.Response} response The object that will wrap the response
+    @param {SC.Request} request a copy of the request, not frozen
+    @returns {void}
   */
   willSend: function(request, response) {},
   
@@ -12645,10 +11537,10 @@ isAsynchronous: YES,
     
     The passed request is a frozen copy of the request, indicating the 
     options set at the time of the request.
-
-    @param {SC.Request} request A copy of the request object, frozen
-    @param {SC.Response} response The object that will wrap the response
-		@returns BOOL YES on success, NO on failure
+    
+    @param {SC.Request} request a copy of the request, frozen
+    @param {SC.Response} response the object that will carry the response
+    @returns {void}
   */
   didSend: function(request, response) {},
   
@@ -12657,8 +11549,8 @@ isAsynchronous: YES,
     your chance to fix up the response based on the results.  If you don't
     want to continue processing the response call response.cancel().
 
-    @param {SC.Request} request A copy of the request object, frozen
-    @param {SC.Response} response The object that will wrap the response
+    @param {SC.Response} response the response
+    @returns {void}
   */
   willReceive: function(request, response) {},
   
@@ -12668,16 +11560,14 @@ isAsynchronous: YES,
     point.  If you don't want to allow notifications to continue, call
     response.cancel()
 
-    @param {SC.Request} request A copy of the request object, frozen
-    @param {SC.Response} response The object that will wrap the response
+    @param {SC.Response} response reponse
+    @returns {void}
   */
   didReceive: function(request, response) {},
   
   // ..........................................................
   // HELPER METHODS
   // 
-
-  concatenatedProperties: 'COPY_KEYS',
 
   COPY_KEYS: 'isAsynchronous isJSON isXML address type timeout body responseClass willSend didSend willReceive didReceive'.w(),
   
@@ -12851,8 +11741,7 @@ isAsynchronous: YES,
     You may also pass additional parameters which will be passed along to your
     callback. If your callback handled the notification, it should return YES.
     
-    Scoping With Status Codes
-    ------
+    h2. Scoping With Status Codes
     
     If you pass a status code as the first option to this method, then your 
     notification callback will only be called if the response status matches
@@ -12868,8 +11757,7 @@ isAsynchronous: YES,
     method to be executed no matter what the resulting status is unless a 
     more specific notifier was registered and returned YES.
     
-    Callback Format
-    ------
+    h2. Callback Format
     
     Your notification callback should expect to receive the Response object
     as the first parameter plus any additional parameters that you pass.  
@@ -12951,17 +11839,12 @@ SC.Request.mixin(/** @scope SC.Request */ {
 });
 
 /**
-  @class
-
   The request manager coordinates all of the active XHR requests.  It will
   only allow a certain number of requests to be active at a time; queuing 
   any others.  This allows you more precise control over which requests load
   in which order.
-
-  @since SproutCore 1.0
 */
-SC.Request.manager = SC.Object.create( SC.DelegateSupport, 
-	/** @scope SC.Request.manager */{
+SC.Request.manager = SC.Object.create( SC.DelegateSupport, {
 
   /**
     Maximum number of concurrent requests allowed.  6 for all browsers.
@@ -13089,7 +11972,7 @@ SC.Request.manager = SC.Object.create( SC.DelegateSupport,
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -13607,12 +12490,6 @@ SC.routes = SC.Object.create({
 });
 
 /* >>>>>>>>>> BEGIN source/system/staticqueue.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
 SC.StaticQueue = SC.mixin({},
 {
   _content: null,
@@ -13668,12 +12545,11 @@ SC.StaticQueue = SC.mixin({},
 });
 
 /* >>>>>>>>>> BEGIN source/system/time.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
+// ========================================================================
+// SproutCore -- JavaScript Application Framework
+// Copyright ©2006-2011, Strobe Inc. and contributors.
+// Portions copyright ©2008 Apple Inc.  All rights reserved.
+// ========================================================================
 
 /**
   The time library provides a common way for working with time offsets.
@@ -14147,7 +13023,7 @@ SC.mixin(Date.prototype, {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 /*globals ie7userdata openDatabase*/
@@ -14538,13 +13414,6 @@ SC.UserDefaults = SC.Object.extend(/** @scope SC.UserDefaults.prototype */ {
 SC.userDefaults = SC.UserDefaults.create();
 
 /* >>>>>>>>>> BEGIN source/system/utils/colors.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
 SC.mixin ( /** @scope SC */ {
 
   /** Returns hex color from hsv value */
@@ -14627,13 +13496,6 @@ SC.mixin ( /** @scope SC */ {
 });
 
 /* >>>>>>>>>> BEGIN source/system/utils/range.js */
-// ==========================================================================
-// Project:   SproutCore - JavaScript Application Framework
-// Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            ©2008-2011 Apple Inc. All rights reserved.
-// License:   Licensed under MIT license (see license.js)
-// ==========================================================================
-
 SC.mixin( /** @scope SC */ {
   /** A zero length range at zero. */
   ZERO_RANGE: { start: 0, length: 0 },
@@ -14703,7 +13565,7 @@ SC.mixin( /** @scope SC */ {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -14746,7 +13608,7 @@ SC.PreloadBundleTask = SC.Task.extend({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -15074,7 +13936,7 @@ SC.Validator.mixin(/** @scope SC.Validator */ {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -15201,7 +14063,7 @@ SC.Validator.CreditCard = SC.Validator.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -15255,7 +14117,7 @@ SC.Validator.Date = SC.Validator.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -15305,7 +14167,7 @@ SC.Validator.DateTime = SC.Validator.extend({
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -15352,7 +14214,7 @@ SC.Validator.EmailOrEmpty = SC.Validator.Email.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -15391,7 +14253,7 @@ SC.Validator.NotEmpty = SC.Validator.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -15492,7 +14354,7 @@ SC.Validator.Number = SC.Validator.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -15580,7 +14442,7 @@ SC.Validator.Password = SC.Validator.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -15636,7 +14498,6 @@ SC.Validator.PositiveInteger = SC.Validator.extend(
         value = this.get('defaultValue') ;
         break ;
     }
-    if(isNaN(value)) return this.get('defaultValue');
     return value ;
   },
 
@@ -15667,7 +14528,7 @@ SC.Validator.PositiveInteger = SC.Validator.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -15809,7 +14670,7 @@ SC.ContainerView = SC.View.extend(
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 //            Portions ©2010 Strobe Inc.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
@@ -15828,7 +14689,7 @@ SC.IMAGE_TYPE_CSS_CLASS = 'CSS_CLASS';
 */
 SC.BLANK_IMAGE_DATAURL = "data:image/gif;base64,R0lGODlhAQABAJAAAP///wAAACH5BAUQAAAALAAAAAABAAEAAAICBAEAOw==";
 
-SC.BLANK_IMAGE_URL = SC.browser.msie && SC.browser.msie<8 ? '/static/sproutcore/foundation/en/current/source/blank.gif?1302159774' : SC.BLANK_IMAGE_DATAURL;
+SC.BLANK_IMAGE_URL = SC.browser.msie && SC.browser.msie<8 ? '/static/sproutcore/foundation/en/current/source/blank.gif?1300492110' : SC.BLANK_IMAGE_DATAURL;
 
 SC.BLANK_IMAGE = new Image();
 SC.BLANK_IMAGE.src = SC.BLANK_IMAGE_URL;
@@ -15958,8 +14819,8 @@ SC.ImageView = SC.View.extend(SC.Control, SC.InnerFrame,
     @since SproutCore 1.5
   */
   useCanvas: function() {
-    return SC.platform.supportsCanvas && !this.get('useStaticLayout');
-  }.property('useStaticLayout').cacheable(),
+    return SC.platform.supportsCanvas;
+  }.property().cacheable(),
 
   /**
     If YES, image view will use the SC.imageQueue to control loading.  This
@@ -16192,16 +15053,16 @@ SC.ImageView.valueIsUrl = function(value) {
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
 sc_require('mixins/inline_editable');
 sc_require('mixins/inline_editor_delegate');
-sc_require('delegates/inline_text_field');
 
 SC.REGULAR_WEIGHT = 'normal';
 SC.BOLD_WEIGHT = 'bold';
+
 /**
   @class
   
@@ -16216,7 +15077,7 @@ SC.BOLD_WEIGHT = 'bold';
   @extends SC.InlineEditorDelegate
   @since SproutCore 1.0
 */
-SC.LabelView = SC.View.extend(SC.Control, SC.InlineEditable,
+SC.LabelView = SC.View.extend(SC.Control, SC.InlineEditorDelegate, SC.InlineEditable,
 /** @scope SC.LabelView.prototype */ {
 
   classNames: ['sc-label-view'],
@@ -16224,14 +15085,15 @@ SC.LabelView = SC.View.extend(SC.Control, SC.InlineEditable,
   displayProperties: 'displayTitle textAlign fontWeight icon escapeHTML needsEllipsis hint'.w(),
 
   /**
-    The delegate that gets notified of events related to the editing process. Set
-    this to the object you want to handles the lifecycle of the inline editor.
+    The WAI-ARIA attribute for the label view. This property is assigned to
+    'aria-labelledby' attribute, which defines a string value that labels the
+    element. Used to support voiceover. It should be assigned a non-empty string,
+    if the 'aria-labelledby' attribute has to be set for the element.
 
-    Defaults to itself.
-    @type SC.Object
+    @property {String}
   */
-  inlineEditorDelegate: SC.InlineTextFieldDelegate,
-
+  ariaLabeledBy: null,
+  
   isEditable: NO,
   
   /**
@@ -16243,16 +15105,17 @@ SC.LabelView = SC.View.extend(SC.Control, SC.InlineEditable,
     @type {SC.View}
     @default {SC.InlineTextFieldView}
   */
-  exampleEditor: SC.InlineTextFieldView,
+  exampleInlineTextFieldView: SC.InlineTextFieldView,
+  
+  /**
+    LabelView is its own delegate by default, but you can change this to use a customized editor.
+  */
+  editorDelegate: null,
   
   /**
     Specify the font weight for this.  You may pass SC.REGULAR_WEIGHT, or SC.BOLD_WEIGHT.
-    
-    @property {String} SC.REGULAR_WEIGHT|SC.BOLD_WEIGHT
-    @default null
-    @deprecated
   */
-  fontWeight: null,
+  fontWeight: SC.REGULAR_WEIGHT,
   
   /**
     If true, value will be escaped to avoid scripting attacks.
@@ -16302,24 +15165,8 @@ SC.LabelView = SC.View.extend(SC.Control, SC.InlineEditable,
   
   /**
     Set the alignment of the label view.
-    
-    @property {String} SC.ALIGN_LEFT|SC.ALIGN_MIDDLE|SC.ALIGN_RIGHT
-    @default null
-    @deprecated
   */
-  textAlign: null,
-
-  //
-  // SUPPORT FOR AUTOMATIC RESIZING
-  //
-  supportsAutoResize: YES,
-  autoResizeLayer: function() { return this.get('layer'); }
-  .property('layer').cacheable(),
-
-  autoResizeText: function() { return this.get('displayTitle'); }
-  .property('displayTitle').cacheable(),
-
-  autoResizePadding: SC.propertyFromRenderDelegate('autoResizePadding', 10),
+  textAlign: SC.ALIGN_LEFT,
 
   /**
     The name of the theme's SC.LabelView render delegate.
@@ -16392,26 +15239,26 @@ SC.LabelView = SC.View.extend(SC.Control, SC.InlineEditable,
   */
   doubleClick: function( evt ) { return this.beginEditing(); },
 
-  /*
-  * @method
-  *
-  * Hide the label view while the inline editor covers it.
+  /** @private 
+    Hide the label view while the inline editor covers it.
   */
-  inlineEditorDidBeginEditing: function(original, editor, value, editable) {
-    this._oldOpacity = this.get('layout').opacity || 1;
+  inlineEditorDidBeginEditing: function(editor) {
+    var layer = this.$();
+
+    // Cache the current opacity value
+    this._oldOpacity = layer.css('opacity');  //gets the opacity from the layer
+    // Hide the view by setting its opacity to 0
     this.adjust('opacity', 0);
-
-    original(editor, value, editable);
-  }.enhance(),
-
-  /*
-  * @method
-  *
-  * Restore the label view when the inline editor finishes.
+  },
+  
+  /** @private
+    Update the field value and make it visible again.
   */
-  inlineEditorDidEndEditing: function() {
+  inlineEditorDidEndEditing: function(editor, finalValue) {
+    this.setIfChanged('value', finalValue) ;
     this.adjust('opacity', this._oldOpacity);
     this._oldOpacity = null ;
+    this.set('isEditing', NO) ;
   }
 });
 

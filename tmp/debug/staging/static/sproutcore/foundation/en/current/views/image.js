@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 //            Portions ©2010 Strobe Inc.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
@@ -20,7 +20,7 @@ SC.IMAGE_TYPE_CSS_CLASS = 'CSS_CLASS';
 */
 SC.BLANK_IMAGE_DATAURL = "data:image/gif;base64,R0lGODlhAQABAJAAAP///wAAACH5BAUQAAAALAAAAAABAAEAAAICBAEAOw==";
 
-SC.BLANK_IMAGE_URL = SC.browser.msie && SC.browser.msie<8 ? '/static/sproutcore/foundation/en/current/source/blank.gif?1302159774' : SC.BLANK_IMAGE_DATAURL;
+SC.BLANK_IMAGE_URL = SC.browser.msie && SC.browser.msie<8 ? '/static/sproutcore/foundation/en/current/source/blank.gif?1300492110' : SC.BLANK_IMAGE_DATAURL;
 
 SC.BLANK_IMAGE = new Image();
 SC.BLANK_IMAGE.src = SC.BLANK_IMAGE_URL;
@@ -150,8 +150,8 @@ SC.ImageView = SC.View.extend(SC.Control, SC.InnerFrame,
     @since SproutCore 1.5
   */
   useCanvas: function() {
-    return SC.platform.supportsCanvas && !this.get('useStaticLayout');
-  }.property('useStaticLayout').cacheable(),
+    return SC.platform.supportsCanvas;
+  }.property().cacheable(),
 
   /**
     If YES, image view will use the SC.imageQueue to control loading.  This

@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -38,20 +38,28 @@ SC.BaseTheme.labelRenderDelegate = SC.RenderDelegate.create({
   name: 'label',
   
   render: function(dataSource, context) {
-    this.addSizeClassName(dataSource, context);
+    var view = dataSource.get('view'),
+        ariaLabeledBy;
 
-    /*
-      TODO [CC @ 1.5] These properties have been deprecated. We should remove them
-            in the next release
-    */
+    if(view) {
+      ariaLabeledBy = view.get('ariaLabeledBy');
+    }
+
+    // CONSIDER DEPRECATING THESE PROPERTIES BECAUSE THEY ARE
+    // ANNOYING PAINS IN THE BUTT THAT EVERYONE HATES
     context.addStyle({
-      fontWeight: dataSource.get('fontWeight') || null,
-      textAlign: dataSource.get('textAlign') || null
+      'textAlign': dataSource.get('textAlign'),
+      'fontWeight': dataSource.get('fontWeight')
     });
     
     context.setClass('ellipsis', dataSource.get('needsEllipsis') || NO);
     context.setClass('icon', dataSource.get('icon') || NO);
 
+    //addressing accessibility
+    if(ariaLabeledBy && ariaLabeledBy !== "") {
+      context.attr('aria-labelledby', ariaLabeledBy);
+    }
+    
     var html = this._htmlForTitleAndIcon(dataSource);
     context.push(html);
     
@@ -62,18 +70,26 @@ SC.BaseTheme.labelRenderDelegate = SC.RenderDelegate.create({
   },
   
   update: function(dataSource, jquery) {
-    this.updateSizeClassName(dataSource, jquery);
+    var view = dataSource.get('view'),
+        ariaLabeledBy;
 
-    /*
-      TODO [CC @ 1.5] These properties have been deprecated. We should remove them
-            in the next release
-    */
+    if(view) {
+      ariaLabeledBy = view.get('ariaLabeledBy');
+    }
+
+    // CONSIDER DEPRECATING THESE PROPERTIES BECAUSE THEY ARE
+    // ANNOYING PAINS IN THE BUTT THAT EVERYONE HATES
     jquery.css({
-      fontWeight: dataSource.get('fontWeight') || null,
-      textAlign: dataSource.get('textAlign') || null
+      'textAlign': dataSource.get('textAlign') || null,
+      'fontWeight': dataSource.get('fontWeight') || null
     });
     
     jquery.setClass('ellipsis', dataSource.get('needsEllipsis') || NO);
+
+    //addressing accessibility
+    if(ariaLabeledBy && ariaLabeledBy !== "") {
+      jquery.attr('aria-labelledby', ariaLabeledBy);
+    }
 
     var html = this._htmlForTitleAndIcon(dataSource);
     if (dataSource.get('renderState')._lastHTMLForTitleAndIcon !== html) {

@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -32,7 +32,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     An (optional) name of the store, which can be useful during debugging,
     especially if you have multiple nested stores.
     
-    @type String
+    @property {String}
   */
   name: null,
 
@@ -40,7 +40,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     An array of all the chained stores that current rely on the receiver 
     store.
     
-    @type Array
+    @property {Array}
   */
   nestedStores: null,
 
@@ -49,23 +49,21 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     store and save changes.  You normally will set your data source when you
     first create your store in your application.
     
-    @type SC.DataSource
+    @property {SC.DataSource}
   */
   dataSource: null,
   
   /**
     This type of store is not nested.
     
-		@default NO
-    @type Boolean
+    @property {Boolean}
   */
   isNested: NO,
   
   /**
     This type of store is not nested.
     
-		@default NO
-    @type Boolean
+    @property {Boolean}
   */
   commitRecordsAutomatically: NO,
   
@@ -126,9 +124,11 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     changes, call commitChanges() or destroyChanges() and then destroy() when
     you are finished with the chained store altogether.
     
-			      store = MyApp.store.chain();
-			      .. edit edit edit
-			      store.commitChanges().destroy();
+    {{{
+      store = MyApp.store.chain();
+      .. edit edit edit
+      store.commitChanges().destroy();
+    }}}
     
     @param {Hash} attrs optional attributes to set on new store
     @param {Class} newStoreClass optional the class of the newly-created nested store (defaults to SC.NestedStore)
@@ -196,7 +196,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
 
     Shared by a store and its child stores until you make edits to it.
     
-    @type Hash
+    @property {Hash}
   */
   dataHashes: null,
 
@@ -207,7 +207,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
 
     Shared by a store and its child stores until you make edits to it.
     
-    @type Hash
+    @property {Hash}
   */
   statuses: null,
     
@@ -221,7 +221,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     changed. A store shares the revisions data with its parent until it 
     starts to make changes to it.
     
-    @type Hash
+    @property {Hash}
   */
   revisions: null,
 
@@ -234,7 +234,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     Note that this is kept as an array because it will be stored as a dense 
     array on some browsers, making it faster.
     
-    @type Array
+    @property {Array}
   */
   editables: null,
     
@@ -243,7 +243,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     you call commitRecords() without passing any other parameters, the keys
     in this set will be committed instead.
   
-    @type SC.Set
+    @property {SC.Set}
   */
   changelog: null,
   
@@ -254,7 +254,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     Errors passed form the data source in the call to dataSourceDidError() are
     stored here.
     
-    @type Array
+    @property {Array}
   */
   recordErrors: null,
   
@@ -265,7 +265,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     Errors passed from the data source in the call to dataSourceDidErrorQuery()
     are stored here.
     
-    @type Hash
+    @property {Hash}
   */
   queryErrors: null,
   
@@ -777,8 +777,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     Finds a single record instance with the specified recordType and id or an 
     array of records matching some query conditions.
     
-    Finding a Single Record
-    ---
+    h2. Finding a Single Record
     
     If you pass a single recordType and id, this method will return an actual
     record instance.  If the record has not been loaded into the store yet,
@@ -792,8 +791,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     the status property to be notified when the record data is available for 
     you to use it.
     
-    Find a Collection of Records
-    ---
+    h2. Find a Collection of Records
     
     If you pass only a record type or a query object, you can instead find 
     all records matching a specified set of conditions.  When you call find()
@@ -808,27 +806,33 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     You can detect whether a RecordArray is fetching from the server by 
     checking its status.
     
-    Examples
-    ---
+    h2. Examples
     
     Finding a single record:
     
-		      MyApp.store.find(MyApp.Contact, "23"); // returns MyApp.Contact
+    {{{
+      MyApp.store.find(MyApp.Contact, "23"); // returns MyApp.Contact
+    }}}
     
     Finding all records of a particular type:
     
-		      MyApp.store.find(MyApp.Contact); // returns SC.RecordArray of contacts
-    
+    {{{
+      MyApp.store.find(MyApp.Contact); // returns SC.RecordArray of contacts
+    }}}
     
     Finding all contacts with first name John:
     
-    		  var query = SC.Query.local(MyApp.Contact, "firstName = %@", "John");
-		      MyApp.store.find(query); // returns SC.RecordArray of contacts
+    {{{
+      var query = SC.Query.local(MyApp.Contact, "firstName = %@", "John");
+      MyApp.store.find(query); // returns SC.RecordArray of contacts
+    }}}
     
     Finding all contacts using a remote query:
     
-    		  var query = SC.Query.remote(MyApp.Contact);
-		      MyApp.store.find(query); // returns SC.RecordArray filled by server
+    {{{
+      var query = SC.Query.remote(MyApp.Contact);
+      MyApp.store.find(query); // returns SC.RecordArray filled by server
+    }}}
     
     @param {SC.Record|String} recordType the expected record type
     @param {String} id the id to load
@@ -1395,8 +1399,6 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
   
   /**
     function for retrieving a parent record key
-
-		@param {Number} storeKey The store key of the parent
   */
   parentStoreKeyExists: function(storeKey){
     if (SC.none(storeKey)) return ;
@@ -1523,19 +1525,17 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     @param {Array} ids ids to retrieve
     @param {Array} storeKeys (optional) store keys to retrieve
     @param {Boolean} isRefresh
-    @param {Function|Array} callback function or array of functions
     @returns {Array} storeKeys to be retrieved
   */
-  retrieveRecords: function(recordTypes, ids, storeKeys, isRefresh, callbacks) {
+  retrieveRecords: function(recordTypes, ids, storeKeys, isRefresh) {
     
     var source  = this._getDataSource(),
         isArray = SC.typeOf(recordTypes) === SC.T_ARRAY,
-        hasCallbackArray = SC.typeOf(callbacks) === SC.T_ARRAY,
         len     = (!storeKeys) ? ids.length : storeKeys.length,
         ret     = [],
         rev     = SC.Store.generateStoreKey(),
         K       = SC.Record,
-        recordType, idx, storeKey, status, ok, callback;
+        recordType, idx, storeKey, status, ok;
         
     if (!isArray) recordType = recordTypes;
     
@@ -1549,8 +1549,6 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
         if (isArray) recordType = recordTypes[idx];
         storeKey = recordType.storeKeyFor(ids[idx]);
       }
-      //collect the callback
-      callback = hasCallbackArray ? callbacks[idx] : callbacks;
       
       // collect status and process
       status = this.readStatus(storeKey);
@@ -1560,7 +1558,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
         this.writeStatus(storeKey, K.BUSY_LOADING);
         this.dataHashDidChange(storeKey, rev, YES);
         ret.push(storeKey);
-        this._setCallbackForStoreKey(storeKey, callback, hasCallbackArray, storeKeys);
+
       // otherwise, ignore record unless isRefresh is YES.
       } else if (isRefresh) {
         // K.READY_CLEAN, K.READY_DIRTY, ignore K.READY_NEW
@@ -1568,7 +1566,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
           this.writeStatus(storeKey, K.BUSY_REFRESH | (status & 0x03)) ;
           this.dataHashDidChange(storeKey, rev, YES);
           ret.push(storeKey);
-          this._setCallbackForStoreKey(storeKey, callback, hasCallbackArray, storeKeys);
+
         // K.BUSY_DESTROYING, K.BUSY_COMMITTING, K.BUSY_CREATING
         } else if ((status == K.BUSY_DESTROYING) || (status == K.BUSY_CREATING) || (status == K.BUSY_COMMITTING)) {
           throw K.BUSY_ERROR ;
@@ -1612,61 +1610,6 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
   
   _TMP_RETRIEVE_ARRAY: [],
   
-  _callback_queue: {},
-  
-  /**
-    @private
-    stores the callbacks for the storeKeys that are inflight
-  **/
-  _setCallbackForStoreKey: function(storeKey, callback, hasCallbackArray, storeKeys){
-    var queue = this._callback_queue;
-    if(hasCallbackArray) queue[storeKey] = {callback: callback, otherKeys: storeKeys};
-    else queue[storeKey] = callback;
-  },
-  /**
-    @private
-    retreives and calls callback for storkey if exists
-    also handles if a single callback is need for one key
-  **/
-  _retreiveCallbackForStoreKey: function(storeKey){
-    var queue = this._callback_queue,
-        callback = queue[storeKey],
-        allFinished, keys;
-    if(callback){
-      if(SC.typeOf(callback) === SC.T_FUNCTION){
-        callback.call(); //args?
-        delete queue[storeKey]; //cleanup
-      }
-      else if(SC.typeOf(callback) == SC.T_HASH){
-        callback.completed = YES;
-        keys = callback.storeKeys;
-        keys.forEach(function(key){
-          if(!queue[key].completed) allFinished = YES;
-        });
-        if(allFinished){
-          callback.callback.call(); // args?
-          //cleanup
-          keys.forEach(function(key){
-            delete queue[key];
-          });
-        }
-        
-      }
-    }
-  },
-  
-  /*
-    @private
-    
-  */
-  _cancelCallback: function(storeKey){
-    var queue = this._callback_queue;
-    if(queue[storeKey]){
-      delete queue[storeKey];
-    }
-  },
-  
-  
   /**
     Retrieves a record from the server.  If the record has already been loaded
     in the store, then this method will simply return.  Otherwise if your 
@@ -1682,10 +1625,9 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     @param {String} id id to retrieve
     @param {Number} storeKey (optional) store key
     @param {Boolean} isRefresh
-    @param {Function} callback (optional)
     @returns {Number} storeKey that was retrieved 
   */
-  retrieveRecord: function(recordType, id, storeKey, isRefresh, callback) {
+  retrieveRecord: function(recordType, id, storeKey, isRefresh) {
     var array = this._TMP_RETRIEVE_ARRAY,
         ret;
     
@@ -1698,7 +1640,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
       id = array;
     }
     
-    ret = this.retrieveRecords(recordType, id, storeKey, isRefresh, callback);
+    ret = this.retrieveRecords(recordType, id, storeKey, isRefresh);
     array.length = 0 ;
     return ret[0];
   },
@@ -1711,11 +1653,10 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     @param {String} id to id of the record to load
     @param {SC.Record} recordType the expected record type
     @param {Number} storeKey (optional) optional store key
-    @param {Function} callback (optional) when refresh complets
     @returns {Boolean} YES if the retrieval was a success.
   */
-  refreshRecord: function(recordType, id, storeKey, callback) {
-    return !!this.retrieveRecord(recordType, id, storeKey, YES, callback);
+  refreshRecord: function(recordType, id, storeKey) {
+    return !!this.retrieveRecord(recordType, id, storeKey, YES);
   },
 
   /**
@@ -1726,11 +1667,10 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     @param {SC.Record|Array} recordTypes class or array of classes
     @param {Array} ids ids to destroy
     @param {Array} storeKeys (optional) store keys to destroy
-    @param {Function} callback (optional) when refresh complets
     @returns {Boolean} YES if the retrieval was a success.
   */
-  refreshRecords: function(recordTypes, ids, storeKeys, callback) {
-    var ret = this.retrieveRecords(recordTypes, ids, storeKeys, YES, callback);
+  refreshRecords: function(recordTypes, ids, storeKeys) {
+    var ret = this.retrieveRecords(recordTypes, ids, storeKeys, YES);
     return ret && ret.length>0;
   },
     
@@ -1747,18 +1687,16 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     @param {SC.Set} storeKeys to commit
     @param {Hash} params optional additional parameters to pass along to the
       data source
-    @param {Function|Array} callback function or array of callbacks
-    
+
     @returns {Boolean} if the action was succesful.
   */
-  commitRecords: function(recordTypes, ids, storeKeys, params, callbacks) {
+  commitRecords: function(recordTypes, ids, storeKeys, params) {
     var source    = this._getDataSource(),
-        isArray   = SC.typeOf(recordTypes) === SC.T_ARRAY,
-        hasCallbackArray = SC.typeOf(callbacks) === SC.T_ARRAY,    
+        isArray   = SC.typeOf(recordTypes) === SC.T_ARRAY,    
         retCreate= [], retUpdate= [], retDestroy = [], 
         rev       = SC.Store.generateStoreKey(),
         K         = SC.Record,
-        recordType, idx, storeKey, status, key, ret, len, callback;
+        recordType, idx, storeKey, status, key, ret, len ;
 
     // If no params are passed, look up storeKeys in the changelog property.
     // Remove any committed records from changelog property.
@@ -1780,9 +1718,6 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
         storeKey = recordType.storeKeyFor(ids[idx]);
       }
       
-      //collect the callback
-      callback = hasCallbackArray ? callbacks[idx] : callbacks;
-      
       // collect status and process
       status = this.readStatus(storeKey);
       
@@ -1794,17 +1729,14 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
           this.writeStatus(storeKey, K.BUSY_CREATING);
           this.dataHashDidChange(storeKey, rev, YES);
           retCreate.push(storeKey);
-          this._setCallbackForStoreKey(storeKey, callback, hasCallbackArray, storeKeys);
         } else if (status==K.READY_DIRTY) {
           this.writeStatus(storeKey, K.BUSY_COMMITTING);
           this.dataHashDidChange(storeKey, rev, YES);
           retUpdate.push(storeKey);
-          this._setCallbackForStoreKey(storeKey, callback, hasCallbackArray, storeKeys);
         } else if (status==K.DESTROYED_DIRTY) {
           this.writeStatus(storeKey, K.BUSY_DESTROYING);
           this.dataHashDidChange(storeKey, rev, YES);
           retDestroy.push(storeKey);
-          this._setCallbackForStoreKey(storeKey, callback, hasCallbackArray, storeKeys);
         } else if (status==K.DESTROYED_CLEAN) {
           this.dataHashDidChange(storeKey, rev, YES);
         }
@@ -1843,10 +1775,9 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     @param {Number} storeKey the storeKey of the record to commit
     @param {Hash} params optional additonal params that will passed down
       to the data source
-    @param {Function|Array} callback function or array of functions
     @returns {Boolean} if the action was successful.
   */
-  commitRecord: function(recordType, id, storeKey, params, callback) {
+  commitRecord: function(recordType, id, storeKey, params) {
     var array = this._TMP_RETRIEVE_ARRAY,
         ret ;
     if (id === undefined && storeKey === undefined ) return NO;
@@ -1859,7 +1790,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
       id = array;
     }
     
-    ret = this.commitRecords(recordType, id, storeKey, params, callback);
+    ret = this.commitRecords(recordType, id, storeKey, params);
     array.length = 0 ;
     return ret;
   },
@@ -1895,12 +1826,11 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
       }
       if(storeKey) {
         status = this.readStatus(storeKey);
-        
+
         if ((status == K.EMPTY) || (status == K.ERROR)) {
           throw K.NOT_FOUND_ERROR ;
         }
         ret.push(storeKey);
-        this._cancelCallback(storeKey);
       }
     }
     
@@ -2114,7 +2044,6 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     } 
     this.writeStatus(storeKey, status) ;
     this.dataHashDidChange(storeKey, null, YES);
-    this._cancelCallback(storeKey);
     
     return this ;
   },
@@ -2155,9 +2084,7 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     if (record != null) {
       record.notifyPropertyChange('status');
     }
-    //update callbacks
-    this._retreiveCallbackForStoreKey(storeKey);
-    
+
     return this ;
   },
   
@@ -2188,8 +2115,6 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
     if (record != null) {
       record.notifyPropertyChange('status');
     }
-
-    this._retreiveCallbackForStoreKey(storeKey);
 
     return this ;
   },
@@ -2226,7 +2151,6 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
       record.notifyPropertyChange('status');
     }
 
-    this._retreiveCallbackForStoreKey(storeKey);
     return this ;
   },
 
@@ -2589,13 +2513,13 @@ SC.Store = SC.Object.extend( /** @scope SC.Store.prototype */ {
   
 }) ;
 
-SC.Store.mixin(/** @scope SC.Store.prototype */{
+SC.Store.mixin({
   
   /**
     Standard error raised if you try to commit changes from a nested store
     and there is a conflict.
     
-    @type Error
+    @property {Error}
   */
   CHAIN_CONFLICT_ERROR: new Error("Nested Store Conflict"),
   
@@ -2603,7 +2527,7 @@ SC.Store.mixin(/** @scope SC.Store.prototype */{
     Standard error if you try to perform an operation on a nested store 
     without a parent.
   
-    @type Error
+    @property {Error}
   */
   NO_PARENT_STORE_ERROR: new Error("Parent Store Required"),
   
@@ -2611,7 +2535,7 @@ SC.Store.mixin(/** @scope SC.Store.prototype */{
     Standard error if you try to perform an operation on a nested store that
     is only supported in root stores.
     
-    @type Error
+    @property {Error}
   */
   NESTED_STORE_UNSUPPORTED_ERROR: new Error("Unsupported In Nested Store"),
   
@@ -2619,14 +2543,14 @@ SC.Store.mixin(/** @scope SC.Store.prototype */{
     Standard error if you try to retrieve a record in a nested store that is
     dirty.  (This is allowed on the main store, but not in nested stores.)
     
-    @type Error
+    @property {Error}
   */
   NESTED_STORE_RETRIEVE_DIRTY_ERROR: new Error("Cannot Retrieve Dirty Record in Nested Store"),
 
   /**
     Data hash state indicates the data hash is currently editable
     
-    @type String
+    @property {String}
   */
   EDITABLE:  'editable',
   
@@ -2634,7 +2558,7 @@ SC.Store.mixin(/** @scope SC.Store.prototype */{
     Data hash state indicates the hash no longer tracks changes from a 
     parent store, but it is not editable.
     
-    @type String
+    @property {String}
   */
   LOCKED:    'locked',
 
@@ -2642,7 +2566,7 @@ SC.Store.mixin(/** @scope SC.Store.prototype */{
     Data hash state indicates the hash is tracking changes from the parent
     store and is not editable.
     
-    @type String
+    @property {String}
   */
   INHERITED: 'inherited',
   
@@ -2678,7 +2602,7 @@ SC.Store.mixin(/** @scope SC.Store.prototype */{
   /**
     Generates a new store key for use.
     
-    @type Number
+    @property {Number}
   */
   generateStoreKey: function() { return this.nextStoreKey++; },
   

@@ -1,17 +1,19 @@
 sc_require('extensions');
 
-Handlebars.registerHelper('collection', function(path, options) {
-  var fn = options.fn;
-  var data = options.data;
-  var inverse = options.inverse;
-  var collectionClass, collectionObject;
+Handlebars.registerHelper('collection', function(path, fn, inverse) {
+  var data = fn.data;
+  var collectionClass;
 
-  collectionClass = path ? SC.objectForPropertyPath(path) : SC.TemplateCollectionView;
-  //@ if (debug)
-  if (!collectionClass) {
-    throw "%@ #collection: Could not find %@".fmt(data.view, path);
+  if(!data) {
+    data = fn;
+    fn = null;
   }
-  //@ endif
+
+  if(typeof path === "string") {
+    collectionClass = SC.objectForPropertyPath(path) || SC.TemplateCollectionView;
+  } else {
+    collectionClass = path;
+  }
 
   var hash = fn.hash, itemHash = {}, match;
 
@@ -27,10 +29,10 @@ Handlebars.registerHelper('collection', function(path, options) {
   }
 
   if(fn) {
-    if(collectionClass.isClass) {
-      collectionObject = collectionClass.create();
-    } else {
-      collectionObject = collectionClass;
+    var collectionObject = collectionClass;
+
+    if(collectionObject.isClass) {
+      collectionObject = collectionObject.prototype;
     }
 
     collectionObject.itemViewTemplate = fn;
@@ -38,13 +40,36 @@ Handlebars.registerHelper('collection', function(path, options) {
     collectionObject.itemViewOptions = itemHash;
   }
 
-  options.fn = function() { return ""; };
+  var noop = function() { return ""; };
 
-  return Handlebars.helpers.view.call(this, collectionObject, options);
+  noop.data = fn.data;
+  noop.hash = fn.hash;
+  noop.fn = noop;
+
+  return Handlebars.helpers.view.call(this, collectionClass, noop);
 });
 
-Handlebars.registerHelper('each', function(path, options) {
-  options.hash.content = SC.getPath(this, path);
-  options.hash.itemContextProperty = 'content';
-  return Handlebars.helpers.collection.call(this, null, options);
+Handlebars.registerHelper('bindCollection', function(path, bindingString, fn) {
+  var data = fn.data;
+  var inverse = fn.data;
+  var collectionClass = SC.objectForPropertyPath(path) || SC.TemplateCollectionView;
+  var binding = SC.Binding.from(bindingString, this);
+
+  if(!data) {
+    data = fn;
+    fn = null;
+  }
+
+  if(fn) {
+    // attach the function to the original class so it can be used recursively
+    collectionClass.prototype.itemViewTemplate = fn;
+  }
+
+  if(collectionClass.isClass) {
+    collectionClass = collectionClass.extend({ contentBinding: binding });
+  } else {
+    collectionClass.bindings.push( binding.to('content', collectionClass) );
+  }
+
+  return Handlebars.helpers.collection.call(this, collectionClass, fn);
 });

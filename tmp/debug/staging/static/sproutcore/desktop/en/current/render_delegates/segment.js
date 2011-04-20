@@ -1,17 +1,15 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-
 
 /**
   Renders and updates the HTML representation of a segment child view within
   SC.SegmentedView.
 */
-SC.BaseTheme.segmentRenderDelegate = SC.RenderDelegate.create({
-  name: 'segment',
+SC.BaseTheme.segmentRenderDelegate = SC.Object.create({
 
   render: function(dataSource, context) {
     var theme = dataSource.get('theme'),
@@ -25,7 +23,6 @@ SC.BaseTheme.segmentRenderDelegate = SC.RenderDelegate.create({
       'sc-last-segment': dataSource.get('isLastSegment'),
       'sc-overflow-segment': dataSource.get('isOverflowSegment')
     };
-
     if (!SC.none(dataSource.get('index'))) classes['sc-segment-' + dataSource.get('index')] = YES;
     context.setClass(classes);
 

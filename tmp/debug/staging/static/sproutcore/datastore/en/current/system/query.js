@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -14,27 +14,35 @@ sc_require('models/record');
   This permits you to perform queries on your data store,
   written in a SQL-like language. Here is a simple example:
     
-		    q = SC.Query.create({
-		      conditions: "firstName = 'Jonny' AND lastName = 'Cash'"
-		    })
+  {{{
+    q = SC.Query.create({
+      conditions: "firstName = 'Jonny' AND lastName = 'Cash'"
+    })
+  }}}
     
   You can check if a certain record matches the query by calling:
 
-		    q.contains(record)
+  {{{
+    q.contains(record)
+  }}}
   
   To find all records of your store, that match query q, use findAll with
   query q as argument:
   
-		    r = MyApp.store.findAll(q)
+  {{{
+    r = MyApp.store.findAll(q)
+  }}}
   
   r will be a record array containing all matching records.
   To limit the query to a record type of MyApp.MyModel,
   you can specify the type as a property of the query like this:
   
-		    q = SC.Query.create({ 
-		      conditions: "firstName = 'Jonny' AND lastName = 'Cash'",
-		      recordType: MyApp.MyModel 
-		    })
+  {{{
+    q = SC.Query.create({ 
+      conditions: "firstName = 'Jonny' AND lastName = 'Cash'",
+      recordType: MyApp.MyModel 
+    })
+  }}}
   
   Calling find() like above will now return only records of type t.
   It is recommended to limit your query to a record type, since the query will
@@ -43,23 +51,24 @@ sc_require('models/record');
   
   You can give an order, which the resulting records should follow, like this:
   
-		    q = SC.Query.create({ 
-		      conditions: "firstName = 'Jonny' AND lastName = 'Cash'",
-		      recordType: MyApp.MyModel,
-		      orderBy: "lastName, year DESC" 
-		    });
+  {{{
+    q = SC.Query.create({ 
+      conditions: "firstName = 'Jonny' AND lastName = 'Cash'",
+      recordType: MyApp.MyModel,
+      orderBy: "lastName, year DESC" 
+    });
+  }}}
   
   The default order direction is ascending. You can change it to descending
   by writing DESC behind the property name like in the example above.
   If no order is given, or records are equal in respect to a given order,
   records will be ordered by guid.
 
-  SproutCore Query Language
-  =====
+  h2. SproutCore Query Language
   
   Features of the query language:
   
-  Primitives:
+  h4. Primitives:
 
   - record properties
   - null, undefined
@@ -67,7 +76,7 @@ sc_require('models/record');
   - numbers (integers and floats)
   - strings (double or single quoted)
   
-  Parameters:
+  h4. Parameters:
 
   - %@ (wild card)
   - {parameterName} (named parameter)
@@ -77,7 +86,9 @@ sc_require('models/record');
   becomes difficult. Both types of parameters can be used by giving the 
   parameters as a property to your query object:
   
-		    yourQuery.parameters = yourParameters
+  {{{
+    yourQuery.parameters = yourParameters
+  }}}
   
   where yourParameters should have one of the following formats:
 
@@ -86,7 +97,7 @@ sc_require('models/record');
 
   You cannot use both types of parameters in a single query!
   
-  Operators:
+  h4. Operators:
   
   - =
   - !=
@@ -106,30 +117,33 @@ sc_require('models/record');
                 of a Model class on its right side, only records of this type
                 will match)
     
-  Boolean Operators:
+  h4. Boolean Operators:
   
   - AND
   - OR
   - NOT
   
-  Parenthesis for grouping:
+  h4. Parenthesis for grouping:
   
   - ( and )
 
 
-  Adding Your Own Query Handlers
-  ---
+  h2. Adding Your Own Query Handlers
 
   You can extend the query language with your own operators by calling:
 
-			    SC.Query.registerQueryExtension('your_operator', your_operator_definition);
+  {{{
+    SC.Query.registerQueryExtension('your_operator', your_operator_definition);
+  }}}
 
   See details below. As well you can provide your own comparison functions
   to control ordering of specific record properties like this:
 
-			    SC.Query.registerComparison(property_name, comparison_for_this_property);
+  {{{
+    SC.Query.registerComparison(property_name, comparison_for_this_property);
+  }}}
   
-  Examples
+  h2. Examples
   
   Some example queries:
   
@@ -151,7 +165,7 @@ SC.Query = SC.Object.extend(SC.Copyable, SC.Freezable,
   /** 
     Walk like a duck.
     
-    @type Boolean
+    @property {Boolean}
   */
   isQuery: YES,
   
@@ -159,7 +173,7 @@ SC.Query = SC.Object.extend(SC.Copyable, SC.Freezable,
     Unparsed query conditions.  If you are handling a query yourself, then 
     you will find the base query string here.
     
-    @type String
+    @property {String}
   */
   conditions:  null,
   
@@ -172,7 +186,7 @@ SC.Query = SC.Object.extend(SC.Copyable, SC.Freezable,
     two records will be sent to it.  Your comparison function, as with any
     other, is expected to return -1, 0, or 1.
     
-    @type String | Function
+    @property {String | Function}
   */
   orderBy:     null,
   
@@ -181,7 +195,7 @@ SC.Query = SC.Object.extend(SC.Copyable, SC.Freezable,
     filter the kinds of records this query will work on.  You may either 
     set this to a single record type or to an array or set of record types.
     
-    @type SC.Record
+    @property {SC.Record}
   */
   recordType:  null,
   
@@ -189,7 +203,7 @@ SC.Query = SC.Object.extend(SC.Copyable, SC.Freezable,
     Optional array of multiple record types.  If the query accepts multiple 
     record types, this is how you can check for it.
     
-    @type SC.Enumerable
+    @property {SC.Enumerable}
   */
   recordTypes: null,
   
@@ -197,8 +211,7 @@ SC.Query = SC.Object.extend(SC.Copyable, SC.Freezable,
     Returns the complete set of recordTypes matched by this query.  Includes
     any named recordTypes plus their subclasses.
     
-    @property
-    @type SC.Enumerable
+    @property {SC.Enumerable}
   */
   expandedRecordTypes: function() {
     var ret = SC.CoreSet.create(), rt, q  ;
@@ -239,7 +252,7 @@ SC.Query = SC.Object.extend(SC.Copyable, SC.Freezable,
     the query conditions.  If you are handling the query manually, these 
     parameters will not be used.
     
-    @type Hash
+    @property {Hash}
   */
   parameters:  null,
   
@@ -263,7 +276,7 @@ SC.Query = SC.Object.extend(SC.Copyable, SC.Freezable,
     need to use a REMOTE query if you are retrieving a large data set and you
     don't want to pay the cost of computing the result set client side.
     
-    @type String
+    @property {String}
   */
   location: 'local', // SC.Query.LOCAL
   
@@ -271,7 +284,7 @@ SC.Query = SC.Object.extend(SC.Copyable, SC.Freezable,
     Another query that will optionally limit the search of records.  This is 
     usually configured for you when you do find() from another record array.
     
-    @type SC.Query
+    @property {SC.Query}
   */
   scope: null,
   
@@ -280,8 +293,7 @@ SC.Query = SC.Object.extend(SC.Copyable, SC.Freezable,
     Returns YES if query location is Remote.  This is sometimes more 
     convenient than checking the location.
     
-		@property
-    @type Boolean
+    @property {Boolean}
   */
   isRemote: function() {
     return this.get('location') === SC.Query.REMOTE;
@@ -291,8 +303,7 @@ SC.Query = SC.Object.extend(SC.Copyable, SC.Freezable,
     Returns YES if query location is Local.  This is sometimes more 
     convenient than checking the location.
     
-		@property
-    @type Boolean
+    @property {Boolean}
   */
   isLocal: function() {
     return this.get('location') === SC.Query.LOCAL;
@@ -1217,14 +1228,14 @@ SC.Query.mixin( /** @scope SC.Query */ {
   /** 
     Constant used for SC.Query#location
   
-    @type String
+    @property {String}
   */
   LOCAL: 'local',
   
   /** 
     Constant used for SC.Query#location 
     
-    @type String
+    @property {String}
   */
   REMOTE: 'remote',
   
@@ -1383,33 +1394,39 @@ SC.Query.mixin( /** @scope SC.Query */ {
     Usually you will not call this method directly.  Instead use the more
     convenient SC.Query.local() and SC.Query.remote().
     
-    Examples
+    h2. Examples
     
     There are a number of different ways you can call this method.  
     
     The following return local queries selecting all records of a particular 
     type or types, including any subclasses:
     
-    		  var people = SC.Query.local(Ab.Person);
-		      var peopleAndCompanies = SC.Query.local([Ab.Person, Ab.Company]);
+    {{{
+      var people = SC.Query.local(Ab.Person);
+      var peopleAndCompanies = SC.Query.local([Ab.Person, Ab.Company]);
       
-		      var people = SC.Query.local('Ab.Person');
-		      var peopleAndCompanies = SC.Query.local('Ab.Person Ab.Company'.w());
+      var people = SC.Query.local('Ab.Person');
+      var peopleAndCompanies = SC.Query.local('Ab.Person Ab.Company'.w());
       
-		      var allRecords = SC.Query.local(SC.Record);
+      var allRecords = SC.Query.local(SC.Record);
+    }}} 
     
     The following will match a particular type of condition:
     
-    		  var married = SC.Query.local(Ab.Person, "isMarried=YES");
-		      var married = SC.Query.local(Ab.Person, "isMarried=%@", [YES]);
-		      var married = SC.Query.local(Ab.Person, "isMarried={married}", {
-		        married: YES
-		      });
+    {{{
+      var married = SC.Query.local(Ab.Person, "isMarried=YES");
+      var married = SC.Query.local(Ab.Person, "isMarried=%@", [YES]);
+      var married = SC.Query.local(Ab.Person, "isMarried={married}", {
+        married: YES
+      });
+    }}}
     
     You can also pass a hash of options as the second parameter.  This is 
     how you specify an order, for example:
     
-		      var orderedPeople = SC.Query.local(Ab.Person, { orderBy: "firstName" });
+    {{{
+      var orderedPeople = SC.Query.local(Ab.Person, { orderBy: "firstName" });
+    }}}
     
     @param {String} location the query location.
     @param {SC.Record|Array} recordType the record type or types.

@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -13,28 +13,8 @@
   and events are supported by the browser, allowing you to create much more
   robust apps.
 */
-SC.platform = SC.Object.create({
-  /**
-    The size of scrollbars in this browser.
-
-    @property
-  */
-  scrollbarSize: function() {
-    var tester = document.createElement("DIV");
-    tester.innerHTML = "<div style='height:1px;'></div>";
-    tester.style.cssText="position:absolute;width:100px;height:100px;overflow-y:visible;";
-
-    document.body.appendChild(tester);
-    var noScroller = tester.childNodes[0].innerWidth;
-    tester.style.overflowY = 'scroll';
-    var withScroller = tester.childNodes[0].innerWidth;
-    document.body.removeChild(tester);
-
-    return noScroller-withScroller;
-
-  }.property().cacheable(),
-
-
+SC.platform = {
+  
   /*
     NOTES
       - A development version of Chrome 9 incorrectly reported supporting touch
@@ -346,7 +326,7 @@ SC.platform = SC.Object.create({
   */
   windowSizeDeterminesOrientation: SC.browser.iOS || !('onorientationchange' in window)
 
-});
+};
 
 /* Calculate CSS Prefixes */
 

@@ -4,7 +4,7 @@
  * ==========================================================================
  * SproutCore Costello -- Property Observing Library
  * Copyright ©2006-2011, Strobe Inc. and contributors.
- * Portions copyright ©2008-2011 Apple Inc. All rights reserved.
+ * Portions copyright ©2008-2010 Apple Inc. All rights reserved.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the "Software"), 
@@ -33,7 +33,7 @@
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -71,7 +71,7 @@ if (typeof console === 'undefined') {
   @version 1.5.0.pre.4
   @namespace
 
-  All SproutCore methods and functions are defined
+  The SproutCore namespace.  All SproutCore methods and functions are defined
   inside of this namespace.  You generally should not add new properties to
   this namespace as it may be overwritten by future versions of SproutCore.
 
@@ -99,11 +99,11 @@ SC.VERSION = '1.5.0.pre.4';
 
   Used as a base function for the wrapper functions SC.mixin and SC.supplement.
 
-  @param {Boolean} overwrite if a target has a value for a property, this specifies
+  @param overwrite {Boolean} if a target has a value for a property, this specifies
                   whether or not to overwrite that value with the copyied object's
                   property value.
-  @param {Object} target the target object to extend
-  @param {Object} properties one or more objects with properties to copy.
+  @param target {Object} the target object to extend
+  @param properties {Object} one or more objects with properties to copy.
   @returns {Object} the target object.
   @static
 */
@@ -140,8 +140,8 @@ SC._baseMixin = function (override) {
   Takes the root object and adds the attributes for any additional
   arguments passed.
 
-  @param {Object} target the target object to extend
-  @param {Object} properties one or more objects with properties to copy.
+  @param target {Object} the target object to extend
+  @param properties {Object} one or more objects with properties to copy.
   @returns {Object} the target object.
   @static
 */
@@ -158,8 +158,8 @@ SC.mixin = function() {
   Takes the root object and adds the attributes for any additional
   arguments passed.
 
-  @param {Object} target the target object to extend
-  @param {Object} properties one or more objects with properties to copy.
+  @param target {Object} the target object to extend
+  @param properties {Object} one or more objects with properties to copy.
   @returns {Object} the target object.
   @static
 */
@@ -180,7 +180,7 @@ SC.extend = SC.mixin ;
 //
 // Enough with the bootstrap code.  Let's define some core functions
 
-SC.mixin(/** @scope window.SC.prototype */ {
+SC.mixin(/** @scope SC */ {
 
   // ........................................
   // GLOBAL CONSTANTS
@@ -202,24 +202,26 @@ SC.mixin(/** @scope window.SC.prototype */ {
   //
 
   /**
-    Returns a consistent type for the passed item.
+    Returns a consistant type for the passed item.
 
     Use this instead of the built-in typeOf() to get the type of an item.
     It will return the same result across all browsers and includes a bit
-    more detail. 
+    more detail.  Here is what will be returned:
 
-    @param {Object} item the item to check
-    @returns {String} One of the following, depending on the type of the item<br>
-            SC.T_STRING: String primitive,<br>
-            SC.T_NUMBER: Number primitive,<br>
-            SC.T_BOOLEAN: Boolean primitive,<br>
-            SC.T_NULL: Null value,<br>
-            SC.T_UNDEFINED: Undefined value,<br>
-            SC.T_FUNCTION: A function,<br>
-            SC.T_ARRAY: An instance of Array,<br>
-            SC.T_CLASS: A SproutCore class (created using SC.Object.extend()),<br>
-            SC.T_OBJECT: A SproutCore object instance,<br>
-            SC.T_HASH: A JavaScript object not inheriting from SC.Object
+    | Return Value Constant | Meaning |
+    | SC.T_STRING | String primitive |
+    | SC.T_NUMBER | Number primitive |
+    | SC.T_BOOLEAN | Boolean primitive |
+    | SC.T_NULL | Null value |
+    | SC.T_UNDEFINED | Undefined value |
+    | SC.T_FUNCTION | A function |
+    | SC.T_ARRAY | An instance of Array |
+    | SC.T_CLASS | A SproutCore class (created using SC.Object.extend()) |
+    | SC.T_OBJECT | A SproutCore object instance |
+    | SC.T_HASH | A JavaScript object not inheriting from SC.Object |
+
+    @param item {Object} the item to check
+    @returns {String} the type
   */
   typeOf: function(item) {
     if (item === undefined) return SC.T_UNDEFINED ;
@@ -277,7 +279,7 @@ SC.mixin(/** @scope window.SC.prototype */ {
     not formally array but appears to be array-like (i.e. has a length
     property, responds to .objectAt, etc.)
 
-    @param {Object} obj the object to test
+    @param obj {Object} the object to test
     @returns {Boolean}
   */
   isArray: function(obj) {
@@ -309,7 +311,7 @@ SC.mixin(/** @scope window.SC.prototype */ {
     array-like, a new array will be cloned from it.  Otherwise, a new array
     will be created with the item itself as the only item in the array.
 
-    @param {Object} object any enumerable or array-like object.
+    @param object {Object} any enumerable or array-like object.
     @returns {Array} Array of items
   */
   A: function(obj) {
@@ -353,7 +355,7 @@ SC.mixin(/** @scope window.SC.prototype */ {
 
     You can also use this method on DOM Element objects.
 
-    @param {Object} obj any object, string, number, Element, or primitive
+    @param obj {Object} any object, string, number, Element, or primitive
     @returns {String} the unique guid for this instance.
   */
   guidFor: function(obj) {
@@ -394,7 +396,7 @@ SC.mixin(/** @scope window.SC.prototype */ {
     internally for performance.
 
     @param {String} prefix the prefix to attach to the key
-    @param {String} key The key
+    @param {String} key key
     @returns {String} result
   */
   keyFor: function(prefix, key) {
@@ -411,7 +413,6 @@ SC.mixin(/** @scope window.SC.prototype */ {
     call SC.guidFor(obj), which return an existing guid if available.
 
     @param {Object} obj the object to assign the guid to
-    @param {String} prefix prefixes the generated guid
     @returns {String} the guid
   */
   generateGuid: function(obj, prefix) {
@@ -432,11 +433,11 @@ SC.mixin(/** @scope window.SC.prototype */ {
     code to cause two separate instances of the same object to be treated as
     if they were equal for comparisons and other functions.
 
-    <b>IMPORTANT</b>: If you implement a hash() method, it MUST NOT return a
+    IMPORTANT: If you implement a hash() method, it MUST NOT return a
     number or a string that contains only a number. Typically hash codes
     are strings that begin with a "%".
 
-    @param {Object...} objects the object(s)
+    @param obj {Object} the object(s)
     @returns {String} the hash code for this instance.
   */
   hashFor: function() {
@@ -455,8 +456,8 @@ SC.mixin(/** @scope window.SC.prototype */ {
   /**
     This will compare the two object values using their hash codes.
 
-    @param {Object} a first value to compare
-    @param {Object} b the second value to compare
+    @param a {Object} first value to compare
+    @param b {Object} the second value to compare
     @returns {Boolean} YES if the two have equal hash code values.
 
   */
@@ -476,8 +477,8 @@ SC.mixin(/** @scope window.SC.prototype */ {
    The order is calculated based on SC.ORDER_DEFINITION , if types are different.
    In case they have the same type an appropriate comparison for this type is made.
 
-   @param {Object} v first value to compare
-   @param {Object} w the second value to compare
+   @param v {Object} first value to compare
+   @param w {Object} the second value to compare
    @returns {NUMBER} -1 if v < w, 0 if v = w and 1 if v > w.
 
   */
@@ -567,21 +568,21 @@ SC.mixin(/** @scope window.SC.prototype */ {
   /**
     Empty array.  Useful for some optimizations.
 
-    @type Array
+    @property {Array}
   */
   EMPTY_ARRAY: [],
 
   /**
     Empty hash.  Useful for some optimizations.
 
-    @type Hash
+    @property {Hash}
   */
   EMPTY_HASH: {},
 
   /**
     Empty range. Useful for some optimizations.
 
-    @type Range
+    @property {Range}
   */
   EMPTY_RANGE: {start: 0, length: 0},
 
@@ -603,7 +604,7 @@ SC.mixin(/** @scope window.SC.prototype */ {
     For more information on using beget(), see the section on beget() in
     Crockford's JavaScript: The Good Parts.
 
-    @param {Object} obj the object to beget
+    @param obj {Object} the object to beget
     @returns {Object} the new object.
   */
   beget: function(obj) {
@@ -623,8 +624,8 @@ SC.mixin(/** @scope window.SC.prototype */ {
     If the passed object implements the clone() method, then this function
     will simply call that method and return the result.
 
-    @param {Object} object the object to clone
-    @param {Boolean} deep if true, a deep copy of the object is made
+    @param object {Object} the object to clone
+    @param deep {Boolean} if true, a deep copy of the object is made
     @returns {Object} the cloned object
   */
   copy: function(object, deep) {
@@ -657,7 +658,7 @@ SC.mixin(/** @scope window.SC.prototype */ {
   /**
     Returns a new object combining the values of all passed hashes.
 
-    @param {Object...} object one or more objects
+    @param object {Object} one or more objects
     @returns {Object} new Object
   */
   merge: function() {
@@ -670,7 +671,7 @@ SC.mixin(/** @scope window.SC.prototype */ {
     Returns all of the keys defined on an object or hash.  This is useful
     when inspecting objects for debugging.
 
-    @param {Object} obj The Object
+    @param {Object} obj
     @returns {Array} array of keys
   */
   keys: function(obj) {
@@ -682,10 +683,6 @@ SC.mixin(/** @scope window.SC.prototype */ {
   /**
     Convenience method to inspect an object.  This method will attempt to
     convert the object into a useful string description.
-    
-    @param {Object} obj The object you want to inspec.
-    
-    @returns {String} A description of the object
   */
   inspect: function(obj) {
     var v, ret = [] ;
@@ -706,8 +703,8 @@ SC.mixin(/** @scope window.SC.prototype */ {
     This is the standard method used throughout SproutCore to resolve property
     paths.
 
-    @param {String} path the property path
-    @param {Object} root optional parameter specifying the place to start
+    @param path {String} the property path
+    @param root {Object} optional parameter specifying the place to start
     @returns {Array} array with [object, property] if found or null
   */
   tupleForPropertyPath: function(path, root) {
@@ -730,9 +727,9 @@ SC.mixin(/** @scope window.SC.prototype */ {
     Finds the object for the passed path or array of path components.  This is
     the standard method used in SproutCore to traverse object paths.
 
-    @param {String} path the path
-    @param {Object} root optional root object.  window is used otherwise
-    @param {Integer} stopAt optional point to stop searching the path.
+    @param path {String} the path
+    @param root {Object} optional root object.  window is used otherwise
+    @param stopAt {Integer} optional point to stop searching the path.
     @returns {Object} the found object or undefined.
   */
   objectForPropertyPath: function(path, root, stopAt) {
@@ -776,7 +773,7 @@ SC.mixin(/** @scope window.SC.prototype */ {
   /**
     Known loc strings
 
-    @type Hash
+    @property {Hash}
   */
   STRINGS: {},
 
@@ -786,7 +783,7 @@ SC.mixin(/** @scope window.SC.prototype */ {
 
     @param {String} lang the language the strings are for
     @param {Hash} strings hash of strings
-    @returns {SC} The receiver, useful for chaining calls to the same object.
+    @returns {SC} receiver
   */
   stringsFor: function(lang, strings) {
     SC.mixin(SC.STRINGS, strings);
@@ -796,7 +793,7 @@ SC.mixin(/** @scope window.SC.prototype */ {
 
 }); // end mixin
 
-/** @private Alias for SC.clone() */
+/** @private Aliasn for SC.clone() */
 SC.clone = SC.copy ;
 
 /** @private Alias for SC.A() */
@@ -888,38 +885,39 @@ SC.mixin(Function.prototype,
 
     Consider the following example:
 
-          contact = SC.Object.create({
+    {{{
+      contact = SC.Object.create({
 
-            firstName: "Charles",
-            lastName: "Jolley",
+        firstName: "Charles",
+        lastName: "Jolley",
 
-            // This is a computed property!
-            fullName: function() {
-              return this.getEach('firstName','lastName').compact().join(' ') ;
-            }.property('firstName', 'lastName'),
+        // This is a computed property!
+        fullName: function() {
+          return this.getEach('firstName','lastName').compact().join(' ') ;
+        }.property('firstName', 'lastName'),
 
-            // this is not
-            getFullName: function() {
-              return this.getEach('firstName','lastName').compact().join(' ') ;
-            }
-          });
+        // this is not
+        getFullName: function() {
+          return this.getEach('firstName','lastName').compact().join(' ') ;
+        }
+      });
 
-          contact.get('firstName') ;
-          --> "Charles"
+      contact.get('firstName') ;
+      --> "Charles"
 
-          contact.get('fullName') ;
-          --> "Charles Jolley"
+      contact.get('fullName') ;
+      --> "Charles Jolley"
 
-          contact.get('getFullName') ;
-          --> function()
+      contact.get('getFullName') ;
+      --> function()
+    }}}
 
     Note that when you get the fullName property, SproutCore will call the
     fullName() function and return its value whereas when you get() a property
     that contains a regular method (such as getFullName above), then the
     function itself will be returned instead.
 
-    Using Dependent Keys
-    ----
+    h2. Using Dependent Keys
 
     Computed properties are often computed dynamically from other member
     properties.  Whenever those properties change, you need to notify any
@@ -940,18 +938,7 @@ SC.mixin(Function.prototype,
     You should always register dependent keys for computed properties to
     ensure they update.
 
-    Sometimes you may need to depend on keys that are several objects deep. In
-    that case, you can provide a path to property():
-
-        capitalizedName: function() {
-          return this.getPath('person.fullName').toUpper();
-        }.property('person.firstName')
-
-    This will cause observers of +capitalizedName+ to be fired when either
-    +fullName+ _or_ +person+ changes.
-
-    Using Computed Properties as Setters
-    ---
+    h2. Using Computed Properties as Setters
 
     Computed properties can be used to modify the state of an object as well
     as to return a value.  Unlike many other key-value system, you use the
@@ -965,23 +952,25 @@ SC.mixin(Function.prototype,
     For example, the following object will split any full name that you set
     into a first name and last name components and save them.
 
-          contact = SC.Object.create({
+    {{{
+      contact = SC.Object.create({
 
-            fullName: function(key, value) {
-              if (value !== undefined) {
-                var parts = value.split(' ') ;
-                this.beginPropertyChanges()
-                  .set('firstName', parts[0])
-                  .set('lastName', parts[1])
-                .endPropertyChanges() ;
-              }
-              return this.getEach('firstName', 'lastName').compact().join(' ');
-            }.property('firstName','lastName')
+        fullName: function(key, value) {
+          if (value !== undefined) {
+            var parts = value.split(' ') ;
+            this.beginPropertyChanges()
+              .set('firstName', parts[0])
+              .set('lastName', parts[1])
+            .endPropertyChanges() ;
+          }
+          return this.getEach('firstName', 'lastName').compact().join(' ');
+        }.property('firstName','lastName')
 
-          }) ;
+      }) ;
 
-    Why Use The Same Method for Getters and Setters?
-    ---
+    }}}
+
+    h2. Why Use The Same Method for Getters and Setters?
 
     Most property-based frameworks expect you to write two methods for each
     property but SproutCore only uses one. We do this because most of the time
@@ -990,7 +979,7 @@ SC.mixin(Function.prototype,
     conditionally exclude part of it. This helps to keep your code more
     compact and easier to maintain.
 
-    @param {String...} dependentKeys optional set of dependent keys
+    @param dependentKeys {String...} optional set of dependent keys
     @returns {Function} the declared function instance
   */
   property: function() {
@@ -1009,7 +998,7 @@ SC.mixin(Function.prototype,
     not cacheable.
 
     @param {Boolean} aFlag optionally indicate cacheable or no, default YES
-    @returns {Function} reciever, useful for chaining calls.
+    @returns {Function} reciever
   */
   cacheable: function(aFlag) {
     return SC.Function.cacheable(this, aFlag);
@@ -1030,7 +1019,7 @@ SC.mixin(Function.prototype,
     non-volatile.
 
     @param {Boolean} aFlag optionally indicate state, default to YES
-    @returns {Function} reciever, useful for chaining calls.
+    @returns {Function} receiver
   */
   idempotent: function(aFlag) {
     return SC.Function.idempotent(this, aFlag);
@@ -1041,13 +1030,10 @@ SC.mixin(Function.prototype,
   },
 
   /**
-    Declare that a function should observe an object or property at the named 
-    path.  Note that the path is used only to construct the observation one time.
+    Declare that a function should observe an object at the named path.  Note
+    that the path is used only to construct the observation one time.
 
-    @param {String...} propertyPaths A list of strings which indicate the
-      properties being observed
-      
-    @returns {Function} reciever, useful for chaining calls.
+    @returns {Function} receiver
   */
   observes: function(propertyPaths) {
     return SC.Function.observes(this, arguments);
@@ -1055,14 +1041,37 @@ SC.mixin(Function.prototype,
 
 });
 
-/**
-  @class
-  
-  Implements support methods useful when working with strings in SproutCore
-  applications.
-  */
-SC.CoreString = /** @scope SC.CoreString.prototype */{
-  
+SC.CoreString = {
+  fmt: function(str, formats) {
+    // first, replace any ORDERED replacements.
+    var idx  = 0; // the current index for non-numerical replacements
+    return str.replace(/%@([0-9]+)?/g, function(s, argIndex) {
+      argIndex = (argIndex) ? parseInt(argIndex,0) - 1 : idx++ ;
+      s = formats[argIndex];
+      return ((s === null) ? '(null)' : (s === undefined) ? '' : s).toString();
+    }) ;
+  },
+  loc: function(str, formats) {
+    str = SC.STRINGS[str] || str;
+    return SC.CoreString.fmt(str, arguments) ;
+  },
+  w: function(str) {
+    var ary = [], ary2 = str.split(' '), len = ary2.length, string, idx=0;
+    for (idx=0; idx<len; ++idx) {
+      string = ary2[idx] ;
+      if (string.length !== 0) ary.push(string) ; // skip empty strings
+    }
+    return ary ;
+  }
+};
+
+SC.mixin(String.prototype,
+/** @lends Function.prototype */ {
+
+  // ..........................................................
+  // STRING ENHANCEMENT
+  //
+
   // Interpolate string. looks for %@ or %@1; to control the order of params.
   /**
     Apply formatting options to the string.  This will look for occurrences
@@ -1074,76 +1083,41 @@ SC.CoreString = /** @scope SC.CoreString.prototype */{
     Ordered insertions are most useful when building loc strings where values
     you need to insert may appear in different orders.
 
-    Examples
-    -----
+    h3. Examples
 
-        "Hello %@ %@".fmt('John', 'Doe') => "Hello John Doe"
-        "Hello %@2, %@1".fmt('John', 'Doe') => "Hello Doe, John"
+    {{{
+      "Hello %@ %@".fmt('John', 'Doe') => "Hello John Doe"
+      "Hello %@2, %@1".fmt('John', 'Doe') => "Hello Doe, John"
+    }}}
 
-    @param {Object...} args optional arguments
+    @param args {Object...} optional arguments
     @returns {String} formatted string
   */
-  fmt: function(str, formats) {
-    // first, replace any ORDERED replacements.
-    var idx  = 0; // the current index for non-numerical replacements
-    return str.replace(/%@([0-9]+)?/g, function(s, argIndex) {
-      argIndex = (argIndex) ? parseInt(argIndex,0) - 1 : idx++ ;
-      s = formats[argIndex];
-      return ((s === null) ? '(null)' : (s === undefined) ? '' : s).toString();
-    }) ;
+  fmt: function() {
+    return SC.CoreString.fmt(this, arguments);
   },
-  
+
   /**
     Localizes the string.  This will look up the reciever string as a key
     in the current Strings hash.  If the key matches, the loc'd value will be
     used.  The resulting string will also be passed through fmt() to insert
     any variables.
 
-    @param {Object...} args optional arguments to interpolate also
+    @param args {Object...} optional arguments to interpolate also
     @returns {String} the localized and formatted string.
   */
-  loc: function(str, formats) {
-    str = SC.STRINGS[str] || str;
-    return SC.CoreString.fmt(str, arguments) ;
-  },
-  
-  /**
-    Splits the string into words, separated by spaces. Empty strings are
-    removed from the results.
-
-    @returns {Array} An array of non-empty strings
-  */
-  w: function(str) {
-    var ary = [], ary2 = str.split(' '), len = ary2.length, string, idx=0;
-    for (idx=0; idx<len; ++idx) {
-      string = ary2[idx] ;
-      if (string.length !== 0) ary.push(string) ; // skip empty strings
-    }
-    return ary ;
-  }
-};
-
-/** 
-  @namespace
-
-  Extends the String class by adding a few helpful methods.
-
-  */
-SC.mixin(String.prototype,{
-
-  // ..........................................................
-  // STRING ENHANCEMENT
-  //
-
-  fmt: function() {
-    return SC.CoreString.fmt(this, arguments);
-  },
-
-
   loc: function() {
     return SC.CoreString.loc(this, arguments);
   },
 
+
+
+  /**
+    Splits the string into words, separated by spaces. Empty strings are
+    removed from the results.
+
+    @returns {Array} an array of non-empty strings
+  */
   w: function() {
     return SC.CoreString.w(this);
   }
@@ -1153,20 +1127,19 @@ SC.mixin(String.prototype,{
 // DATE ENHANCEMENT
 //
 if (!Date.now) {
-  /**
-    @ignore
-  */
   Date.now = function() {
     return new Date().getTime() ;
   };
 }
 
 
+/* >>>>>>>>>> BEGIN __sc_chance.js */
+
 /* >>>>>>>>>> BEGIN source/debug/test_suites/array/base.js */
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -1565,7 +1538,7 @@ SC.ArraySuite.define(function(T) {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -1600,7 +1573,7 @@ SC.ArraySuite.define(function(T) {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -1723,7 +1696,7 @@ SC.ArraySuite.define(function(T) {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -1759,7 +1732,7 @@ SC.ArraySuite.define(function(T) {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -1811,7 +1784,7 @@ SC.ArraySuite.define(function(T) {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -1859,7 +1832,7 @@ SC.ArraySuite.define(function(T) {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -2232,7 +2205,7 @@ SC.ArraySuite.define(function(T) {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -2334,7 +2307,7 @@ SC.ArraySuite.define(function(T) {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -2385,7 +2358,7 @@ SC.ArraySuite.define(function(T) {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -2481,7 +2454,7 @@ SC.ArraySuite.define(function(T) {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -2533,7 +2506,7 @@ SC.ArraySuite.define(function(T) {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -2598,7 +2571,7 @@ sc_require('debug/test_suites/array/unshiftObject');
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -2613,7 +2586,6 @@ sc_require('debug/test_suites/array/unshiftObject');
   particular key.  Note that this object is not observable.  You create new
   instances by calling SC.beget(SC.ObserverSet) ;
 
-  @private
   @since SproutCore 1.0
 */
 SC.ObserverSet = {
@@ -2724,7 +2696,7 @@ SC.ObserverSet.slice = SC.ObserverSet.clone ;
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -2826,12 +2798,8 @@ SC._ChainObserver.prototype = {
     if (newObject === this.object) return; // nothing to do.
 
     // if an old object, remove observer on it.
-    if (this.object) {
-      if (this.property === '@each' && this.object._removeContentObserver) {
-        this.object._removeContentObserver(this);
-      } else if (this.object.removeObserver) {
-        this.object.removeObserver(this.property, this, this.propertyDidChange);
-      }
+    if (this.object && this.object.removeObserver) {
+      this.object.removeObserver(this.property, this, this.propertyDidChange);
     }
 
     // if a new object, add observer on it...
@@ -2845,8 +2813,8 @@ SC._ChainObserver.prototype = {
     // and tearing down observers as items are added and removed from the
     // Enumerable.
     if (this.property === '@each' && this.next) {
-      if (this.object && this.object._addContentObserver) {
-        this.object._addContentObserver(this);
+      if (this.object && this.object.addEnumerableObserver) {
+        this.object.addEnumerableObserver(this.next.property, this, this.propertyDidChange);
       }
     } else {
       if (this.object && this.object.addObserver) {
@@ -2860,6 +2828,7 @@ SC._ChainObserver.prototype = {
 
   // the observer method invoked when the observed property changes.
   propertyDidChange: function() {
+
     // get the new value
     var object = this.object ;
     var property = this.property ;
@@ -2907,7 +2876,7 @@ SC._ChainObserver.prototype = {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -2925,7 +2894,7 @@ sc_require('private/chain_observer');
 SC.LOG_OBSERVERS = NO ;
 
 /**
-  @class
+  @namespace
 
   Key-Value-Observing (KVO) simply allows one object to observe changes to a
   property on another object. It is one of the fundamental ways that models,
@@ -2939,8 +2908,7 @@ SC.LOG_OBSERVERS = NO ;
   but you will use the features provided by this module frequently, so it is
   important to understand how to use it.
 
-  Enabling Key Value Observing
-  ---
+  h2. Enabling Key Value Observing
 
   With KVO, you can write functions that will be called automatically whenever
   a property on a particular object changes.  You can use this feature to
@@ -2950,30 +2918,35 @@ SC.LOG_OBSERVERS = NO ;
   To use KVO, just use the KVO-aware methods get() and set() to access
   properties instead of accessing properties directly.  Instead of writing:
 
-        var aName = contact.firstName ;
-        contact.firstName = 'Charles' ;
+  {{{
+    var aName = contact.firstName ;
+    contact.firstName = 'Charles' ;
+  }}}
 
   use:
 
-        var aName = contact.get('firstName') ;
-        contact.set('firstName', 'Charles') ;
+  {{{
+    var aName = contact.get('firstName') ;
+    contact.set('firstName', 'Charles') ;
+  }}}
 
   get() and set() work just like the normal "dot operators" provided by
   JavaScript but they provide you with much more power, including not only
   observing but computed properties as well.
 
-  Observing Property Changes
-  ---
+  h2. Observing Property Changes
 
   You typically observe property changes simply by adding the observes()
   call to the end of your method declarations in classes that you write.  For
   example:
 
-        SC.Object.create({
-          valueObserver: function() {
-            // Executes whenever the "Value" property changes
-          }.observes('value')
-        }) ;
+  {{{
+    SC.Object.create({
+      valueObserver: function() {
+        // Executes whenever the "Value" property changes
+      }.observes('value')
+    }) ;
+  }}}
 
   Although this is the most common way to add an observer, this capability is
   actually built into the SC.Object class on top of two methods defined in
@@ -2983,27 +2956,29 @@ SC.LOG_OBSERVERS = NO ;
 
   To add an observer for a property, just call:
 
-        object.addObserver('propertyKey', targetObject, targetAction) ;
+  {{{
+    object.addObserver('propertyKey', targetObject, targetAction) ;
+  }}}
 
   This will call the 'targetAction' method on the targetObject to be called
   whenever the value of the propertyKey changes.
 
-  Observer Parameters
-  ---
+  h2. Observer Parameters
 
   An observer function typically does not need to accept any parameters,
   however you can accept certain arguments when writing generic observers.
   An observer function can have the following arguments:
 
-        propertyObserver(target, key, value, revision) ;
+  {{{
+    propertyObserver(target, key, value, revision) ;
+  }}}
 
   - *target* - This is the object whose value changed.  Usually this.
   - *key* - The key of the value that changed
   - *value* - this property is no longer used.  It will always be null
   - *revision* - this is the revision of the target object
 
-  Implementing Manual Change Notifications
-  ---
+  h2. Implementing Manual Change Notifications
 
   Sometimes you may want to control the rate at which notifications for
   a property are delivered, for example by checking first to make sure
@@ -3015,32 +2990,34 @@ SC.LOG_OBSERVERS = NO ;
   The example below will only notify if the "balance" property value actually
   changes:
 
+  {{{
 
-        automaticallyNotifiesObserversFor: function(key) {
-          return (key === 'balance') ? NO : arguments.callee.base.apply(this,arguments) ;
-        },
+    automaticallyNotifiesObserversFor: function(key) {
+      return (key === 'balance') ? NO : arguments.callee.base.apply(this,arguments) ;
+    },
 
-        balance: function(key, value) {
-          var balance = this._balance ;
-          if ((value !== undefined) && (balance !== value)) {
-            this.propertyWillChange(key) ;
-            balance = this._balance = value ;
-            this.propertyDidChange(key) ;
-          }
-          return balance ;
-        }
+    balance: function(key, value) {
+      var balance = this._balance ;
+      if ((value !== undefined) && (balance !== value)) {
+        this.propertyWillChange(key) ;
+        balance = this._balance = value ;
+        this.propertyDidChange(key) ;
+      }
+      return balance ;
+    }
 
+  }}}
 
-  Implementation Details
-  ---
+  h1. Implementation Details
 
   Internally, SproutCore keeps track of observable information by adding a
   number of properties to the object adopting the observable.  All of these
   properties begin with "_kvo_" to separate them from the rest of your object.
 
+  @static
   @since SproutCore 1.0
 */
-SC.Observable = /** @scope SC.Observable.prototype */{
+SC.Observable = {
 
   /**
     Walk like that ol' duck
@@ -3059,7 +3036,7 @@ SC.Observable = /** @scope SC.Observable.prototype */{
 
     The default implementation always returns YES.
 
-    @param {String} key the key that is changing
+    @param key {String} the key that is changing
     @returns {Boolean} YES if automatic notification should occur.
   */
   automaticallyNotifiesObserversFor: function(key) {
@@ -3080,22 +3057,22 @@ SC.Observable = /** @scope SC.Observable.prototype */{
     however it supports both computed properties and the unknownProperty
     handler.
 
-    Computed Properties
-    ---
+    *Computed Properties*
 
     Computed properties are methods defined with the property() modifier
     declared at the end, such as:
 
-          fullName: function() {
-            return this.getEach('firstName', 'lastName').compact().join(' ');
-          }.property('firstName', 'lastName')
+    {{{
+      fullName: function() {
+        return this.getEach('firstName', 'lastName').compact().join(' ');
+      }.property('firstName', 'lastName')
+    }}}
 
     When you call get() on a computed property, the property function will be
     called and the return value will be returned instead of the function
     itself.
 
-    Unknown Properties
-    ---
+    *Unknown Properties*
 
     Likewise, if you try to call get() on a property whose values is
     undefined, the unknownProperty() method will be called on the object.
@@ -3103,7 +3080,7 @@ SC.Observable = /** @scope SC.Observable.prototype */{
     instead.  This allows you to implement "virtual" properties that are
     not defined upfront.
 
-    @param {String} key the property to retrieve
+    @param key {String} the property to retrieve
     @returns {Object} the property value or undefined.
 
   */
@@ -3127,8 +3104,7 @@ SC.Observable = /** @scope SC.Observable.prototype */{
     object.key = value, except that it provides support for computed
     properties, the unknownProperty() method and property observers.
 
-    Computed Properties
-    ---
+    *Computed Properties*
 
     If you try to set a value on a key that has a computed property handler
     defined (see the get() method for an example), then set() will call
@@ -3137,8 +3113,7 @@ SC.Observable = /** @scope SC.Observable.prototype */{
     implement a property that is composed of one or more member
     properties.
 
-    Unknown Properties
-    ---
+    *Unknown Properties*
 
     If you try to set a value on a key that is undefined in the target
     object, then the unknownProperty() handler will be called instead.  This
@@ -3146,8 +3121,7 @@ SC.Observable = /** @scope SC.Observable.prototype */{
     are not predefined on the obejct.  If unknownProperty() returns
     undefined, then set() will simply set the value on the object.
 
-    Property Observers
-    ---
+    *Property Observers*
 
     In addition to changing the property, set() will also register a
     property change with the object.  Unless you have placed this call
@@ -3157,16 +3131,17 @@ SC.Observable = /** @scope SC.Observable.prototype */{
     declared on another object) will be placed in a queue and called at a
     later time in a coelesced manner.
 
-    Chaining
-    ---
+    *Chaining*
 
     In addition to property changes, set() returns the value of the object
     itself so you can do chaining like this:
 
-          record.set('firstName', 'Charles').set('lastName', 'Jolley');
+    {{{
+      record.set('firstName', 'Charles').set('lastName', 'Jolley');
+    }}}
 
-    @param {String|Hash} key the property to set
-    @param {Object} value the value to set or null.
+    @param key {String|Hash} the property to set
+    @param value {Object} the value to set or null.
     @returns {SC.Observable}
   */
   set: function(key, value) {
@@ -3174,18 +3149,18 @@ SC.Observable = /** @scope SC.Observable.prototype */{
         notify = this.automaticallyNotifiesObserversFor(key),
         ret    = value,
         cachedep, cache, idx, dfunc ;
-
+    
     if(value === undefined && SC.typeOf(key) === SC.T_HASH) {
       var hash = key;
-
+      
       for(key in hash) {
         if (!hash.hasOwnProperty(key)) continue;
         this.set(key, hash[key]);
       }
-
+      
       return this;
     }
-
+        
     // if there are any dependent keys and they use caching, then clear the
     // cache.  (If we're notifying, then propertyDidChange will do this for
     // us.)
@@ -3245,8 +3220,8 @@ SC.Observable = /** @scope SC.Observable.prototype */{
     when the named property is not yet set in the object.  The default does
     nothing.
 
-    @param {String} key the key that was requested
-    @param {Object} value The value if called as a setter, undefined if called as a getter.
+    @param key {String} the key that was requested
+    @param value {Object} The value if called as a setter, undefined if called as a getter.
     @returns {Object} The new value for key.
   */
   unknownProperty: function(key,value) {
@@ -3261,7 +3236,7 @@ SC.Observable = /** @scope SC.Observable.prototype */{
     will not be sent until the changes are finished.  If you plan to make a
     large number of changes to an object at one time, you should call this
     method at the beginning of the changes to suspend change notifications.
-    When you are done making changes, call endPropertyChanges() to allow
+    When you are done making changes, all endPropertyChanges() to allow
     notification to resume.
 
     @returns {SC.Observable}
@@ -3305,7 +3280,7 @@ SC.Observable = /** @scope SC.Observable.prototype */{
     a pair.  If you do not, it may get the property change groups out of order
     and cause notifications to be delivered more often than you would like.
 
-    @param {String} key The property key that is about to change.
+    @param key {String} The property key that is about to change.
     @returns {SC.Observable}
   */
   propertyWillChange: function(key) {
@@ -3325,37 +3300,17 @@ SC.Observable = /** @scope SC.Observable.prototype */{
     a pair. If you do not, it may get the property change groups out of order
     and cause notifications to be delivered more often than you would like.
 
-    @param {String} key The property key that has just changed.
-    @param {Object} value The new value of the key.  May be null.
-    @param {Boolean} _keepCache Private property
+    @param key {String} The property key that has just changed.
+    @param value {Object} The new value of the key.  May be null.
     @returns {SC.Observable}
   */
   propertyDidChange: function(key,value, _keepCache) {
     this._kvo_revision = (this._kvo_revision || 0) + 1;
     var level = this._kvo_changeLevel || 0,
-        cachedep, idx, dfunc, func,
-        log = SC.LOG_OBSERVERS && (this.LOG_OBSERVING !== NO);
+        cachedep, idx, dfunc, cache, func,
+        log = SC.LOG_OBSERVERS && !(this.LOG_OBSERVING===NO);
 
-    // If any dependent keys contain this property in their path,
-    // invalidate the cache of the computed property and re-setup chain with
-    // new value.
-    var chains = this._kvo_property_chains;
-    if (chains) {
-      var keyChains = chains[key];
-
-      if (keyChains) {
-        keyChains = SC.clone(keyChains);
-        keyChains.forEach(function(chain) {
-          // Invalidate the property that depends on the changed key.
-          chain.notifyPropertyDidChange();
-          // Now that the chain is potentially invalid, rebuild it.
-          chain.rebuildChain();
-        });
-      }
-    }
-
-    var cache = this._kvo_cache;
-    if (cache) {
+    if (cache = this._kvo_cache) {
 
       // clear any cached value
       if (!_keepCache) {
@@ -3422,993 +3377,916 @@ SC.Observable = /** @scope SC.Observable.prototype */{
     @returns {Object} this
   */
   registerDependentKey: function(key, dependentKeys) {
-    var dependents      = this._kvo_dependents,
-        chainDependents = this._kvo_chain_dependents,
-        func            = this[key],
+    var dependents = this._kvo_dependents,
+        func       = this[key],
         keys, idx, lim, dep, queue;
 
-      // normalize input.
-      if (typeof dependentKeys === "object" && (dependentKeys instanceof Array)) {
-        keys = dependentKeys;
-        lim  = 0;
+    // normalize input.
+    if (typeof dependentKeys === "object" && (dependentKeys instanceof Array)) {
+      keys = dependentKeys;
+      lim  = 0;
+    } else {
+      keys = arguments;
+      lim  = 1;
+    }
+    idx  = keys.length;
+
+    // define dependents if not defined already.
+    if (!dependents) this._kvo_dependents = dependents = {} ;
+
+    // for each key, build array of dependents, add this key...
+    // note that we ignore the first argument since it is the key...
+    while(--idx >= lim) {
+      dep = keys[idx] ;
+
+      if (dep.indexOf('.') >= 0) {
+        this.addObserver(dep, this, function() {
+          this.propertyDidChange(key);
+        });
       } else {
-        keys = arguments;
-        lim  = 1;
+        // add dependent key to dependents array of key it depends on
+        queue = dependents[dep] ;
+        if (!queue) { queue = dependents[dep] = [] ; }
+        queue.push(key) ;
       }
-      idx  = keys.length;
+    }
+  },
 
-      // define dependents if not defined already.
-      if (!dependents) this._kvo_dependents = dependents = {} ;
+  /** @private
 
-      // for each key, build array of dependents, add this key...
-      // note that we ignore the first argument since it is the key...
-      while(--idx >= lim) {
-        dep = keys[idx] ;
+    Helper method used by computeCachedDependents.  Just loops over the
+    array of dependent keys.  If the passed function is cacheable, it will
+    be added to the queue.  Also, recursively call on each keys dependent
+    keys.
 
-        if (dep.indexOf('.') >= 0) {
-          SC._PropertyChain.createChain(dep, this, key).activate();
-        } else {
-          // add dependent key to dependents array of key it depends on
-          queue = dependents[dep] ;
-          if (!queue) { queue = dependents[dep] = [] ; }
-          queue.push(key) ;
-        }
-      }
-    },
+    @param {Array} queue the queue to add functions to
+    @param {Array} keys the array of dependent keys for this key
+    @param {Hash} dependents the _kvo_dependents cache
+    @param {SC.Set} seen already seen keys
+    @returns {void}
+  */
+  _kvo_addCachedDependents: function(queue, keys, dependents, seen) {
+    var idx = keys.length,
+        func, key, deps ;
 
-    /** @private
-      Register a property chain so that dependent keys can be invalidated
-      when a property on this object changes.
-
-      @param {String} property the property on this object that invalidates the chain
-      @param {SC._PropertyChain} chain the chain to notify
-    */
-    registerDependentKeyWithChain: function(property, chain) {
-      var chains = this._chainsFor(property), next;
-      chains.add(chain);
-
-      next = chain.next;
-      if (next) { next.activate(this); }
-    },
-
-    /** @private
-      Removes a property chain from the object.
-
-      @param {String} property the property on this object that invalidates the chain
-      @param {SC._PropertyChain} chain the chain to notify
-    */
-    removeDependentKeyWithChain: function(property, chain) {
-      var chains = this._chainsFor(property), next;
-      chains.remove(chain);
-
-      if (chains.get('length') === 0) {
-        delete this._kvo_property_chains[property];
-      }
-
-      next = chain.next;
-      if (next) { next.deactivate(); }
-    },
-
-    /** @private
-      Returns an instance of SC.CoreSet in which to save SC._PropertyChains.
-
-      @param {String} property the property associated with the SC._PropertyChain
-      @returns {SC.CoreSet}
-    */
-    _chainsFor: function(property) {
-      this._kvo_property_chains = this._kvo_property_chains || {};
-      var chains = this._kvo_property_chains[property] || SC.CoreSet.create();
-      this._kvo_property_chains[property] = chains;
-
-      return chains;
-    },
-
-    /** @private
-
-      Helper method used by computeCachedDependents.  Just loops over the
-      array of dependent keys.  If the passed function is cacheable, it will
-      be added to the queue.  Also, recursively call on each keys dependent
-      keys.
-
-      @param {Array} queue the queue to add functions to
-      @param {Array} keys the array of dependent keys for this key
-      @param {Hash} dependents the _kvo_dependents cache
-      @param {SC.Set} seen already seen keys
-      @returns {void}
-    */
-    _kvo_addCachedDependents: function(queue, keys, dependents, seen) {
-      var idx = keys.length,
-          func, key, deps ;
-
-      while(--idx >= 0) {
-        key  = keys[idx];
-        seen.add(key);
-
-        // if the value for this key is a computed property, then add it to the
-        // set if it is cacheable, and process any of its dependent keys also.
-        func = this[key];
-        if (func && (func instanceof Function) && func.isProperty) {
-          if (func.isCacheable) queue.push(func); // handle this func
-          if ((deps = dependents[key]) && deps.length>0) { // and any dependents
-            this._kvo_addCachedDependents(queue, deps, dependents, seen);
-          }
-        }
-      }
-
-    },
-
-    /** @private
-
-      Called by set() whenever it needs to determine which cached dependent
-      keys to clear.  Recursively searches dependent keys to determine all
-      cached property direcly or indirectly affected.
-
-      The return value is also saved for future reference
-
-      @param {String} key the key to compute
-      @returns {Array}
-    */
-    _kvo_computeCachedDependentsFor: function(key) {
-      var cached     = this._kvo_cachedep,
-          dependents = this._kvo_dependents,
-          keys       = dependents ? dependents[key] : null,
-          queue, seen ;
-      if (!cached) cached = this._kvo_cachedep = {};
-
-      // if there are no dependent keys, then just set and return null to avoid
-      // this mess again.
-      if (!keys || keys.length===0) return cached[key] = null;
-
-      // there are dependent keys, so we need to do the work to find out if
-      // any of them or their dependent keys are cached.
-      queue = cached[key] = [];
-      seen  = SC._TMP_SEEN_SET = (SC._TMP_SEEN_SET || SC.CoreSet.create());
+    while(--idx >= 0) {
+      key  = keys[idx];
       seen.add(key);
-      this._kvo_addCachedDependents(queue, keys, dependents, seen);
-      seen.clear(); // reset
 
-      if (queue.length === 0) queue = cached[key] = null ; // turns out nothing
-      return queue ;
-    },
-
-    // ..........................................
-    // OBSERVERS
-    //
-
-    _kvo_for: function(kvoKey, type) {
-      var ret = this[kvoKey] ;
-
-      if (!this._kvo_cloned) this._kvo_cloned = {} ;
-
-      // if the item does not exist, create it.  Unless type is passed,
-      // assume array.
-      if (!ret) {
-        ret = this[kvoKey] = (type === undefined) ? [] : type.create();
-        this._kvo_cloned[kvoKey] = YES ;
-
-      // if item does exist but has not been cloned, then clone it.  Note
-      // that all types must implement copy().0
-      } else if (!this._kvo_cloned[kvoKey]) {
-        ret = this[kvoKey] = ret.copy();
-        this._kvo_cloned[kvoKey] = YES;
-      }
-
-      return ret ;
-    },
-
-    /**
-      Adds an observer on a property.
-
-      This is the core method used to register an observer for a property.
-
-      Once you call this method, anytime the key's value is set, your observer
-      will be notified.  Note that the observers are triggered anytime the
-      value is set, regardless of whether it has actually changed.  Your
-      observer should be prepared to handle that.
-
-      You can also pass an optional context parameter to this method.  The
-      context will be passed to your observer method whenever it is triggered.
-      Note that if you add the same target/method pair on a key multiple times
-      with different context parameters, your observer will only be called once
-      with the last context you passed.
-
-      Observer Methods
-      ---
-
-      Observer methods you pass should generally have the following signature if
-      you do not pass a "context" parameter:
-
-            fooDidChange: function(sender, key, value, rev);
-
-      The sender is the object that changed.  The key is the property that
-      changes.  The value property is currently reserved and unused.  The rev
-      is the last property revision of the object when it changed, which you can
-      use to detect if the key value has really changed or not.
-
-      If you pass a "context" parameter, the context will be passed before the
-      revision like so:
-
-            fooDidChange: function(sender, key, value, context, rev);
-
-      Usually you will not need the value, context or revision parameters at
-      the end.  In this case, it is common to write observer methods that take
-      only a sender and key value as parameters or, if you aren't interested in
-      any of these values, to write an observer that has no parameters at all.
-
-      @param {String} key the key to observer
-      @param {Object} target the target object to invoke
-      @param {String|Function} method the method to invoke.
-      @param {Object} context optional context
-      @returns {SC.Object} self
-    */
-    addObserver: function(key, target, method, context) {
-      var kvoKey, chain, chains, observers;
-
-      // normalize.  if a function is passed to target, make it the method.
-      if (method === undefined) {
-        method = target; target = this ;
-      }
-      if (!target) target = this ;
-
-      if (typeof method === "string") method = target[method] ;
-      if (!method) throw "You must pass a method to addObserver()" ;
-
-      // Normalize key...
-      key = key.toString() ;
-      if (key.indexOf('.') >= 0) {
-
-        // create the chain and save it for later so we can tear it down if
-        // needed.
-        chain = SC._ChainObserver.createChain(this, key, target, method, context);
-        chain.masterTarget = target;
-        chain.masterMethod = method ;
-
-        // Save in set for chain observers.
-        this._kvo_for(SC.keyFor('_kvo_chains', key)).push(chain);
-
-      // Create observers if needed...
-      } else {
-
-        // Special case to support reduced properties.  If the property
-        // key begins with '@' and its value is unknown, then try to get its
-        // value.  This will configure the dependent keys if needed.
-        if ((this[key] === undefined) && (key.indexOf('@') === 0)) {
-          this.get(key) ;
+      // if the value for this key is a computed property, then add it to the
+      // set if it is cacheable, and process any of its dependent keys also.
+      func = this[key];
+      if (func && (func instanceof Function) && func.isProperty) {
+        if (func.isCacheable) queue.push(func); // handle this func
+        if ((deps = dependents[key]) && deps.length>0) { // and any dependents
+          this._kvo_addCachedDependents(queue, deps, dependents, seen);
         }
+      }
+    }
 
-        if (target === this) target = null ; // use null for observers only.
-        kvoKey = SC.keyFor('_kvo_observers', key);
-        this._kvo_for(kvoKey, SC.ObserverSet).add(target, method, context);
-        this._kvo_for('_kvo_observed_keys', SC.CoreSet).add(key) ;
+  },
+
+  /** @private
+
+    Called by set() whenever it needs to determine which cached dependent
+    keys to clear.  Recursively searches dependent keys to determine all
+    cached property direcly or indirectly affected.
+
+    The return value is also saved for future reference
+
+    @param {String} key the key to compute
+    @returns {Array}
+  */
+  _kvo_computeCachedDependentsFor: function(key) {
+    var cached     = this._kvo_cachedep,
+        dependents = this._kvo_dependents,
+        keys       = dependents ? dependents[key] : null,
+        queue, seen ;
+    if (!cached) cached = this._kvo_cachedep = {};
+
+    // if there are no dependent keys, then just set and return null to avoid
+    // this mess again.
+    if (!keys || keys.length===0) return cached[key] = null;
+
+    // there are dependent keys, so we need to do the work to find out if
+    // any of them or their dependent keys are cached.
+    queue = cached[key] = [];
+    seen  = SC._TMP_SEEN_SET = (SC._TMP_SEEN_SET || SC.CoreSet.create());
+    seen.add(key);
+    this._kvo_addCachedDependents(queue, keys, dependents, seen);
+    seen.clear(); // reset
+
+    if (queue.length === 0) queue = cached[key] = null ; // turns out nothing
+    return queue ;
+  },
+
+  // ..........................................
+  // OBSERVERS
+  //
+
+  _kvo_for: function(kvoKey, type) {
+    var ret = this[kvoKey] ;
+
+    if (!this._kvo_cloned) this._kvo_cloned = {} ;
+
+    // if the item does not exist, create it.  Unless type is passed,
+    // assume array.
+    if (!ret) {
+      ret = this[kvoKey] = (type === undefined) ? [] : type.create();
+      this._kvo_cloned[kvoKey] = YES ;
+
+    // if item does exist but has not been cloned, then clone it.  Note
+    // that all types must implement copy().0
+    } else if (!this._kvo_cloned[kvoKey]) {
+      ret = this[kvoKey] = ret.copy();
+      this._kvo_cloned[kvoKey] = YES;
+    }
+
+    return ret ;
+  },
+
+  /**
+    Adds an observer on a property.
+
+    This is the core method used to register an observer for a property.
+
+    Once you call this method, anytime the key's value is set, your observer
+    will be notified.  Note that the observers are triggered anytime the
+    value is set, regardless of whether it has actually changed.  Your
+    observer should be prepared to handle that.
+
+    You can also pass an optional context parameter to this method.  The
+    context will be passed to your observer method whenever it is triggered.
+    Note that if you add the same target/method pair on a key multiple times
+    with different context parameters, your observer will only be called once
+    with the last context you passed.
+
+    h2. Observer Methods
+
+    Observer methods you pass should generally have the following signature if
+    you do not pass a "context" parameter:
+
+    {{{
+      fooDidChange: function(sender, key, value, rev);
+    }}}
+
+    The sender is the object that changed.  The key is the property that
+    changes.  The value property is currently reserved and unused.  The rev
+    is the last property revision of the object when it changed, which you can
+    use to detect if the key value has really changed or not.
+
+    If you pass a "context" parameter, the context will be passed before the
+    revision like so:
+
+    {{{
+      fooDidChange: function(sender, key, value, context, rev);
+    }}}
+
+    Usually you will not need the value, context or revision parameters at
+    the end.  In this case, it is common to write observer methods that take
+    only a sender and key value as parameters or, if you aren't interested in
+    any of these values, to write an observer that has no parameters at all.
+
+    @param key {String} the key to observer
+    @param target {Object} the target object to invoke
+    @param method {String|Function} the method to invoke.
+    @param context {Object} optional context
+    @returns {SC.Object} self
+  */
+  addObserver: function(key, target, method, context) {
+    var kvoKey, chain, chains, observers;
+
+    // normalize.  if a function is passed to target, make it the method.
+    if (method === undefined) {
+      method = target; target = this ;
+    }
+    if (!target) target = this ;
+
+    if (typeof method === "string") method = target[method] ;
+    if (!method) throw "You must pass a method to addObserver()" ;
+
+    // Normalize key...
+    key = key.toString() ;
+    if (key.indexOf('.') >= 0) {
+
+      // create the chain and save it for later so we can tear it down if
+      // needed.
+      chain = SC._ChainObserver.createChain(this, key, target, method, context);
+      chain.masterTarget = target;
+      chain.masterMethod = method ;
+
+      // Save in set for chain observers.
+      this._kvo_for(SC.keyFor('_kvo_chains', key)).push(chain);
+
+    // Create observers if needed...
+    } else {
+
+      // Special case to support reduced properties.  If the property
+      // key begins with '@' and its value is unknown, then try to get its
+      // value.  This will configure the dependent keys if needed.
+      if ((this[key] === undefined) && (key.indexOf('@') === 0)) {
+        this.get(key) ;
       }
 
-      if (this.didAddObserver) this.didAddObserver(key, target, method);
-      return this;
-    },
+      if (target === this) target = null ; // use null for observers only.
+      kvoKey = SC.keyFor('_kvo_observers', key);
+      this._kvo_for(kvoKey, SC.ObserverSet).add(target, method, context);
+      this._kvo_for('_kvo_observed_keys', SC.CoreSet).add(key) ;
+    }
 
-    /**
-      Remove an observer you have previously registered on this object.  Pass
-      the same key, target, and method you passed to addObserver() and your
-      target will no longer receive notifications.
+    if (this.didAddObserver) this.didAddObserver(key, target, method);
+    return this;
+  },
 
-      @param {String} key the key to observer
-      @param {Object} target the target object to invoke
-      @param {String|Function} method the method to invoke.
-      @returns {SC.Observable} reciever
-    */
-    removeObserver: function(key, target, method) {
+  /**
+    Remove an observer you have previously registered on this object.  Pass
+    the same key, target, and method you passed to addObserver() and your
+    target will no longer receive notifications.
 
-      var kvoKey, chains, chain, observers, idx ;
+    @returns {SC.Observable} reciever
+  */
+  removeObserver: function(key, target, method) {
 
-      // normalize.  if a function is passed to target, make it the method.
-      if (method === undefined) {
-        method = target; target = this ;
+    var kvoKey, chains, chain, observers, idx ;
+
+    // normalize.  if a function is passed to target, make it the method.
+    if (method === undefined) {
+      method = target; target = this ;
+    }
+    if (!target) target = this ;
+
+    if (typeof method === "string") method = target[method] ;
+    if (!method) throw "You must pass a method to removeObserver()" ;
+
+    // if the key contains a '.', this is a chained observer.
+    key = key.toString() ;
+    if (key.indexOf('.') >= 0) {
+
+      // try to find matching chains
+      kvoKey = SC.keyFor('_kvo_chains', key);
+      if (chains = this[kvoKey]) {
+
+        // if chains have not been cloned yet, do so now.
+        chains = this._kvo_for(kvoKey) ;
+
+        // remove any chains
+        idx = chains.length;
+        while(--idx >= 0) {
+          chain = chains[idx];
+          if (chain && (chain.masterTarget===target) && (chain.masterMethod===method)) {
+            chains[idx] = chain.destroyChain() ;
+          }
+        }
       }
-      if (!target) target = this ;
 
-      if (typeof method === "string") method = target[method] ;
-      if (!method) throw "You must pass a method to removeObserver()" ;
+    // otherwise, just like a normal observer.
+    } else {
+      if (target === this) target = null ; // use null for observers only.
+      kvoKey = SC.keyFor('_kvo_observers', key) ;
+      if (observers = this[kvoKey]) {
+        // if observers have not been cloned yet, do so now
+        observers = this._kvo_for(kvoKey) ;
+        observers.remove(target, method) ;
+        if (observers.getMembers().length === 0) {
+          this._kvo_for('_kvo_observed_keys', SC.CoreSet).remove(key);
+        }
+      }
+    }
 
-      // if the key contains a '.', this is a chained observer.
-      key = key.toString() ;
-      if (key.indexOf('.') >= 0) {
+    if (this.didRemoveObserver) this.didRemoveObserver(key, target, method);
+    return this;
+  },
 
-        // try to find matching chains
-        kvoKey = SC.keyFor('_kvo_chains', key);
-        if (chains = this[kvoKey]) {
+  /**
+    Returns YES if the object currently has observers registered for a
+    particular key.  You can use this method to potentially defer performing
+    an expensive action until someone begins observing a particular property
+    on the object.
 
-          // if chains have not been cloned yet, do so now.
-          chains = this._kvo_for(kvoKey) ;
+    @param {String} key key to check
+    @returns {Boolean}
+  */
+  hasObserverFor: function(key) {
+    SC.Observers.flush(this) ; // hookup as many observers as possible.
 
-          // remove any chains
-          idx = chains.length;
-          while(--idx >= 0) {
-            chain = chains[idx];
-            if (chain && (chain.masterTarget===target) && (chain.masterMethod===method)) {
-              chains[idx] = chain.destroyChain() ;
+    var observers = this[SC.keyFor('_kvo_observers', key)],
+        locals    = this[SC.keyFor('_kvo_local', key)],
+        members ;
+
+    if (locals && locals.length>0) return YES ;
+    if (observers && observers.getMembers().length > 0) return YES ;
+    return NO ;
+  },
+
+  /**
+    This method will register any observers and computed properties saved on
+    the object.  Normally you do not need to call this method youself.  It
+    is invoked automatically just before property notifications are sent and
+    from the init() method of SC.Object.  You may choose to call this
+    from your own initialization method if you are using SC.Observable in
+    a non-SC.Object-based object.
+
+    This method looks for several private variables, which you can setup,
+    to initialize:
+
+      - _observers: this should contain an array of key names for observers
+        you need to configure.
+
+      - _bindings: this should contain an array of key names that configure
+        bindings.
+
+      - _properties: this should contain an array of key names for computed
+        properties.
+
+    @returns {Object} this
+  */
+  initObservable: function() {
+    if (this._observableInited) return ;
+    this._observableInited = YES ;
+
+    var loc, keys, key, value, observer, propertyPaths, propertyPathsLength,
+        len, ploc, path, dotIndex, root, propertyKey, keysLen;
+
+    // Loop through observer functions and register them
+    if (keys = this._observers) {
+      len = keys.length ;
+      for(loc=0;loc<len;loc++) {
+        key = keys[loc]; observer = this[key] ;
+        propertyPaths = observer.propertyPaths ;
+        propertyPathsLength = (propertyPaths) ? propertyPaths.length : 0 ;
+        for(ploc=0;ploc<propertyPathsLength;ploc++) {
+          path = propertyPaths[ploc] ;
+          dotIndex = path.indexOf('.') ;
+          // handle most common case, observing a local property
+          if (dotIndex < 0) {
+            this.addObserver(path, this, observer) ;
+
+          // next most common case, use a chained observer
+          } else if (path.indexOf('*') === 0) {
+            this.addObserver(path.slice(1), this, observer) ;
+
+          // otherwise register the observer in the observers queue.  This
+          // will add the observer now or later when the named path becomes
+          // available.
+          } else {
+            root = null ;
+
+            // handle special cases for observers that look to the local root
+            if (dotIndex === 0) {
+              root = this; path = path.slice(1) ;
+            } else if (dotIndex===4 && path.slice(0,5) === 'this.') {
+              root = this; path = path.slice(5) ;
+            } else if (dotIndex<0 && path.length===4 && path === 'this') {
+              root = this; path = '';
             }
-          }
-        }
 
-      // otherwise, just like a normal observer.
-      } else {
-        if (target === this) target = null ; // use null for observers only.
-        kvoKey = SC.keyFor('_kvo_observers', key) ;
-        if (observers = this[kvoKey]) {
-          // if observers have not been cloned yet, do so now
-          observers = this._kvo_for(kvoKey) ;
-          observers.remove(target, method) ;
-          if (observers.getMembers().length === 0) {
-            this._kvo_for('_kvo_observed_keys', SC.CoreSet).remove(key);
+            SC.Observers.addObserver(path, this, observer, root);
           }
         }
       }
+    }
 
-      if (this.didRemoveObserver) this.didRemoveObserver(key, target, method);
-      return this;
-    },
+    // Add Bindings
+    this.bindings = []; // will be filled in by the bind() method.
+    if (keys = this._bindings) {
+      for(loc=0, keysLen = keys.length; loc < keysLen;loc++) {
+        // get propertyKey
+        key = keys[loc] ; value = this[key] ;
+        propertyKey = key.slice(0,-7) ; // contentBinding => content
+        this[key] = this.bind(propertyKey, value) ;
+      }
+    }
 
-    /**
-      Returns YES if the object currently has observers registered for a
-      particular key.  You can use this method to potentially defer performing
-      an expensive action until someone begins observing a particular property
-      on the object.
+    // Add Properties
+    if (keys = this._properties) {
+      for(loc=0, keysLen = keys.length; loc<keysLen;loc++) {
+        key = keys[loc];
+        if (value = this[key]) {
 
-      @param {String} key key to check
-      @returns {Boolean}
-    */
-    hasObserverFor: function(key) {
-      SC.Observers.flush(this) ; // hookup as many observers as possible.
+          // activate cacheable only if needed for perf reasons
+          if (value.isCacheable) this._kvo_cacheable = YES;
 
-      var observers = this[SC.keyFor('_kvo_observers', key)],
-          locals    = this[SC.keyFor('_kvo_local', key)],
-          members ;
-
-      if (locals && locals.length>0) return YES ;
-      if (observers && observers.getMembers().length > 0) return YES ;
-      return NO ;
-    },
-
-    /**
-      This method will register any observers and computed properties saved on
-      the object.  Normally you do not need to call this method youself.  It
-      is invoked automatically just before property notifications are sent and
-      from the init() method of SC.Object.  You may choose to call this
-      from your own initialization method if you are using SC.Observable in
-      a non-SC.Object-based object.
-
-      This method looks for several private variables, which you can setup,
-      to initialize:
-
-        - _observers: this should contain an array of key names for observers
-          you need to configure.
-
-        - _bindings: this should contain an array of key names that configure
-          bindings.
-
-        - _properties: this should contain an array of key names for computed
-          properties.
-
-      @returns {Object} this
-    */
-    initObservable: function() {
-      if (this._observableInited) return ;
-      this._observableInited = YES ;
-
-      var loc, keys, key, value, observer, propertyPaths, propertyPathsLength,
-          len, ploc, path, dotIndex, root, propertyKey, keysLen;
-
-      // Loop through observer functions and register them
-      if (keys = this._observers) {
-        len = keys.length ;
-        for(loc=0;loc<len;loc++) {
-          key = keys[loc]; observer = this[key] ;
-          propertyPaths = observer.propertyPaths ;
-          propertyPathsLength = (propertyPaths) ? propertyPaths.length : 0 ;
-          for(ploc=0;ploc<propertyPathsLength;ploc++) {
-            path = propertyPaths[ploc] ;
-            dotIndex = path.indexOf('.') ;
-            // handle most common case, observing a local property
-            if (dotIndex < 0) {
-              this.addObserver(path, this, observer) ;
-
-            // next most common case, use a chained observer
-            } else if (path.indexOf('*') === 0) {
-              this.addObserver(path.slice(1), this, observer) ;
-
-            // otherwise register the observer in the observers queue.  This
-            // will add the observer now or later when the named path becomes
-            // available.
-            } else {
-              root = null ;
-
-              // handle special cases for observers that look to the local root
-              if (dotIndex === 0) {
-                root = this; path = path.slice(1) ;
-              } else if (dotIndex===4 && path.slice(0,5) === 'this.') {
-                root = this; path = path.slice(5) ;
-              } else if (dotIndex<0 && path.length===4 && path === 'this') {
-                root = this; path = '';
-              }
-
-              SC.Observers.addObserver(path, this, observer, root);
-            }
+          // register dependent keys
+          if (value.dependentKeys && (value.dependentKeys.length>0)) {
+            this.registerDependentKey(key, value.dependentKeys) ;
           }
         }
       }
+    }
 
-      // Add Bindings
-      this.bindings = []; // will be filled in by the bind() method.
-      if (keys = this._bindings) {
-        for(loc=0, keysLen = keys.length; loc < keysLen;loc++) {
-          // get propertyKey
-          key = keys[loc] ; value = this[key] ;
-          propertyKey = key.slice(0,-7) ; // contentBinding => content
-          this[key] = this.bind(propertyKey, value) ;
-        }
-      }
+  },
 
-      // Add Properties
-      if (keys = this._properties) {
-        for(loc=0, keysLen = keys.length; loc<keysLen;loc++) {
-          key = keys[loc];
-          if (value = this[key]) {
+  // ..........................................
+  // NOTIFICATION
+  //
 
-            // activate cacheable only if needed for perf reasons
-            if (value.isCacheable) this._kvo_cacheable = YES;
+  /**
+    Returns an array with all of the observers registered for the specified
+    key.  This is intended for debugging purposes only.  You generally do not
+    want to rely on this method for production code.
 
-            // register dependent keys
-            if (value.dependentKeys && (value.dependentKeys.length>0)) {
-              this.registerDependentKey(key, value.dependentKeys) ;
-            }
-          }
-        }
-      }
-
-    },
-
-    // ..........................................
-    // NOTIFICATION
-    //
-
-    /**
-      Returns an array with all of the observers registered for the specified
-      key.  This is intended for debugging purposes only.  You generally do not
-      want to rely on this method for production code.
-
-    @param {String} key the key to evaluate
+    @params key {String} the key to evaluate
     @returns {Array} array of Observer objects, describing the observer.
   */
   observersForKey: function(key) {
-    SC.Observers.flush(this) ; // hookup as many observers as possible.
-
-    var observers = this[SC.keyFor('_kvo_observers', key)];
-    return observers ? observers.getMembers() : [];
+    var observers = this._kvo_for('_kvo_observers', key) ;
+    return observers.getMembers() ;
   },
 
-    // this private method actually notifies the observers for any keys in the
-    // observer queue.  If you pass a key it will be added to the queue.
-    _notifyPropertyObservers: function(key) {
-      if (!this._observableInited) this.initObservable() ;
+  // this private method actually notifies the observers for any keys in the
+  // observer queue.  If you pass a key it will be added to the queue.
+  _notifyPropertyObservers: function(key) {
+    if (!this._observableInited) this.initObservable() ;
 
-      SC.Observers.flush(this) ; // hookup as many observers as possible.
+    SC.Observers.flush(this) ; // hookup as many observers as possible.
 
-      var log = SC.LOG_OBSERVERS && !(this.LOG_OBSERVING===NO),
-          observers, changes, dependents, starObservers, idx, keys, rev,
-          members, membersLength, member, memberLoc, target, method, loc, func,
-          context, spaces, cache ;
+    var log = SC.LOG_OBSERVERS && !(this.LOG_OBSERVING===NO),
+        observers, changes, dependents, starObservers, idx, keys, rev,
+        members, membersLength, member, memberLoc, target, method, loc, func,
+        context, spaces, cache ;
 
-      if (log) {
-        spaces = SC.KVO_SPACES = (SC.KVO_SPACES || '') + '  ';
-        SC.Logger.log('%@%@: notifying observers after change to key "%@"'.fmt(spaces, this, key));
-      }
+    if (log) {
+      spaces = SC.KVO_SPACES = (SC.KVO_SPACES || '') + '  ';
+      SC.Logger.log('%@%@: notifying observers after change to key "%@"'.fmt(spaces, this, key));
+    }
 
-      // Get any starObservers -- they will be notified of all changes.
-      starObservers =  this['_kvo_observers_*'] ;
+    // Get any starObservers -- they will be notified of all changes.
+    starObservers =  this['_kvo_observers_*'] ;
 
-      // prevent notifications from being sent until complete
-      this._kvo_changeLevel = (this._kvo_changeLevel || 0) + 1;
+    // prevent notifications from being sent until complete
+    this._kvo_changeLevel = (this._kvo_changeLevel || 0) + 1;
 
-      // keep sending notifications as long as there are changes
-      while(((changes = this._kvo_changes) && (changes.length > 0)) || key) {
+    // keep sending notifications as long as there are changes
+    while(((changes = this._kvo_changes) && (changes.length > 0)) || key) {
 
-        // increment revision
-        rev = ++this.propertyRevision ;
+      // increment revision
+      rev = ++this.propertyRevision ;
 
-        // save the current set of changes and swap out the kvo_changes so that
-        // any set() calls by observers will be saved in a new set.
-        if (!changes) changes = SC.CoreSet.create() ;
-        this._kvo_changes = null ;
+      // save the current set of changes and swap out the kvo_changes so that
+      // any set() calls by observers will be saved in a new set.
+      if (!changes) changes = SC.CoreSet.create() ;
+      this._kvo_changes = null ;
 
-        // Add the passed key to the changes set.  If a '*' was passed, then
-        // add all keys in the observers to the set...
-        // once finished, clear the key so the loop will end.
-        if (key === '*') {
-          changes.add('*') ;
-          changes.addEach(this._kvo_for('_kvo_observed_keys', SC.CoreSet));
+      // Add the passed key to the changes set.  If a '*' was passed, then
+      // add all keys in the observers to the set...
+      // once finished, clear the key so the loop will end.
+      if (key === '*') {
+        changes.add('*') ;
+        changes.addEach(this._kvo_for('_kvo_observed_keys', SC.CoreSet));
 
-        } else if (key) changes.add(key) ;
+      } else if (key) changes.add(key) ;
 
-        // Now go through the set and add all dependent keys...
-        if (dependents = this._kvo_dependents) {
+      // Now go through the set and add all dependent keys...
+      if (dependents = this._kvo_dependents) {
 
-          // NOTE: each time we loop, we check the changes length, this
-          // way any dependent keys added to the set will also be evaluated...
-          for(idx=0;idx<changes.length;idx++) {
-            key = changes[idx] ;
-            keys = dependents[key] ;
+        // NOTE: each time we loop, we check the changes length, this
+        // way any dependent keys added to the set will also be evaluated...
+        for(idx=0;idx<changes.length;idx++) {
+          key = changes[idx] ;
+          keys = dependents[key] ;
 
-            // for each dependent key, add to set of changes.  Also, if key
-            // value is a cacheable property, clear the cached value...
-            if (keys && (loc = keys.length)) {
-              if (log) {
-                SC.Logger.log("%@...including dependent keys for %@: %@".fmt(spaces, key, keys));
-              }
-              cache = this._kvo_cache;
-              if (!cache) cache = this._kvo_cache = {};
-              while(--loc >= 0) {
-                changes.add(key = keys[loc]);
-                if (func = this[key]) {
-                  this[func.cacheKey] = undefined;
-                  cache[func.cacheKey] = cache[func.lastSetValueKey] = undefined;
-                } // if (func=)
-              } // while (--loc)
-            } // if (keys &&
-          } // for(idx...
-        } // if (dependents...)
+          // for each dependent key, add to set of changes.  Also, if key
+          // value is a cacheable property, clear the cached value...
+          if (keys && (loc = keys.length)) {
+            if (log) {
+              SC.Logger.log("%@...including dependent keys for %@: %@".fmt(spaces, key, keys));
+            }
+            cache = this._kvo_cache;
+            if (!cache) cache = this._kvo_cache = {};
+            while(--loc >= 0) {
+              changes.add(key = keys[loc]);
+              if (func = this[key]) {
+                this[func.cacheKey] = undefined;
+                cache[func.cacheKey] = cache[func.lastSetValueKey] = undefined;
+              } // if (func=)
+            } // while (--loc)
+          } // if (keys &&
+        } // for(idx...
+      } // if (dependents...)
 
-        // now iterate through all changed keys and notify observers.
-        while(changes.length > 0) {
-          key = changes.pop() ; // the changed key
+      // now iterate through all changed keys and notify observers.
+      while(changes.length > 0) {
+        key = changes.pop() ; // the changed key
 
-          // find any observers and notify them...
-          observers = this[SC.keyFor('_kvo_observers', key)];
+        // find any observers and notify them...
+        observers = this[SC.keyFor('_kvo_observers', key)];
 
-          if (observers) {
-            // We need to clone the 'members' structure here in case any of the
-            // observers we're about to notify happen to remove observers for
-            // this key, which would mutate the structure underneath us.
-            // (Cloning it rather than mutating gives us a clear policy:  if you
-            // were registered as an observer at the time notification begins,
-            // you will be notified, regardless of whether you're removed as an
-            // observer during that round of notification.  Similarly, if you're
-            // added as an observer during the notification round by another
-            // observer, you will not be notified until the next time.)
-            members = SC.clone(observers.getMembers()) ;
-            membersLength = members.length ;
-            for(memberLoc=0;memberLoc < membersLength; memberLoc++) {
-              member = members[memberLoc] ;
+        if (observers) {
+          // We need to clone the 'members' structure here in case any of the
+          // observers we're about to notify happen to remove observers for
+          // this key, which would mutate the structure underneath us.
+          // (Cloning it rather than mutating gives us a clear policy:  if you
+          // were registered as an observer at the time notification begins,
+          // you will be notified, regardless of whether you're removed as an
+          // observer during that round of notification.  Similarly, if you're
+          // added as an observer during the notification round by another
+          // observer, you will not be notified until the next time.)
+          members = SC.clone(observers.getMembers()) ;
+          membersLength = members.length ;
+          for(memberLoc=0;memberLoc < membersLength; memberLoc++) {
+            member = members[memberLoc] ;
 
-              if (member[3] === rev) continue ; // skip notified items.
+            if (member[3] === rev) continue ; // skip notified items.
 
-              if(!member[1]) SC.Logger.log(member);
+            if(!member[1]) SC.Logger.log(member);
 
-              target = member[0] || this;
-              method = member[1] ;
-              context = member[2];
-              member[3] = rev;
+            target = member[0] || this;
+            method = member[1] ;
+            context = member[2];
+            member[3] = rev;
 
-              if (log) SC.Logger.log('%@...firing observer on %@ for key "%@"'.fmt(spaces, target, key));
-              if (context !== undefined) {
-                method.call(target, this, key, null, context, rev);
-              } else {
-                method.call(target, this, key, null, rev) ;
-              }
+            if (log) SC.Logger.log('%@...firing observer on %@ for key "%@"'.fmt(spaces, target, key));
+            if (context !== undefined) {
+              method.call(target, this, key, null, context, rev);
+            } else {
+              method.call(target, this, key, null, rev) ;
             }
           }
+        }
 
-          // look for local observers.  Local observers are added by SC.Object
-          // as an optimization to avoid having to add observers for every
-          // instance when you are just observing your local object.
-          members = this[SC.keyFor('_kvo_local', key)];
-          if (members) {
-            // Note:  Since, unlike above, we don't expect local observers to be
-            //        removed in general, we will not clone 'members'.
-            membersLength = members.length ;
-            for(memberLoc=0;memberLoc<membersLength;memberLoc++) {
-              member = members[memberLoc];
-              method = this[member] ; // try to find observer function
-              if (method) {
-                if (log) SC.Logger.log('%@...firing local observer %@.%@ for key "%@"'.fmt(spaces, this, member, key));
-                method.call(this, this, key, null, rev);
-              }
+        // look for local observers.  Local observers are added by SC.Object
+        // as an optimization to avoid having to add observers for every
+        // instance when you are just observing your local object.
+        members = this[SC.keyFor('_kvo_local', key)];
+        if (members) {
+          // Note:  Since, unlike above, we don't expect local observers to be
+          //        removed in general, we will not clone 'members'.
+          membersLength = members.length ;
+          for(memberLoc=0;memberLoc<membersLength;memberLoc++) {
+            member = members[memberLoc];
+            method = this[member] ; // try to find observer function
+            if (method) {
+              if (log) SC.Logger.log('%@...firing local observer %@.%@ for key "%@"'.fmt(spaces, this, member, key));
+              method.call(this, this, key, null, rev);
             }
           }
+        }
 
-          // if there are starObservers, do the same thing for them
-          if (starObservers && key !== '*') {
-            // We clone the structure per the justification, above, for regular
-            // observers.
-            members = SC.clone(starObservers.getMembers()) ;
-            membersLength = members.length ;
-            for(memberLoc=0;memberLoc < membersLength; memberLoc++) {
-              member = members[memberLoc] ;
-              target = member[0] || this;
-              method = member[1] ;
-              context = member[2] ;
+        // if there are starObservers, do the same thing for them
+        if (starObservers && key !== '*') {
+          // We clone the structure per the justification, above, for regular
+          // observers.
+          members = SC.clone(starObservers.getMembers()) ;
+          membersLength = members.length ;
+          for(memberLoc=0;memberLoc < membersLength; memberLoc++) {
+            member = members[memberLoc] ;
+            target = member[0] || this;
+            method = member[1] ;
+            context = member[2] ;
 
-              if (log) SC.Logger.log('%@...firing * observer on %@ for key "%@"'.fmt(spaces, target, key));
-              if (context !== undefined) {
-                method.call(target, this, key, null, context, rev);
-              } else {
-                method.call(target, this, key, null, rev) ;
-              }
+            if (log) SC.Logger.log('%@...firing * observer on %@ for key "%@"'.fmt(spaces, target, key));
+            if (context !== undefined) {
+              method.call(target, this, key, null, context, rev);
+            } else {
+              method.call(target, this, key, null, rev) ;
             }
           }
-
-          // if there is a default property observer, call that also
-          if (this.propertyObserver) {
-            if (log) SC.Logger.log('%@...firing %@.propertyObserver for key "%@"'.fmt(spaces, this, key));
-            this.propertyObserver(this, key, null, rev);
-          }
-        } // while(changes.length>0)
-
-        // changes set should be empty. release it for reuse
-        if (changes) changes.destroy() ;
-
-        // key is no longer needed; clear it to avoid infinite loops
-        key = null ;
-
-      } // while (changes)
-
-      // done with loop, reduce change level so that future sets can resume
-      this._kvo_changeLevel = (this._kvo_changeLevel || 1) - 1;
-
-      if (log) SC.KVO_SPACES = spaces.slice(0, -2);
-
-      return YES ; // finished successfully
-    },
-
-    // ..........................................
-    // BINDINGS
-    //
-
-    /**
-      Manually add a new binding to an object.  This is the same as doing
-      the more familiar propertyBinding: 'property.path' approach.
-
-      @param {String} toKey the key to bind to
-      @param {Object} target target or property path to bind from
-      @param {String|Function} method method for target to bind from
-      @returns {SC.Binding} new binding instance
-    */
-    bind: function(toKey, target, method) {
-
-      var binding , pathType;
-
-      // normalize...
-      if (method !== undefined) target = [target, method];
-
-      // if a string or array (i.e. tuple) is passed, convert this into a
-      // binding.  If a binding default was provided, use that.
-      pathType = typeof target;
-
-      if (pathType === "string" || (pathType === "object" && (target instanceof Array))) {
-        binding = this[toKey + 'BindingDefault'] || SC.Binding;
-        binding = binding.beget().from(target) ;
-      } else binding = target ;
-
-      // finish configuring the binding and then connect it.
-      binding = binding.to(toKey, this).connect() ;
-      this.bindings.push(binding) ;
-
-      return binding ;
-    },
-
-    /**
-      didChangeFor allows you to determine if a property has changed since the
-      last time the method was called. You must pass a unique context as the
-      first parameter (so didChangeFor can identify which method is calling it),
-      followed by a list of keys that should be checked for changes.
-
-      For example, in your render method you might pass the following context:
-      if (this.didChangeFor('render','height','width')) {
-         // Only render if changed
-      }
-
-      In your view's update method, you might instead pass 'update':
-
-      if (this.didChangeFor('update', 'height', 'width')) {
-        // Only update height and width properties
-      }
-
-      This method works by comparing property revision counts. Every time a
-      property changes, an internal counter is incremented. When didChangeFor is
-      invoked, the current revision count of the property is compared to the
-      revision count from the last time this method was called.
-
-      @param {String|Object} context a unique identifier
-      @param {String…} propertyNames one or more property names
-    */
-    didChangeFor: function(context) {
-      var valueCache, revisionCache, seenValues, seenRevisions, ret,
-          currentRevision, idx, key, value;
-      context = SC.hashFor(context) ; // get a hash key we can use in caches.
-
-      // setup caches...
-      valueCache = this._kvo_didChange_valueCache ;
-      if (!valueCache) valueCache = this._kvo_didChange_valueCache = {};
-      revisionCache = this._kvo_didChange_revisionCache;
-      if (!revisionCache) revisionCache=this._kvo_didChange_revisionCache={};
-
-      // get the cache of values and revisions already seen in this context
-      seenValues = valueCache[context] || {} ;
-      seenRevisions = revisionCache[context] || {} ;
-
-      // prepare too loop!
-      ret = false ;
-      currentRevision = this._kvo_revision || 0  ;
-      idx = arguments.length ;
-      while(--idx >= 1) {  // NB: loop only to 1 to ignore context arg.
-        key = arguments[idx];
-
-        // has the kvo revision changed since the last time we did this?
-        if (seenRevisions[key] != currentRevision) {
-          // yes, check the value with the last seen value
-          value = this.get(key) ;
-          if (seenValues[key] !== value) {
-            ret = true ; // did change!
-            seenValues[key] = value;
-          }
-        }
-        seenRevisions[key] = currentRevision;
-      }
-
-      valueCache[context] = seenValues ;
-      revisionCache[context] = seenRevisions ;
-      return ret ;
-    },
-
-    /**
-      Sets the property only if the passed value is different from the
-      current value.  Depending on how expensive a get() is on this property,
-      this may be more efficient.
-
-      NOTE: By default, the set() method will not set the value unless it has
-      changed. However, this check can skipped by setting .property().idempotent(NO)
-      setIfChanged() may be useful in this case.
-
-      @param {String|Hash} key the key to change
-      @param {Object} value the value to change
-      @returns {SC.Observable}
-    */
-    setIfChanged: function(key, value) {
-      if(value === undefined && SC.typeOf(key) === SC.T_HASH) {
-        var hash = key;
-
-        for(key in hash) {
-          if (!hash.hasOwnProperty(key)) continue;
-          this.setIfChanged(key, hash[key]);
         }
 
-        return this;
-      }
-
-      return (this.get(key) !== value) ? this.set(key, value) : this ;
-    },
-
-    /**
-      Navigates the property path, returning the value at that point.
-
-      If any object in the path is undefined, returns undefined.
-      @param {String} path The property path you want to retrieve
-    */
-    getPath: function(path) {
-      var tuple = SC.tupleForPropertyPath(path, this) ;
-      if (tuple === null || tuple[0] === null) return undefined ;
-      return SC.get(tuple[0], tuple[1]) ;
-    },
-
-    /**
-      Navigates the property path, finally setting the value.
-
-      @param {String} path the property path to set
-      @param {Object} value the value to set
-      @returns {SC.Observable}
-    */
-    setPath: function(path, value) {
-      if (path.indexOf('.') >= 0) {
-        var tuple = SC.tupleForPropertyPath(path, this) ;
-        if (!tuple || !tuple[0]) return null ;
-        tuple[0].set(tuple[1], value) ;
-      } else this.set(path, value) ; // shortcut
-      return this;
-    },
-
-    /**
-      Navigates the property path, finally setting the value but only if
-      the value does not match the current value.  This will avoid sending
-      unecessary change notifications.
-
-      @param {String} path the property path to set
-      @param {Object} value the value to set
-      @returns {Object} this
-    */
-    setPathIfChanged: function(path, value) {
-      if (path.indexOf('.') >= 0) {
-        var tuple = SC.tupleForPropertyPath(path, this) ;
-        if (!tuple || !tuple[0]) return null ;
-        if (tuple[0].get(tuple[1]) !== value) {
-          tuple[0].set(tuple[1], value) ;
+        // if there is a default property observer, call that also
+        if (this.propertyObserver) {
+          if (log) SC.Logger.log('%@...firing %@.propertyObserver for key "%@"'.fmt(spaces, this, key));
+          this.propertyObserver(this, key, null, rev);
         }
-      } else this.setIfChanged(path, value) ; // shortcut
-      return this;
-    },
+      } // while(changes.length>0)
 
-    /**
-      Convenience method to get an array of properties.
+      // changes set should be empty. release it for reuse
+      if (changes) changes.destroy() ;
 
-      Pass in multiple property keys or an array of property keys.  This
-      method uses getPath() so you can also pass key paths.
+      // key is no longer needed; clear it to avoid infinite loops
+      key = null ;
 
-      @returns {Array} Values of property keys.
-    */
-    getEach: function() {
-      var keys = SC.A(arguments),
-          ret = [], idx, idxLen;
-      for(idx=0, idxLen = keys.length; idx < idxLen;idx++) {
-        ret[ret.length] = this.getPath(keys[idx]);
-      }
-      return ret ;
-    },
+    } // while (changes)
 
+    // done with loop, reduce change level so that future sets can resume
+    this._kvo_changeLevel = (this._kvo_changeLevel || 1) - 1;
 
-    /**
-      Increments the value of a property.
+    if (log) SC.KVO_SPACES = spaces.slice(0, -2);
 
-      @param {String} key property name
-      @param {Number} increment the amount to increment (optional)
-      @returns {Number} new value of property
-    */
-    incrementProperty: function(key,increment) {
-      if (!increment) increment = 1;
-      this.set(key,(this.get(key) || 0)+increment);
-      return this.get(key) ;
-    },
+    return YES ; // finished successfully
+  },
 
-    /**
-      Decrements the value of a property.
-
-      @param {String} key property name
-      @param {Number} increment the amount to decrement (optional)
-      @returns {Number} new value of property
-    */
-    decrementProperty: function(key,increment) {
-      if (!increment) increment = 1;
-      this.set(key,(this.get(key) || 0) - increment) ;
-      return this.get(key) ;
-    },
-
-    /**
-      Inverts a property.  Property should be a bool.
-
-      @param {String} key property name
-      @param {Object} value optional parameter for "true" value
-      @param {Object} alt optional parameter for "false" value
-      @returns {Object} new value
-    */
-    toggleProperty: function(key,value,alt) {
-      if (value === undefined) value = true ;
-      if (alt === undefined) alt = false ;
-      value = (this.get(key) == value) ? alt : value ;
-      this.set(key,value);
-      return this.get(key) ;
-    },
-
-    /**
-      Convenience method to call propertyWillChange/propertyDidChange.
-
-      Sometimes you need to notify observers that a property has changed value
-      without actually changing this value.  In those cases, you can use this
-      method as a convenience instead of calling propertyWillChange() and
-      propertyDidChange().
-
-      @param {String} key The property key that has just changed.
-      @param {Object} value The new value of the key.  May be null.
-      @returns {SC.Observable}
-    */
-    notifyPropertyChange: function(key, value) {
-      this.propertyWillChange(key) ;
-      this.propertyDidChange(key, value) ;
-      return this;
-    },
-
-    /**
-      Notifies all of observers of a property changes.
-
-      Sometimes when you make a major update to your object, it is cheaper to
-      simply notify all observers that their property might have changed than
-      to figure out specifically which properties actually did change.
-
-      In those cases, you can simply call this method to notify all property
-      observers immediately.  Note that this ignores property groups.
-
-      @returns {SC.Observable}
-    */
-    allPropertiesDidChange: function() {
-      this._kvo_cache = null; //clear cached props
-      this._notifyPropertyObservers('*') ;
-      return this ;
-    },
-
-    /**
-      Allows you to inspect a property for changes. Whenever the named property
-      changes, a log will be printed to the console. This (along with removeProbe)
-      are convenience methods meant for debugging purposes.
-
-      @param {String} key The name of the property you want probed for changes
-    */
-    addProbe: function(key) { this.addObserver(key,SC.logChange); },
-
-    /**
-      Stops a running probe from observing changes to the observer.
-
-      @param {String} key The name of the property you want probed for changes
-    */
-    removeProbe: function(key) { this.removeObserver(key,SC.logChange); },
-
-    /**
-      Logs the named properties to the SC.Logger.
-
-      @param {String...} propertyNames one or more property names
-    */
-    logProperty: function() {
-      var props = SC.$A(arguments),
-          prop, propsLen, idx;
-      for(idx=0, propsLen = props.length; idx<propsLen; idx++) {
-        prop = props[idx] ;
-        SC.Logger.log('%@:%@: '.fmt(SC.guidFor(this), prop), this.get(prop)) ;
-      }
-    },
-
-    propertyRevision: 1
-
-  } ;
-
-  /** @private used by addProbe/removeProbe */
-  SC.logChange = function logChange(target, key, value) {
-    SC.Logger.log("CHANGE: %@[%@] => %@".fmt(target, key, target.get(key)));
-  };
+  // ..........................................
+  // BINDINGS
+  //
 
   /**
-    Retrieves a property from an object, using get() if the
-    object implements SC.Observable.
+    Manually add a new binding to an object.  This is the same as doing
+    the more familiar propertyBinding: 'property.path' approach.
 
-    @param  {Object}  object  the object to query
-    @param  {String}  key the property to retrieve
+    @param {String} toKey the key to bind to
+    @param {Object} target target or property path to bind from
+    @param {String|Function} method method for target to bind from
+    @returns {SC.Binding} new binding instance
   */
-  SC.mixin(SC, {
-    get: function(object, key) {
-      if (!object) return undefined;
-      if (key === undefined) return this[object];
-      if (object.get) return object.get(key);
-      return object[key];
-    },
+  bind: function(toKey, target, method) {
 
-    /**
-      Retrieves a property from an object at a specified path, using get() if
-      the object implements SC.Observable.
+    var binding , pathType;
 
-      @param  {Object}  object  the object to query
-      @param  {String}  path the path to the property to retrieve
-    */
-    getPath: function(object, path) {
-      if (path === undefined) {
-        path = object;
-        object = window;
-      }
-      return SC.objectForPropertyPath(path, object);
+    // normalize...
+    if (method !== undefined) target = [target, method];
+
+    // if a string or array (i.e. tuple) is passed, convert this into a
+    // binding.  If a binding default was provided, use that.
+    pathType = typeof target;
+
+    if (pathType === "string" || (pathType === "object" && (target instanceof Array))) {
+      binding = this[toKey + 'BindingDefault'] || SC.Binding;
+      binding = binding.beget().from(target) ;
+    } else binding = target ;
+
+    // finish configuring the binding and then connect it.
+    binding = binding.to(toKey, this).connect() ;
+    this.bindings.push(binding) ;
+
+    return binding ;
+  },
+
+  /**
+    didChangeFor allows you to determine if a property has changed since the
+    last time the method was called. You must pass a unique context as the
+    first parameter (so didChangeFor can identify which method is calling it),
+    followed by a list of keys that should be checked for changes.
+
+    For example, in your render method you might pass the following context:
+    if (this.didChangeFor('render','height','width')) {
+       // Only render if changed
     }
-  });
 
-  // Make all Array's observable
-  SC.mixin(Array.prototype, SC.Observable) ;
+    In your view's update method, you might instead pass 'update':
+
+    if (this.didChangeFor('update', 'height', 'width')) {
+      // Only update height and width properties
+    }
+
+    This method works by comparing property revision counts. Every time a
+    property changes, an internal counter is incremented. When didChangeFor is
+    invoked, the current revision count of the property is compared to the
+    revision count from the last time this method was called.
+
+    @param {String|Object} context a unique identifier
+    @param {String…} propertyNames one or more property names
+  */
+  didChangeFor: function(context) {
+    var valueCache, revisionCache, seenValues, seenRevisions, ret,
+        currentRevision, idx, key, value;
+    context = SC.hashFor(context) ; // get a hash key we can use in caches.
+
+    // setup caches...
+    valueCache = this._kvo_didChange_valueCache ;
+    if (!valueCache) valueCache = this._kvo_didChange_valueCache = {};
+    revisionCache = this._kvo_didChange_revisionCache;
+    if (!revisionCache) revisionCache=this._kvo_didChange_revisionCache={};
+
+    // get the cache of values and revisions already seen in this context
+    seenValues = valueCache[context] || {} ;
+    seenRevisions = revisionCache[context] || {} ;
+
+    // prepare too loop!
+    ret = false ;
+    currentRevision = this._kvo_revision || 0  ;
+    idx = arguments.length ;
+    while(--idx >= 1) {  // NB: loop only to 1 to ignore context arg.
+      key = arguments[idx];
+
+      // has the kvo revision changed since the last time we did this?
+      if (seenRevisions[key] != currentRevision) {
+        // yes, check the value with the last seen value
+        value = this.get(key) ;
+        if (seenValues[key] !== value) {
+          ret = true ; // did change!
+          seenValues[key] = value;
+        }
+      }
+      seenRevisions[key] = currentRevision;
+    }
+
+    valueCache[context] = seenValues ;
+    revisionCache[context] = seenRevisions ;
+    return ret ;
+  },
+
+  /**
+    Sets the property only if the passed value is different from the
+    current value.  Depending on how expensive a get() is on this property,
+    this may be more efficient.
+
+    NOTE: By default, the set() method will not set the value unless it has
+    changed. However, this check can skipped by setting .property().idempotent(NO)
+    setIfChanged() may be useful in this case.
+
+    @param key {String|Hash} the key to change
+    @param value {Object} the value to change
+    @returns {SC.Observable}
+  */
+  setIfChanged: function(key, value) {
+    if(value === undefined && SC.typeOf(key) === SC.T_HASH) {
+      var hash = key;
+      
+      for(key in hash) {
+        if (!hash.hasOwnProperty(key)) continue;
+        this.setIfChanged(key, hash[key]);
+      }
+      
+      return this;
+    }
+    
+    return (this.get(key) !== value) ? this.set(key, value) : this ;
+  },
+
+  /**
+    Navigates the property path, returning the value at that point.
+
+    If any object in the path is undefined, returns undefined.
+  */
+  getPath: function(path) {
+    var tuple = SC.tupleForPropertyPath(path, this) ;
+    if (tuple === null || tuple[0] === null) return undefined ;
+    return SC.get(tuple[0], tuple[1]) ;
+  },
+
+  /**
+    Navigates the property path, finally setting the value.
+
+    @param path {String} the property path to set
+    @param value {Object} the value to set
+    @returns {SC.Observable}
+  */
+  setPath: function(path, value) {
+    if (path.indexOf('.') >= 0) {
+      var tuple = SC.tupleForPropertyPath(path, this) ;
+      if (!tuple || !tuple[0]) return null ;
+      tuple[0].set(tuple[1], value) ;
+    } else this.set(path, value) ; // shortcut
+    return this;
+  },
+
+  /**
+    Navigates the property path, finally setting the value but only if
+    the value does not match the current value.  This will avoid sending
+    unecessary change notifications.
+
+    @param path {String} the property path to set
+    @param value {Object} the value to set
+    @returns {Object} this
+  */
+  setPathIfChanged: function(path, value) {
+    if (path.indexOf('.') >= 0) {
+      var tuple = SC.tupleForPropertyPath(path, this) ;
+      if (!tuple || !tuple[0]) return null ;
+      if (tuple[0].get(tuple[1]) !== value) {
+        tuple[0].set(tuple[1], value) ;
+      }
+    } else this.setIfChanged(path, value) ; // shortcut
+    return this;
+  },
+
+  /**
+    Convenience method to get an array of properties.
+
+    Pass in multiple property keys or an array of property keys.  This
+    method uses getPath() so you can also pass key paths.
+
+    @returns {Array} Values of property keys.
+  */
+  getEach: function() {
+    var keys = SC.A(arguments),
+        ret = [], idx, idxLen;
+    for(idx=0, idxLen = keys.length; idx < idxLen;idx++) {
+      ret[ret.length] = this.getPath(keys[idx]);
+    }
+    return ret ;
+  },
+
+
+  /**
+    Increments the value of a property.
+
+    @param key {String} property name
+    @param increment {Number} the amount to increment (optional)
+    @returns {Number} new value of property
+  */
+  incrementProperty: function(key,increment) {
+    if (!increment) increment = 1;
+    this.set(key,(this.get(key) || 0)+increment);
+    return this.get(key) ;
+  },
+
+  /**
+    Decrements the value of a property.
+
+    @param key {String} property name
+    @param increment {Number} the amount to decrement (optional)
+    @returns {Number} new value of property
+  */
+  decrementProperty: function(key,increment) {
+    if (!increment) increment = 1;
+    this.set(key,(this.get(key) || 0) - increment) ;
+    return this.get(key) ;
+  },
+
+  /**
+    Inverts a property.  Property should be a bool.
+
+    @param key {String} property name
+    @param value {Object} optional parameter for "true" value
+    @param alt {Object} optional parameter for "false" value
+    @returns {Object} new value
+  */
+  toggleProperty: function(key,value,alt) {
+    if (value === undefined) value = true ;
+    if (alt === undefined) alt = false ;
+    value = (this.get(key) == value) ? alt : value ;
+    this.set(key,value);
+    return this.get(key) ;
+  },
+
+  /**
+    Convenience method to call propertyWillChange/propertyDidChange.
+
+    Sometimes you need to notify observers that a property has changed value
+    without actually changing this value.  In those cases, you can use this
+    method as a convenience instead of calling propertyWillChange() and
+    propertyDidChange().
+
+    @param key {String} The property key that has just changed.
+    @param value {Object} The new value of the key.  May be null.
+    @returns {SC.Observable}
+  */
+  notifyPropertyChange: function(key, value) {
+    this.propertyWillChange(key) ;
+    this.propertyDidChange(key, value) ;
+    return this;
+  },
+
+  /**
+    Notifies all of observers of a property changes.
+
+    Sometimes when you make a major update to your object, it is cheaper to
+    simply notify all observers that their property might have changed than
+    to figure out specifically which properties actually did change.
+
+    In those cases, you can simply call this method to notify all property
+    observers immediately.  Note that this ignores property groups.
+
+    @returns {SC.Observable}
+  */
+  allPropertiesDidChange: function() {
+    this._kvo_cache = null; //clear cached props
+    this._notifyPropertyObservers('*') ;
+    return this ;
+  },
+
+  addProbe: function(key) { this.addObserver(key,SC.logChange); },
+  removeProbe: function(key) { this.removeObserver(key,SC.logChange); },
+
+  /**
+    Logs the named properties to the SC.Logger.
+
+    @param {String...} propertyNames one or more property names
+  */
+  logProperty: function() {
+    var props = SC.$A(arguments),
+        prop, propsLen, idx;
+    for(idx=0, propsLen = props.length; idx<propsLen; idx++) {
+      prop = props[idx] ;
+      SC.Logger.log('%@:%@: '.fmt(SC.guidFor(this), prop), this.get(prop)) ;
+    }
+  },
+
+  propertyRevision: 1
+
+} ;
+
+/** @private used by addProbe/removeProbe */
+SC.logChange = function logChange(target, key, value) {
+  SC.Logger.log("CHANGE: %@[%@] => %@".fmt(target, key, target.get(key)));
+};
+
+/**
+  Retrieves a property from an object, using get() if the
+  object implements SC.Observable.
+
+  @param  {Object}  object  the object to query
+  @param  {String}  key the property to retrieve
+*/
+SC.mixin(SC, {
+  get: function(object, key) {
+    if (!object) return undefined;
+    if (key === undefined) return this[object];
+    if (object.get) return object.get(key);
+    return object[key];
+  }
+});
+
+// Make all Array's observable
+SC.mixin(Array.prototype, SC.Observable) ;
 
 /* >>>>>>>>>> BEGIN source/system/enumerator.js */
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -4432,7 +4310,7 @@ SC.Enumerator = function(enumerableObject) {
   return this ;
 } ;
 
-SC.Enumerator.prototype = /** @scope SC.Enumerator.prototype */{
+SC.Enumerator.prototype = {
 
   /**
     Returns the next object in the enumeration or undefined when complete.
@@ -4517,7 +4395,7 @@ SC.Enumerator._pushContext = function(context) {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -4527,7 +4405,7 @@ sc_require('system/enumerator');
 /*globals Prototype */
 
 /**
-  @class
+  @namespace
 
   This mixin defines the common interface implemented by enumerable objects
   in SproutCore.  Most of these methods follow the standard Array iteration
@@ -4538,8 +4416,7 @@ sc_require('system/enumerator');
   can use any of these methods on simple arrays.  If Array already implements
   one of these methods, the mixin will not override them.
 
-  Writing Your Own Enumerable
-  -----
+  h3. Writing Your Own Enumerable
 
   To make your own custom class enumerable, you need two items:
 
@@ -4550,12 +4427,11 @@ sc_require('system/enumerator');
 
   2. If you must implement nextObject().  See documentation.
 
-  Once you have these two methods implemented, apply the SC.Enumerable mixin
+  Once you have these two methods implement, apply the SC.Enumerable mixin
   to your class and you will be able to enumerate the contents of your object
   like any other collection.
 
-  Using SproutCore Enumeration with Other Libraries
-  -----
+  h3. Using SproutCore Enumeration with Other Libraries
 
   Many other libraries provide some kind of iterator or enumeration like
   facility.  This is often where the most common API conflicts occur.
@@ -4565,12 +4441,12 @@ sc_require('system/enumerator');
 
   @since SproutCore 1.0
 */
-SC.Enumerable = /** @scope SC.Enumerable.prototype */{
+SC.Enumerable = {
 
   /**
     Walk like a duck.
 
-    @type Boolean
+    @property {Boolean}
   */
   isEnumerable: YES,
 
@@ -4600,9 +4476,9 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     The default impementation of this method simply looks up the index.
     This works great on any Array-like objects.
 
-    @param {Number} index the current index of the iteration
-    @param {Object} previousObject the value returned by the last call to nextObject.
-    @param {Object} context a context object you can use to maintain state.
+    @param index {Number} the current index of the iteration
+    @param previousObject {Object} the value returned by the last call to nextObject.
+    @param context {Object} a context object you can use to maintain state.
     @returns {Object} the next object in the iteration or undefined
   */
   nextObject: function(index, previousObject, context) {
@@ -4660,7 +4536,9 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     The callback method you provide should have the following signature (all
     parameters are optional):
 
-          function(item, index, enumerable) ;
+    {{{
+      function(item, index, enumerable) ;
+    }}}
 
     - *item* is the current item in the iteration.
     - *index* is the current index in the iteration
@@ -4670,8 +4548,8 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     object that will be set as "this" on the context.  This is a good way
     to give your iterator function access to the current object.
 
-    @param {Function} callback the callback to execute
-    @param {Object} target the target object to use
+    @params callback {Function} the callback to execute
+    @params target {Object} the target object to use
     @returns {Object} this
   */
   forEach: function(callback, target) {
@@ -4733,7 +4611,9 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     The callback method you provide should have the following signature (all
     parameters are optional):
 
-        function(item, index, enumerable) ;
+    {{{
+      function(item, index, enumerable) ;
+    }}}
 
     - *item* is the current item in the iteration.
     - *index* is the current index in the iteration
@@ -4745,8 +4625,8 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     object that will be set as "this" on the context.  This is a good way
     to give your iterator function access to the current object.
 
-    @param {Function} callback the callback to execute
-    @param {Object} target the target object to use
+    @params callback {Function} the callback to execute
+    @params target {Object} the target object to use
     @returns {Array} The mapped array.
   */
   map: function(callback, target) {
@@ -4771,7 +4651,7 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     Similar to map, this specialized function returns the value of the named
     property on all items in the enumeration.
 
-    @param {String} key name of the property
+    @params key {String} name of the property
     @returns {Array} The mapped array.
   */
   mapProperty: function(key) {
@@ -4788,7 +4668,9 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     The callback method you provide should have the following signature (all
     parameters are optional):
 
-          function(item, index, enumerable) ;
+    {{{
+      function(item, index, enumerable) ;
+    }}}
 
     - *item* is the current item in the iteration.
     - *index* is the current index in the iteration
@@ -4800,8 +4682,8 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     object that will be set as "this" on the context.  This is a good way
     to give your iterator function access to the current object.
 
-    @param {Function} callback the callback to execute
-    @param {Object} target the target object to use
+    @params callback {Function} the callback to execute
+    @params target {Object} the target object to use
     @returns {Array} A filtered array.
   */
   filter: function(callback, target) {
@@ -4862,8 +4744,8 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     can pass an optional second argument with the target value.  Otherwise
     this will match any property that evaluates to true.
 
-    @param {String} key the property to test
-    @param {String} value optional value to test against.
+    @params key {String} the property to test
+    @param value {String} optional value to test against.
     @returns {Array} filtered array
   */
   filterProperty: function(key, value) {
@@ -4891,7 +4773,9 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     The callback method you provide should have the following signature (all
     parameters are optional):
 
-          function(item, index, enumerable) ;
+    {{{
+      function(item, index, enumerable) ;
+    }}}
 
     - *item* is the current item in the iteration.
     - *index* is the current index in the iteration
@@ -4903,8 +4787,8 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     object that will be set as "this" on the context.  This is a good way
     to give your iterator function access to the current object.
 
-    @param {Function} callback the callback to execute
-    @param {Object} target the target object to use
+    @params callback {Function} the callback to execute
+    @params target {Object} the target object to use
     @returns {Object} Found item or null.
   */
   find: function(callback, target) {
@@ -4930,8 +4814,8 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
 
     This method works much like the more generic find() method.
 
-    @param {String} key the property to test
-    @param {String} value optional value to test against.
+    @params key {String} the property to test
+    @param value {String} optional value to test against.
     @returns {Object} found item or null
   */
   findProperty: function(key, value) {
@@ -4957,7 +4841,9 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     The callback method you provide should have the following signature (all
     parameters are optional):
 
-          function(item, index, enumerable) ;
+    {{{
+      function(item, index, enumerable) ;
+    }}}
 
     - *item* is the current item in the iteration.
     - *index* is the current index in the iteration
@@ -4969,12 +4855,14 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     object that will be set as "this" on the context.  This is a good way
     to give your iterator function access to the current object.
 
-    Example Usage:
+    h4. Example Usage
 
-          if (people.every(isEngineer)) { Paychecks.addBigBonus(); }
+    {{{
+      if (people.every(isEngineer)) { Paychecks.addBigBonus(); }
+    }}}
 
-    @param {Function} callback the callback to execute
-    @param {Object} target the target object to use
+    @params callback {Function} the callback to execute
+    @params target {Object} the target object to use
     @returns {Boolean}
   */
   every: function(callback, target) {
@@ -4999,8 +4887,8 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     Returns YES if the passed property resolves to true for all items in the
     enumerable.  This method is often simpler/faster than using a callback.
 
-    @param {String} key the property to test
-    @param {String} value optional value to test against.
+    @params key {String} the property to test
+    @param value {String} optional value to test against.
     @returns {Array} filtered array
   */
   everyProperty: function(key, value) {
@@ -5027,7 +4915,9 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     The callback method you provide should have the following signature (all
     parameters are optional):
 
-          function(item, index, enumerable) ;
+    {{{
+      function(item, index, enumerable) ;
+    }}}
 
     - *item* is the current item in the iteration.
     - *index* is the current index in the iteration
@@ -5039,12 +4929,14 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     object that will be set as "this" on the context.  This is a good way
     to give your iterator function access to the current object.
 
-    Usage Example:
+    h4. Usage Example
 
-          if (people.some(isManager)) { Paychecks.addBiggerBonus(); }
+    {{{
+      if (people.some(isManager)) { Paychecks.addBiggerBonus(); }
+    }}}
 
-    @param {Function} callback the callback to execute
-    @param {Object} target the target object to use
+    @params callback {Function} the callback to execute
+    @params target {Object} the target object to use
     @returns {Array} A filtered array.
   */
   some: function(callback, target) {
@@ -5069,8 +4961,8 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     Returns YES if the passed property resolves to true for any item in the
     enumerable.  This method is often simpler/faster than using a callback.
 
-    @param {String} key the property to test
-    @param {String} value optional value to test against.
+    @params key {String} the property to test
+    @param value {String} optional value to test against.
     @returns {Boolean} YES
   */
   someProperty: function(key, value) {
@@ -5097,7 +4989,9 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     The callback method you provide should have the following signature (all
     parameters are optional):
 
-          function(previousValue, item, index, enumerable) ;
+    {{{
+      function(previousValue, item, index, enumerable) ;
+    }}}
 
     - *previousValue* is the value returned by the last call to the iterator.
     - *item* is the current item in the iteration.
@@ -5114,10 +5008,10 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     pass a target object to set as this for the callback.  It's part of the
     spec. Sorry.
 
-    @param {Function} callback the callback to execute
-    @param {Object} initialValue initial value for the reduce
-    @param {String} reducerProperty internal use only.  May not be available.
-    @returns {Object} The reduced value.
+    @params callback {Function} the callback to execute
+    @params initialValue {Object} initial value for the reduce
+    @params reducerProperty {String} internal use only.  May not be available.
+    @returns {Array} A filtered array.
   */
   reduce: function(callback, initialValue, reducerProperty) {
     if (typeof callback !== "function") throw new TypeError() ;
@@ -5157,8 +5051,8 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     implements it.  This method corresponds to the implementation in
     Prototype 1.6.
 
-    @param {String} methodName the name of the method
-    @param {Object...} args optional arguments to pass as well.
+    @param methodName {String} the name of the method
+    @param args {Object...} optional arguments to pass as well.
     @returns {Array} return values from calling invoke.
   */
   invoke: function(methodName) {
@@ -5195,9 +5089,9 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     a useful way to attempt to apply changes to a collection of objects unless
     or until one fails.
 
-    @param {Object} targetValue the target return value
-    @param {String} methodName the name of the method
-    @param {Object...} args optional arguments to pass as well.
+    @param targetValue {Object} the target return value
+    @param methodName {String} the name of the method
+    @param args {Object...} optional arguments to pass as well.
     @returns {Array} return values from calling invoke.
   */
   invokeWhile: function(targetValue, methodName) {
@@ -5245,7 +5139,7 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     Converts an enumerable into a matrix, with inner arrays grouped based
     on a particular property of the elements of the enumerable.
 
-    @param {String} key the property to test
+    @params key {String} the property to test
     @returns {Array} matrix of arrays
   */
   groupBy: function(key){
@@ -5253,14 +5147,14 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
         ret = [],
         last = null,
         context = SC.Enumerator._popContext(),
-        grouped = [],
+        grouped = [], 
         keyValues = [],
         idx, next, cur;
-
+    
     for(idx=0;idx<len;idx++) {
       next = this.nextObject(idx, last, context) ;
       cur = next ? (next.get ? next.get(key) : next[key]) : null;
-      if(SC.none(grouped[cur])) {
+      if(SC.none(grouped[cur])) { 
         grouped[cur] = []; keyValues.push(cur);
       }
       grouped[cur].push(next);
@@ -5268,9 +5162,9 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     }
     last = null;
     context = SC.Enumerator._pushContext(context);
-
+    
     for(idx=0,len=keyValues.length; idx < len; idx++){
-      ret.push(grouped[keyValues[idx]]);
+      ret.push(grouped[keyValues[idx]]);        
     }
     return ret ;
   }
@@ -5293,8 +5187,7 @@ SC._buildReducerFor = function(reducerKey, reducerProperty) {
   }.property('[]') ;
 };
 
-/** @class */
-SC.Reducers = /** @scope SC.Reducers.prototype */ {
+SC.Reducers = /** @lends SC.Enumerable */ {
   /**
     This property will trigger anytime the enumerable's content changes.
     You can observe this property to be notified of changes to the enumerables
@@ -5322,249 +5215,10 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
     @returns {Object} receiver
   */
   enumerableContentDidChange: function(start, length, delta, addedObjects, removedObjects) {
-    this._setupContentObservers(addedObjects, removedObjects);
+    this._setupEnumerableObservers(addedObjects, removedObjects);
     this.notifyPropertyChange('[]') ;
-    this._notifyEnumerableObservers(addedObjects, removedObjects, start);
-  },
 
-  /**
-    For all registered property chains on this object, removed them from objects
-    being removed from the enumerable, and clone them onto newly added objects.
-
-    @param {Object[]} addedObjects the objects being added to the enumerable
-    @param {Object[]} removedObjects the objected being removed from the enumerable
-    @returns {Object} receiver
-  */
-  setupPropertyChainsForEnumerableContent: function(addedObjects, removedObjects) {
-    var chains = this._kvo_enumerable_property_chains;
-
-    if (chains) {
-      chains.forEach(function(chain) {
-        var idx, len = removedObjects.get('length'),
-            chainGuid = SC.guidFor(chain),
-            clonedChain, item, kvoChainList = '_kvo_enumerable_property_clones';
-
-        chain.notifyPropertyDidChange();
-
-        for (idx = 0; idx < len; idx++) {
-          item = removedObjects[idx];
-          clonedChain = item[kvoChainList][chainGuid];
-          clonedChain.deactivate();
-          delete item[kvoChainList][chainGuid];
-        }
-
-        len = addedObjects.get('length');
-        for (idx = 0; idx < len; idx++) {
-          this._clonePropertyChainToItem(chain, addedObjects[idx]);
-        }
-      }, this);
-    }
     return this ;
-  },
-
-  /**
-    Register a property chain to propagate to enumerable content.
-
-    This will clone the property chain to each item in the enumerable,
-    then save it so that it is automatically set up and torn down when
-    the enumerable content changes.
-
-    @param {String} property the property being listened for on this object
-    @param {SC._PropertyChain} chain the chain to clone to items
-  */
-  registerDependentKeyWithChain: function(property, chain) {
-    // Get the set of all existing property chains that should
-    // be propagated to enumerable contents. If that set doesn't
-    // exist yet, _kvo_for() will create it.
-    var kvoChainList = '_kvo_enumerable_property_chains',
-        chains, item, clone, cloneList;
-
-    chains = this._kvo_for(kvoChainList, SC.CoreSet);
-
-    // Save a reference to the chain on this object. If new objects
-    // are added to the enumerable, we will clone this chain and add
-    // it to the new object.
-    chains.add(chain);
-
-    this.forEach(function(item) {
-      this._clonePropertyChainToItem(chain, item);
-    }, this);
-  },
-
-  /**
-    Clones an SC._PropertyChain to a content item.
-
-    @param {SC._PropertyChain} chain
-    @param {Object} item
-  */
-  _clonePropertyChainToItem: function(chain, item) {
-    var clone        = SC.clone(chain),
-        kvoCloneList = '_kvo_enumerable_property_clones',
-        cloneList;
-
-    clone.object = item;
-
-    cloneList = item[kvoCloneList] = item[kvoCloneList] || {};
-    cloneList[SC.guidFor(chain)] = clone;
-
-    clone.activate(item);
-  },
-
-  /**
-    Removes a dependent key from the enumerable, and tears it down on
-    all content objects.
-
-    @param {String} property
-    @param {SC._PropertyChain} chain
-  */
-  removeDependentKeyWithChain: function(property, chain) {
-    var kvoChainList = '_kvo_enumerable_property_chains',
-        kvoCloneList = '_kvo_enumerable_property_clones',
-        chains, item, clone, cloneList;
-
-    this.forEach(function(item) {
-      item.removeDependentKeyWithChain(property, chain);
-
-      cloneList = item[kvoCloneList];
-      clone = cloneList[SC.guidFor(chain)];
-
-      clone.deactivate(item);
-    }, this);
-  },
-
-  /**
-    Called when the contents of the enumerable mutates.
-
-    Implementers of classes that mixin SC.Enumerable should ensure that they
-    call enumerableContentDidChange(), which invokes this method automatically.
-
-    @param {Array} addedObjects the array of objects that were added to the enumerable
-    @param {Array} removedObjects the array of objects that were removed from the enumerable
-    @param {Number} index the index at which the mutation occurred
-  */
-  _notifyEnumerableObservers: function(addedObjects, removedObjects, index) {
-    var observers, members, member, memberLoc, membersLength;
-    var target, method, context;
-
-    observers = this._kvo_enumerable_observers;
-
-    if (observers) {
-      members = SC.clone(observers.getMembers());
-      membersLength = members.length;
-
-      for(memberLoc=0; memberLoc < membersLength; memberLoc++) {
-        member = members[memberLoc];
-
-        target = member[0];
-        method = member[1];
-        context = member[2];
-
-        method.call(target, addedObjects, removedObjects, index, this, context);
-      }
-    }
-  },
-
-  /**
-    Adds an enumerable observer to the enumerable.
-
-    Enumerable observers are called whenever the enumerable's content
-    mutates. For example, adding an object via pushObject(), or replacing
-    objects via replace(), will cause all enumerable observers to be fired.
-
-    Observer methods that you register should have the following signature:
-
-        enumerableDidChange: function(addedObjects, removedObjects, index, source)
-
-    addedObjects will contain an array of the objects added and removedObjects
-    will contain an array of the objects that were removed. The index parameter
-    contains the index at which the mutation occurred.
-
-    The fourth parameter, source, is the enumerable that mutated. This is useful
-    if you register the same observer method on multiple enumerables.
-
-    If you pass a context parameter to addEnumerableObserver(), it will be
-    included when the observer is fired:
-
-        function(addedObjects, removedObjects, sender, context);
-
-    @param {Object} target the target object to invoke
-    @param {String|Function} method the method to invoke
-    @param {Object} context optional context
-
-    @returns {SC.Object} self
-  */
-  addEnumerableObserver: function(target, method, context) {
-    var observers;
-
-    // Normalize parameters. If a function is passed as
-    // target, make it the method.
-    if (method === undefined) {
-      method = target;
-      target = this;
-    }
-
-    // Call the observer in the context of the enumerable
-    // if no explicit target is given.
-    if (!target) { target = this; }
-
-    // If the method is provided as a string, look it up on
-    // the target.
-    if (typeof method === "string") {
-      method = target[method];
-    }
-
-    if (!method) {
-      throw "You must pass a method to addEnumerableObserver()";
-    }
-
-    observers = this._kvo_for('_kvo_enumerable_observers', SC.ObserverSet);
-    observers.add(target, method, context);
-
-    return this;
-  },
-
-  /**
-    Removes an enumerable observer. Expects the same target and method that
-    were used to register the observer.
-
-    @param {Object} target the target object to invoke
-    @param {String|Function} method the method to invoke
-
-    @returns {SC.Object} self
-  */
-  removeEnumerableObserver: function(target, method) {
-    var observers;
-
-    // Normalize parameters. If a function is passed as
-    // target, make it the method.
-    if (method === undefined) {
-      method = target;
-      target = this;
-    }
-
-    // Call the observer in the context of the enumerable
-    // if no explicit target is given.
-    if (!target) { target = this; }
-
-    // If the method is provided as a string, look it up on
-    // the target.
-    if (typeof method === "string") {
-      method = target[method];
-    }
-
-    if (!method) {
-      throw "You must pass a method to removeEnumerableObserver()";
-    }
-
-    observers = this._kvo_enumerable_observers;
-
-    if (observers) {
-      observers.remove(target, method);
-    } else {
-      throw "%@: Can't remove observers if no observer has been added.";
-    }
-
-    return this;
   },
 
   /**
@@ -5573,7 +5227,6 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
     Clones a segment of an observer chain and applies it
     to an element of this Enumerable.
 
-    @param {Object} item The element
     @param {SC._ChainObserver} chainObserver the chain segment to begin from
   */
   _resumeChainObservingForItemWithChainObserver: function(item, chainObserver) {
@@ -5594,7 +5247,7 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
 
     // Maintain a list of observers on the item so we can remove them
     // if it is removed from the enumerable.
-    item._kvo_for(SC.keyFor('_kvo_content_observers', key)).push(observer);
+    item._kvo_for(SC.keyFor('_kvo_enumerable_observers', key)).push(observer);
   },
 
   /**
@@ -5607,43 +5260,31 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
     @param {Array} addedObjects the array of objects that have been added
     @param {Array} removedObjects the array of objects that have been removed
   */
-  _setupContentObservers: function(addedObjects, removedObjects) {
+  _setupEnumerableObservers: function(addedObjects, removedObjects) {
     if (!addedObjects) { addedObjects = this; }
     if (!removedObjects) { removedObjects = []; }
 
-    // Check the last values passed and skip this step if they are
-    // the same.
-    //
-    // TODO: This is obviously a suboptimal workaround to the fact that
-    // enumerableContentDidChange can get called twice when implementing
-    // SC.ArrayController. We should revisit how enumerableContentDidChange
-    // works in that context. --TD
-    var lastAdded = this._lastAdded;
-    var lastRemoved = this._lastRemoved;
-
-    if(lastAdded === addedObjects) { addedObjects = []; }
-    if(lastRemoved === removedObjects) { removedObjects = []; }
-
-    this._lastAdded = addedObjects;
-    this._lastRemoved = removedObjects;
-
-    var observedKeys = this._kvo_for('_kvo_content_observed_keys', SC.CoreSet);
+    var observedKeys = this._kvo_for('_kvo_enumerable_observed_keys', SC.CoreSet);
     var kvoKey;
 
     // Only setup and teardown enumerable observers if we have keys to observe
     if (observedKeys.get('length') > 0) {
+      // Loop through removed objects and remove any enumerable observers that
+      // belong to them.
+      removedObjects.forEach(function(item) {
+        item._kvo_for('_kvo_enumerable_observers').forEach(function(observer) {
+          // Remove the observer if it is pointing at this enumerable.
+          // If the observer belongs to another enumerable, just ignore it.
+          if (observer.object === this) {
+            item.removeObserver(observer.key, observer, observer.propertyDidChange);
+          }
+        });
+      });
 
       // added and resume the chain observer.
       observedKeys.forEach(function(key) {
-        kvoKey = SC.keyFor('_kvo_content_observers', key);
+        kvoKey = SC.keyFor('_kvo_enumerable_observers', key);
 
-        // Loop through removed objects and remove any enumerable observers that
-        // belong to them.
-        removedObjects.forEach(function(item) {
-          item._kvo_for(kvoKey).forEach(function(observer) {
-            observer.destroyChain();
-          }, this);
-        }, this);
         var lastObserver;
 
         // Get all original ChainObservers associated with the key
@@ -5671,61 +5312,28 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
   /**
     @private
 
-    Adds a content observer. Content observers are able to
+    Adds an enumerable observer. Enumerable observers are able to
     propagate chain observers to each member item in the enumerable,
     so that the observer is fired whenever a single item changes.
 
     You should never call this method directly. Instead, you should
-    call addObserver() with the special '@each' property in the path.
+    call addObserver() with the special '[]' property in the path.
 
     For example, if you wanted to observe changes to each item's isDone
     property, you could call:
 
-        arrayController.addObserver('@each.isDone');
-
-    @param {SC._ChainObserver} chainObserver the chain observer to propagate
+        arrayController.addObserver('[].isDone');
   */
-  _addContentObserver: function(chainObserver) {
-    var key = chainObserver.next.property;
-
+  addEnumerableObserver: function(key, target, action) {
     // Add the key to a set so we know what we are observing
-    this._kvo_for('_kvo_content_observed_keys', SC.CoreSet).push(key);
+    this._kvo_for('_kvo_enumerable_observed_keys', SC.CoreSet).push(key);
 
     // Add the passed ChainObserver to an ObserverSet for that key
-    var kvoKey = SC.keyFor('_kvo_content_observers', key);
-    this._kvo_for(kvoKey).push(chainObserver);
+    var kvoKey = SC.keyFor('_kvo_enumerable_observers', key);
+    this._kvo_for(kvoKey).push(target);
 
     // set up chained observers on the initial content
-    this._setupContentObservers(this);
-  },
-
-  /**
-    @private
-
-    Removes a content observer. Pass the same chain observer
-    that was used to add the content observer.
-
-    @param {SC._ChainObserver} chainObserver the chain observer to propagate
-  */
-
-  _removeContentObserver: function(chainObserver) {
-    var observers, kvoKey;
-    var observedKeys = this._kvo_content_observed_keys;
-    var key = chainObserver.next.property;
-
-    if (observedKeys.contains(key)) {
-
-      kvoKey = SC.keyFor('_kvo_content_observers', key);
-      observers = this._kvo_for(kvoKey);
-
-      observers.removeObject(chainObserver);
-
-      this._setupContentObservers([], this);
-
-      if (observers.length === 0) {
-        this._kvo_for('_kvo_content_observed_keys').remove(key);
-      }
-    }
+    this._setupEnumerableObservers(this);
   },
 
   /**
@@ -5741,19 +5349,24 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
     property.  You can call this at the top of your unknownProperty handler
     like so:
 
+    {{{
       unknownProperty: function(key, value) {
         var ret = this.handleReduceProperty(key, value) ;
         if (ret === undefined) {
           // process like normal
         }
       }
+    }}}
 
-    @param {String} key the reduce property key
+    @param {String} key
+      the reduce property key
 
-    @param {Object} value a value or undefined.
+    @param {Object} value
+      a value or undefined.
 
-    @param {Boolean} generateProperty only set to false if you do not want
-      an optimized computed property handler generated for this.  Not common.
+    @param {Boolean} generateProperty
+      only set to false if you do not want an optimized computed property
+      handler generated for this.  Not common.
 
     @returns {Object} the reduced property or undefined
   */
@@ -5800,13 +5413,6 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
 
   /**
     Reducer for @max reduced property.
-
-    @param {Object} previousValue The previous value in the enumerable
-    @param {Object} item The current value in the enumerable
-    @param {Number} index The index of the current item in the enumerable
-    @param {String} reducerProperty (Optional) The property in the enumerable being reduced
-
-    @returns {Object} reduced value
   */
   reduceMax: function(previousValue, item, index, e, reducerProperty) {
     if (reducerProperty && item) {
@@ -5817,16 +5423,7 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
   },
 
   /**
-    Reduces an enumberable to the max of the items in the enumerable. If
-    reducerProperty is passed, it will reduce that property. Otherwise, it will
-    reduce the item itself.
-
-    @param {Object} previousValue The previous value in the enumerable
-    @param {Object} item The current value in the enumerable
-    @param {Number} index The index of the current item in the enumerable
-    @param {String} reducerProperty (Optional) The property in the enumerable being reduced
-
-    @returns {Object} reduced value
+    Reducer for @maxObject reduced property.
   */
   reduceMaxObject: function(previousItem, item, index, e, reducerProperty) {
 
@@ -5847,16 +5444,7 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
   },
 
   /**
-    Reduces an enumberable to the min of the items in the enumerable. If
-    reducerProperty is passed, it will reduce that property. Otherwise, it will
-    reduce the item itself.
-
-    @param {Object} previousValue The previous value in the enumerable
-    @param {Object} item The current value in the enumerable
-    @param {Number} index The index of the current item in the enumerable
-    @param {String} reducerProperty (Optional) The property in the enumerable being reduced
-
-    @returns {Object} reduced value
+    Reducer for @min reduced property.
   */
   reduceMin: function(previousValue, item, index, e, reducerProperty) {
     if (reducerProperty && item) {
@@ -5867,16 +5455,7 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
   },
 
   /**
-    Reduces an enumberable to the max of the items in the enumerable. If
-    reducerProperty is passed, it will reduce that property. Otherwise, it will
-    reduce the item itself.
-
-    @param {Object} previousValue The previous value in the enumerable
-    @param {Object} item The current value in the enumerable
-    @param {Number} index The index of the current item in the enumerable
-    @param {String} reducerProperty (Optional) The property in the enumerable being reduced
-
-    @returns {Object} reduced value
+    Reducer for @maxObject reduced property.
   */
   reduceMinObject: function(previousItem, item, index, e, reducerProperty) {
 
@@ -5897,16 +5476,7 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
   },
 
   /**
-    Reduces an enumberable to the average of the items in the enumerable. If
-    reducerProperty is passed, it will reduce that property. Otherwise, it will
-    reduce the item itself.
-
-    @param {Object} previousValue The previous value in the enumerable
-    @param {Object} item The current value in the enumerable
-    @param {Number} index The index of the current item in the enumerable
-    @param {String} reducerProperty (Optional) The property in the enumerable being reduced
-
-    @returns {Object} reduced value
+    Reducer for @average reduced property.
   */
   reduceAverage: function(previousValue, item, index, e, reducerProperty) {
     if (reducerProperty && item) {
@@ -5919,16 +5489,7 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
   },
 
   /**
-    Reduces an enumberable to the sum of the items in the enumerable. If
-    reducerProperty is passed, it will reduce that property. Otherwise, it will
-    reduce the item itself.
-
-    @param {Object} previousValue The previous value in the enumerable
-    @param {Object} item The current value in the enumerable
-    @param {Number} index The index of the current item in the enumerable
-    @param {String} reducerProperty (Optional) The property in the enumerable being reduced
-
-    @returns {Object} reduced value
+    Reducer for @sum reduced property.
   */
   reduceSum: function(previousValue, item, index, e, reducerProperty) {
     if (reducerProperty && item) {
@@ -5991,23 +5552,23 @@ Array.prototype.isEnumerable = YES ;
     groupBy: function(key) {
       var len = this.length,
           ret = [],
-          grouped = [],
+          grouped = [], 
           keyValues = [],
           idx, next, cur;
-
+      
       for(idx=0;idx<len;idx++) {
         next = this[idx] ;
         cur = next ? (next.get ? next.get(key) : next[key]) : null;
         if(SC.none(grouped[cur])){ grouped[cur] = []; keyValues.push(cur); }
         grouped[cur].push(next);
       }
-
+      
       for(idx=0,len=keyValues.length; idx < len; idx++){
-        ret.push(grouped[keyValues[idx]]);
+        ret.push(grouped[keyValues[idx]]);        
       }
       return ret ;
     },
-
+    
     find: function(callback, target) {
       if (typeof callback !== "function") throw new TypeError() ;
       var len = this.length ;
@@ -6262,7 +5823,7 @@ Array.prototype.isEnumerable = YES ;
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -6281,7 +5842,7 @@ Array.prototype.isEnumerable = YES ;
 
   @since SproutCore 1.0
 */
-SC.RangeObserver = /** @scope SC.RangeObserver.prototype */{
+SC.RangeObserver = {
 
   /**
     Walk like a duck.
@@ -6355,7 +5916,6 @@ SC.RangeObserver = /** @scope SC.RangeObserver.prototype */{
     new objects instead.
 
     @param {SC.Array} source the source array
-    @param {SC.IndexSet} indexSet The index set representing the change
     @returns {SC.RangeObserver} receiver
   */
   update: function(source, indexSet) {
@@ -6513,8 +6073,6 @@ SC.RangeObserver = /** @scope SC.RangeObserver.prototype */{
 
     @param {Object} the object that changed
     @param {String} key the property that changed
-    @param {Null} value No longer used
-    @param {Number} rev The revision of the change
     @returns {SC.RangeObserver} receiver
   */
   objectPropertyDidChange: function(object, key, value, rev) {
@@ -6537,7 +6095,7 @@ SC.RangeObserver = /** @scope SC.RangeObserver.prototype */{
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -6581,11 +6139,10 @@ SC.OUT_OF_RANGE_EXCEPTION = "Index out of range" ;
   @extends SC.Enumerable
   @since SproutCore 0.9.0
 */
-SC.Array = /** @scope SC.Array.prototype */{
+SC.Array = {
 
   /**
     Walk like a duck - use isSCArray to avoid conflicts
-    @type Boolean
   */
   isSCArray: YES,
 
@@ -6601,9 +6158,6 @@ SC.Array = /** @scope SC.Array.prototype */{
     This is one of the primitves you must implement to support SC.Array.  You
     should replace amt objects started at idx with the objects in the passed
     array.  You should also call this.enumerableContentDidChange() ;
-
-    NOTE: JavaScript arrays already implement SC.Array and 
-    calls this.enumerableContentDidChange.
 
     @param {Number} idx
       Starting index in the array to replace.  If idx >= length, then append to
@@ -6739,10 +6293,6 @@ SC.Array = /** @scope SC.Array.prototype */{
   /**
     Push the object onto the end of the array.  Works just like push() but it
     is KVO-compliant.
-    
-    @param {Object} object the objects to push
-        
-    @return {Object} The passed object
   */
   pushObject: function(obj) {
     this.insertAt(this.get('length'), obj) ;
@@ -6767,8 +6317,6 @@ SC.Array = /** @scope SC.Array.prototype */{
   /**
     Pop object from array or nil if none are left.  Works just like pop() but
     it is KVO-compliant.
-    
-    @return {Object} The popped object
   */
   popObject: function() {
     var len = this.get('length') ;
@@ -6782,8 +6330,6 @@ SC.Array = /** @scope SC.Array.prototype */{
   /**
     Shift an object from start of array or nil if none are left.  Works just
     like shift() but it is KVO-compliant.
-        
-    @return {Object} The shifted object
   */
   shiftObject: function() {
     if (this.get('length') === 0) return null ;
@@ -6795,9 +6341,6 @@ SC.Array = /** @scope SC.Array.prototype */{
   /**
     Unshift an object to start of array.  Works just like unshift() but it is
     KVO-compliant.
-        
-    @param {Object} obj the object to add
-    @return {Object} The passed object
   */
   unshiftObject: function(obj) {
     this.insertAt(0, obj) ;
@@ -6820,10 +6363,7 @@ SC.Array = /** @scope SC.Array.prototype */{
   },
 
   /**
-    Compares each item in the passed array to this one. 
-    
-    @param {Array} ary The array you want to compare to
-    @returns {Boolean} true if they are equal.
+    Compares each item in the array.  Returns true if they are equal.
   */
   isEqual: function(ary) {
     if (!ary) return false ;
@@ -6842,7 +6382,7 @@ SC.Array = /** @scope SC.Array.prototype */{
     Generates a new array with the contents of the old array, sans any null
     values.
 
-    @returns {Array} The new, compact array
+    @returns {Array}
   */
   compact: function() { return this.without(null); },
 
@@ -6850,8 +6390,8 @@ SC.Array = /** @scope SC.Array.prototype */{
     Generates a new array with the contents of the old array, sans the passed
     value.
 
-    @param {Object} value The value you want to be removed
-    @returns {Array} The new, filtered array
+    @param {Object} value
+    @returns {Array}
   */
   without: function(value) {
     if (this.indexOf(value)<0) return this; // value not present.
@@ -6866,7 +6406,7 @@ SC.Array = /** @scope SC.Array.prototype */{
     Generates a new array with only unique values from the contents of the
     old array.
 
-    @returns {Array} The new, de-duped array
+    @returns {Array}
   */
   uniq: function() {
     var ret = [] ;
@@ -6920,7 +6460,9 @@ SC.Array = /** @scope SC.Array.prototype */{
 
     The callback for a range observer should have the signature:
 
-          function rangePropertyDidChange(array, objects, key, indexes, context)
+    {{{
+      function rangePropertyDidChange(array, objects, key, indexes, context)
+    }}}
 
     If the passed key is '[]' it means that the object itself changed.
 
@@ -7036,14 +6578,9 @@ SC.Array = /** @scope SC.Array.prototype */{
       changes.add(start, length);
     }
 
-    this._setupContentObservers(addedObjects, removedObjects);
+    this._setupEnumerableObservers(addedObjects, removedObjects);
     this.notifyPropertyChange('[]') ;
     this.endPropertyChanges();
-
-    // Only notify enumerable observers if we have enough information to do so.
-    if (addedObjects && removedObjects) {
-      this._notifyEnumerableObservers(addedObjects, removedObjects, start);
-    }
 
     return this ;
   },
@@ -7076,9 +6613,6 @@ SC.Array = SC.mixin({}, SC.Enumerable, SC.Array) ;
   Returns a new array that is a slice of the receiver.  This implementation
   uses the observable array methods to retrieve the objects for the new
   slice.
-  
-  If you don't pass in beginIndex and endIndex, it will act as a copy of the
-  array.
 
   @param beginIndex {Integer} (Optional) index to begin slicing from.
   @param endIndex {Integer} (Optional) index to end the slice at.
@@ -7165,7 +6699,6 @@ if (!Array.prototype.lastIndexOf) {
       // replaced range.  Otherwise, pass the full remaining array length
       // since everything has shifted
       var len = objects ? (objects.get ? objects.get('length') : objects.length) : 0;
-      objects = SC.isArray(objects) ? objects : [objects];
       this.enumerableContentDidChange(idx, amt, len - amt, objects, removedObjects) ;
       return this ;
     },
@@ -7182,15 +6715,10 @@ if (!Array.prototype.lastIndexOf) {
 
   });
 
+  // If browser did not implement indexOf natively, then override with
+  // specialized version
   var indexOf = Array.prototype.indexOf;
   if (!indexOf || (indexOf === SC.Array.indexOf)) {
-    /**
-      Returns the index for a particular object in the index.
-
-      @param {Object} object the item to search for
-      @param {NUmber} startAt optional starting location to search, default 0
-      @returns {Number} index of -1 if not found
-    */
     Array.prototype.indexOf = function(object, startAt) {
       var idx, len = this.length;
 
@@ -7207,13 +6735,6 @@ if (!Array.prototype.lastIndexOf) {
 
   var lastIndexOf = Array.prototype.lastIndexOf ;
   if (!lastIndexOf || (lastIndexOf === SC.Array.lastIndexOf)) {
-    /**
-      Returns the last index for a particular object in the index.
-
-      @param {Object} object the item to search for
-      @param {NUmber} startAt optional starting location to search, default 0
-      @returns {Number} index of -1 if not found
-    */
     Array.prototype.lastIndexOf = function(object, startAt) {
       var idx, len = this.length;
 
@@ -7234,12 +6755,12 @@ if (!Array.prototype.lastIndexOf) {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
 /**
-  @class
+  @namespace
 
   Implements some standard methods for comparing objects. Add this mixin to
   any class you create that can compare its instances.
@@ -7260,15 +6781,12 @@ SC.Comparable = {
   /**
     Override to return the result of the comparison of the two parameters. The
     compare method should return
-    
-    <pre>
       -1 if a < b
        0 if a == b
        1 if a > b
-    </pre>
 
-
-    Default implementation raises an exception.
+    Default implementation raises
+    an exception.
 
     @param a {Object} the first object to compare
     @param b {Object} the second object to compare
@@ -7284,12 +6802,12 @@ SC.Comparable = {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
 /**
-  @class
+  @namespace
 
   Impelements some standard methods for copying an object.  Add this mixin to
   any object you create that can create a copy of itself.  This mixin is
@@ -7302,7 +6820,7 @@ SC.Comparable = {
 
   @since SproutCore 1.0
 */
-SC.Copyable = /** @scope SC.Copyable.prototype */{
+SC.Copyable = {
 
   /**
     Walk like a duck.  Indicates that the object can be copied.
@@ -7345,13 +6863,6 @@ SC.Copyable = /** @scope SC.Copyable.prototype */{
 
 // Make Array copyable
 SC.mixin(Array.prototype, SC.Copyable);
-/**
-  Override to return a copy of the receiver.  Default implementation raises
-  an exception.
-
-  @param deep {Boolean} if true, a deep copy of the object should be made
-  @returns {Object} copy of receiver
-*/
 Array.prototype.copy = function(deep) {
 	var ret = this.slice(), idx;
 	if (deep) {
@@ -7365,7 +6876,7 @@ Array.prototype.copy = function(deep) {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -7378,14 +6889,13 @@ Array.prototype.copy = function(deep) {
 SC.FROZEN_ERROR = new Error("Cannot modify a frozen object");
 
 /**
-  @class
+  @namespace
 
   The SC.Freezable mixin implements some basic methods for marking an object
   as frozen.  Once an object is frozen it should be read only.  No changes
   may be made the internal state of the object.
 
-  Enforcement
-  ---
+  h2. Enforcement
 
   To fully support freezing in your subclass, you must include this mixin and
   override any method that might alter any property on the object to instead
@@ -7399,42 +6909,44 @@ SC.FROZEN_ERROR = new Error("Cannot modify a frozen object");
   change.  It is, therefore, very important that you always respect the
   isFrozen property on all freezable objects.
 
-  Example
+  h2. Example
 
   The example below shows a simple object that implement the SC.Freezable
   protocol.
 
-        Contact = SC.Object.extend(SC.Freezable, {
+  {{{
+    Contact = SC.Object.extend(SC.Freezable, {
 
-          firstName: null,
+      firstName: null,
 
-          lastName: null,
+      lastName: null,
 
-          // swaps the names
-          swapNames: function() {
-            if (this.get('isFrozen')) throw SC.FROZEN_ERROR;
-            var tmp = this.get('firstName');
-            this.set('firstName', this.get('lastName'));
-            this.set('lastName', tmp);
-            return this;
-          }
+      // swaps the names
+      swapNames: function() {
+        if (this.get('isFrozen')) throw SC.FROZEN_ERROR;
+        var tmp = this.get('firstName');
+        this.set('firstName', this.get('lastName'));
+        this.set('lastName', tmp);
+        return this;
+      }
 
-        });
+    });
 
-        c = Context.create({ firstName: "John", lastName: "Doe" });
-        c.swapNames();  => returns c
-        c.freeze();
-        c.swapNames();  => EXCEPTION
+    c = Context.create({ firstName: "John", lastName: "Doe" });
+    c.swapNames();  => returns c
+    c.freeze();
+    c.swapNames();  => EXCEPTION
 
-  Copying
-  ---
+  }}}
+
+  h2. Copying
 
   Usually the SC.Freezable protocol is implemented in cooperation with the
   SC.Copyable protocol, which defines a frozenCopy() method that will return
   a frozen object, if the object implements this method as well.
 
 */
-SC.Freezable = /** @scope SC.Freezable.prototype */ {
+SC.Freezable = {
 
   /**
     Walk like a duck.
@@ -7476,7 +6988,7 @@ SC.mixin(Array.prototype, SC.Freezable);
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -7748,7 +7260,7 @@ SC.Set = SC.mixin({},
 
     If the object is already in the set it will not be added again.
 
-    @param {Object} obj the object to add
+    @param obj {Object} the object to add
     @returns {SC.Set} receiver
   */
   add: function(obj) {
@@ -7779,7 +7291,6 @@ SC.Set = SC.mixin({},
   /**
     Add all the items in the passed array or enumerable
 
-    @param {Array} objects
     @returns {SC.Set} receiver
   */
   addEach: function(objects) {
@@ -7809,7 +7320,7 @@ SC.Set = SC.mixin({},
 
     If the object is not in the set, nothing will be changed.
 
-    @param {Object} obj the object to remove
+    @param obj {Object} the object to remove
     @returns {SC.Set} receiver
   */
   remove: function(obj) {
@@ -7865,7 +7376,6 @@ SC.Set = SC.mixin({},
   /**
     Removes all the items in the passed array.
 
-    @param {Array} objects
     @returns {SC.Set} receiver
   */
   removeEach: function(objects) {
@@ -8016,7 +7526,7 @@ SC.CoreSet.constructor = SC.CoreSet;
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -8039,7 +7549,6 @@ sc_require('system/set');
   Whenever the observer fires, the queue will be flushed to connect any
   pending observers.
 
-  @private
   @since SproutCore 1.0
 */
 SC.Observers = {
@@ -8197,7 +7706,7 @@ SC.Observers = {
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -8262,6 +7771,7 @@ SC._detect_base = function _detect_base(func, parent, name) {
 */
 SC._object_extend = function _object_extend(base, ext, proto) {
   if (!ext) { throw "SC.Object.extend expects a non-null value.  Did you forget to 'sc_require' something?  Or were you passing a Protocol to extend() as if it were a mixin?"; }
+
   // set _kvo_cloned for later use
   base._kvo_cloned = null;
 
@@ -8314,15 +7824,6 @@ SC._object_extend = function _object_extend(base, ext, proto) {
 
     // Possibly add to a bindings.
     if (key.length > 7 && key.slice(-7) === "Binding") {
-      // Properties MUST be established before a binding can be made from them.
-      // We won't slow things down by checking in production, but in dev, give a warning.
-      
-      var bindPropertyKey = key.substr(0, key.length - 7);
-      if (ext[bindPropertyKey] === undefined && base[bindPropertyKey] === undefined) {
-        SC.Logger.warn("Uninitialized property '%@'. '%@' will not work as expected.".fmt(bindPropertyKey, key));
-      }
-      
-
       if (!clonedBindings) {
         bindings = (bindings || SC.EMPTY_ARRAY).slice() ;
         clonedBindings = YES ;
@@ -8382,7 +7883,7 @@ SC._object_extend = function _object_extend(base, ext, proto) {
       }
 
       if (value.isEnhancement) {
-        value = SC._enhance(base[key] || K, value);
+        value = SC._enhance(base[key], value);
       }
     }
 
@@ -8421,7 +7922,7 @@ SC._enhance = function(originalFunction, enhancement) {
     args.unshift(function() { return originalFunction.apply(self, arguments); });
     return enhancement.apply(this, args);
   };
-};
+}
 
 /** @class
 
@@ -8435,15 +7936,13 @@ SC._enhance = function(originalFunction, enhancement) {
   own, you should read this documentation to learn some of the details of
   how SC.Object's behave and how they differ from other frameworks.
 
-  About SproutCore Classes
-  ===
+  h2. About SproutCore Classes
 
   JavaScript is not a class-based language.  Instead it uses a type of
   inheritence inspired by self called "prototypical" inheritance.
   ...
 
-  Using SproutCore objects with other JavaScript object.
-  ===
+  h2. Using SproutCore objects with other JavaScript object.
 
   You can create a SproutCore object just like any other object...
   obj = new SC.Object() ;
@@ -8465,7 +7964,7 @@ SC.mixin(SC.Object, /** @scope SC.Object */ {
 
     This is a shorthand for calling SC.mixin(MyClass, props...);
 
-    @param {Hash} props the properties you want to add.
+    @params {Hash} props the properties you want to add.
     @returns {Object} receiver
   */
   mixin: function(props) {
@@ -8482,7 +7981,7 @@ SC.mixin(SC.Object, /** @scope SC.Object */ {
     Points to the superclass for this class.  You can use this to trace a
     class hierarchy.
 
-    @type SC.Object
+    @property {SC.Object}
   */
   superclass: null,
 
@@ -8492,14 +7991,14 @@ SC.mixin(SC.Object, /** @scope SC.Object */ {
     when you plan to create several objects based on a class with similar
     properties.
 
-    Init:
+    h2. Init
 
     If you define an init() method, it will be called when you create
     instances of your new class.  Since SproutCore uses the init() method to
     do important setup, you must be sure to always call arguments.callee.base.apply(this,arguments) somewhere
     in your init() to allow the normal setup to proceed.
 
-    @param {Hash} props the methods of properties you want to add
+    @params {Hash} props the methods of properties you want to add
     @returns {Class} A new object class
   */
   extend: function(props) {
@@ -8574,7 +8073,7 @@ SC.mixin(SC.Object, /** @scope SC.Object */ {
   /**
     Walk like a duck.  You can use this to quickly test classes.
 
-    @type Boolean
+    @property {Boolean}
   */
   isClass: YES,
 
@@ -8582,7 +8081,7 @@ SC.mixin(SC.Object, /** @scope SC.Object */ {
     Set of subclasses that extend from this class.  You can observe this
     array if you want to be notified when the object is extended.
 
-    @type SC.Set
+    @property {SC.Set}
   */
   subclasses: SC.Set.create(),
 
@@ -8598,13 +8097,15 @@ SC.mixin(SC.Object, /** @scope SC.Object */ {
     receiver is the class passed, this will return NO since the class is not
     a subclass of itself.  See also kindOf().
 
-    Example:
+    h2. Example
 
-          ClassA = SC.Object.extend();
-          ClassB = ClassA.extend();
+    {{{
+      ClassA = SC.Object.extend();
+      ClassB = ClassA.extend();
 
-          ClassB.subclassOf(ClassA) => YES
-          ClassA.subclassOf(ClassA) => NO
+      ClassB.subclassOf(ClassA) => YES
+      ClassA.subclassOf(ClassA) => NO
+    }}}
 
     @param {Class} scClass class to compare
     @returns {Boolean}
@@ -8633,13 +8134,15 @@ SC.mixin(SC.Object, /** @scope SC.Object */ {
     pass the receiver itself, since class is a kind of itself.  See also
     subclassOf().
 
-    Example:
+    h2. Example
 
-          ClassA = SC.Object.extend();
-          ClassB = ClassA.extend();
+    {{{
+      ClassA = SC.Object.extend();
+      ClassB = ClassA.extend();
 
-          ClassB.kindOf(ClassA) => YES
-          ClassA.kindOf(ClassA) => YES
+      ClassB.kindOf(ClassA) => YES
+      ClassA.kindOf(ClassA) => YES
+    }}}
 
     @param {Class} scClass class to compare
     @returns {Boolean}
@@ -8660,13 +8163,7 @@ SC.mixin(SC.Object, /** @scope SC.Object */ {
     @function
   */
   design: function() {
-    if (this.isDesign) {
-      //@ if (debug)
-      SC.Logger.warn("SC.Object#design called twice for %@.".fmt(this));
-      //@ endif
-      return this;
-    }
-
+    if (this.isDesign) return this; // only run design one time
     var ret = this.extend.apply(this, arguments);
     ret.isDesign = YES ;
     if (SC.ObjectDesigner) {
@@ -8715,23 +8212,25 @@ SC.Object.prototype = {
     the inherited init method from SC.Object or else your instance may not
     function properly.
 
-    Example:
+    h2. Example
 
-          // dynamically apply a mixin specified in an object property
-          var MyClass = SC.Object.extend({
-             extraMixin: null,
+    {{{
+      // dynamically apply a mixin specified in an object property
+      var MyClass = SC.Object.extend({
+         extraMixin: null,
 
-             init: function() {
-               this.mixin(this.extraMixin);
-               arguments.callee.base.apply(this,arguments);
-             }
-          });
+         init: function() {
+           this.mixin(this.extraMixin);
+           arguments.callee.base.apply(this,arguments);
+         }
+      });
 
-          var ExampleMixin = { foo: "bar" };
+      var ExampleMixin = { foo: "bar" };
 
-          var instance = MyClass.create({ extraMixin: ExampleMixin }) ;
+      var instance = MyClass.create({ extraMixin: ExampleMixin }) ;
 
-          instance.get('foo') => "bar"
+      instance.get('foo') => "bar"
+    }}}
 
     @param {Hash} ext a hash to copy.  Only one.
     @returns {Object} receiver
@@ -8760,7 +8259,7 @@ SC.Object.prototype = {
     Although the default init() method returns the receiver, the return
     value is ignored.
 
-    
+    @returns {void}
   */
   init: function() {
     this.initObservable();
@@ -8770,7 +8269,7 @@ SC.Object.prototype = {
   /**
     Set to NO once this object has been destroyed.
 
-    @type Boolean
+    @property {Boolean}
   */
   isDestroyed: NO,
 
@@ -8804,14 +8303,14 @@ SC.Object.prototype = {
   /**
     Walk like a duck. Always YES since this is an object and not a class.
 
-    @type Boolean
+    @property {Boolean}
   */
   isObject: true,
 
   /**
     Returns YES if the named value is an executable function.
 
-    @param {String} methodName the property name to check
+    @param methodName {String} the property name to check
     @returns {Boolean}
   */
   respondsTo: function( methodName ) {
@@ -8843,30 +8342,32 @@ SC.Object.prototype = {
     - *With Build Tools:* arguments.callee.base.apply(this,arguments);
     - *Without Build Tools:* arguments.callee.base.apply(this, arguments);
 
-    Example
+    h2. Example
 
     All of the following methods will call the superclass implementation of
     your method:
 
-          SC.Object.create({
+    {{{
+      SC.Object.create({
 
-            // DOES NOT WORK IN SAFARI 2 OR EARLIER
-            method1: function() {
-              this.superclass();
-            },
+        // DOES NOT WORK IN SAFARI 2 OR EARLIER
+        method1: function() {
+          this.superclass();
+        },
 
-            // REQUIRES SC-BUILD TOOLS
-            method2: function() {
-              arguments.callee.base.apply(this,arguments);
-            },
+        // REQUIRES SC-BUILD TOOLS
+        method2: function() {
+          arguments.callee.base.apply(this,arguments);
+        },
 
-            // WORKS ANYTIME
-            method3: function() {
-              arguments.callee.base.apply(this, arguments);
-            }
-          });
+        // WORKS ANYTIME
+        method3: function() {
+          arguments.callee.base.apply(this, arguments);
+        }
+      });
+    }}}
 
-    @param {*args} args any arguments you want to pass along.
+    @params args {*args} any arguments you want to pass along.
     @returns {Object} return value from super
   */
   superclass: function(args) {
@@ -8879,16 +8380,18 @@ SC.Object.prototype = {
     returns YES if the receiver is an instance of the named class.  See also
     kindOf().
 
-    Example
+    h2. Example
 
-          var ClassA = SC.Object.extend();
-          var ClassB = SC.Object.extend();
+    {{{
+      var ClassA = SC.Object.extend();
+      var ClassB = SC.Object.extend();
 
-          var instA = ClassA.create();
-          var instB = ClassB.create();
+      var instA = ClassA.create();
+      var instB = ClassB.create();
 
-          instA.instanceOf(ClassA) => YES
-          instB.instanceOf(ClassA) => NO
+      instA.instanceOf(ClassA) => YES
+      instB.instanceOf(ClassA) => NO
+    }}}
 
     @param {Class} scClass the class
     @returns {Boolean}
@@ -8901,18 +8404,20 @@ SC.Object.prototype = {
     Returns true if the receiver is an instance of the named class or any
     subclass of the named class.  See also instanceOf().
 
-    Example
+    h2. Example
 
-          var ClassA = SC.Object.extend();
-          var ClassB = SC.Object.extend();
+    {{{
+      var ClassA = SC.Object.extend();
+      var ClassB = SC.Object.extend();
 
-          var instA = ClassA.create();
-          var instB = ClassB.create();
+      var instA = ClassA.create();
+      var instB = ClassB.create();
 
-          instA.kindOf(ClassA) => YES
-          instB.kindOf(ClassA) => YES
+      instA.kindOf(ClassA) => YES
+      instB.kindOf(ClassA) => YES
+    }}}
 
-    @param {Class} scClass the class
+    @param scClass {Class} the class
     @returns {Boolean}
   */
   kindOf: function(scClass) { return this.constructor.kindOf(scClass); },
@@ -8934,9 +8439,9 @@ SC.Object.prototype = {
     method is called automatically for view classes but may be used for any
     object.
 
-    
+    @returns {void}
   */
-  awake: function() {
+  awake: function(key) {
     var outlets = this.outlets,
         i, len, outlet;
     for (i = 0, len = outlets.length;  i < len;  ++i) {
@@ -8976,17 +8481,19 @@ SC.Object.prototype = {
     selection immediately will have no effect. In this situation, you could do
     this instead:
 
-          // Creates a new MyRecord object and sets the selection of the
-          // myRecord collection controller to the new object.
-          createObjectAction: function(sender, evt) {
-            // create a new record and add it to the store
-            var obj = MyRecord.newRecord() ;
+    {{{
+      // Creates a new MyRecord object and sets the selection of the
+      // myRecord collection controller to the new object.
+      createObjectAction: function(sender, evt) {
+        // create a new record and add it to the store
+        var obj = MyRecord.newRecord() ;
 
-            // update the collection controller's selection
-            MyApp.myRecordCollectionController.invokeLast( function() {
-              this.set('selection', [obj]) ;
-            });
-          }
+        // update the collection controller's selection
+        MyApp.myRecordCollectionController.invokeLast( function() {
+          this.set('selection', [obj]) ;
+        });
+      }
+    }}}
 
     You can call invokeLast as many times as you like and the method will
     only be invoked once.
@@ -9011,7 +8518,7 @@ SC.Object.prototype = {
     should limit the number of properties you include in this list as it
     adds a slight overhead to new class and instance creation.
 
-    @type Array
+    @property {Array}
   */
   concatenatedProperties: ['concatenatedProperties', 'initMixin', 'destroyMixin']
 
@@ -9144,203 +8651,11 @@ SC._object_className = function(obj) {
 } ;
 
 
-/* >>>>>>>>>> BEGIN source/private/property_chain.js */
-sc_require('system/object');
-
-/**
-  @class
-  @private
-
-  SC._PropertyChain is used as the bookkeeping system for notifying the KVO
-  system of changes to computed properties that contains paths as dependent
-  keys.
-
-  Each instance of SC._PropertyChain serves as a node in a linked list. One node
-  is created for each property in the path, and stores a reference to the name
-  of the property and the object to which it belongs. If that property changes,
-  the SC._PropertyChain instance notifies its associated computed property to
-  invalidate, then rebuilds the chain with the new value.
-
-  To create a new chain, call SC._PropertyChain.createChain() with the target,
-  path, and property to invalidate if any of the objects in the path change.
-
-  For example, if you called createChain() with 'foo.bar.baz', it would
-  create a linked list like this:
-
-   ---------------------     ---------------------     ---------------------
-  | property:     'foo' |   | property:     'bar' |   | property:     'baz' |
-  | nextProperty: 'bar' |   | nextProperty: 'baz' |   | nextProperty: undef |
-  | next:           ------->| next:           ------->| next:     undefined |
-   ---------------------     ---------------------     ---------------------
-
-  @extends SC.Object
-  @since SproutCore 1.5
-*/
-
-SC._PropertyChain = SC.Object.extend(
-/** @scope SC.ObjectController.prototype */ {
-
-  /**
-    The object represented by this node in the chain.
-
-    @property {Object}
-  */
-  object: null,
-
-  /**
-    The key on the previous object in the chain that contains the object
-    represented by this node in the chain.
-
-    @property {String}
-  */
-  property: null,
-
-  /**
-    The target object. This is the object passed to createChain(), and the
-    object which contains the +toInvalidate+ property that will be invalidated
-    if +property+ changes.
-
-    @property {Object}
-  */
-  target: null,
-
-  /**
-    The property of +target+ to invalidate when +property+ changes.
-
-    @property {String}
-  */
-  toInvalidate: null,
-
-  /**
-    The property key on +object+ that contains the object represented by the
-    next node in the chain.
-
-    @property {String}
-  */
-  nextProperty: null,
-
-  /**
-    Registers this segment of the chain with the object it represents.
-
-    This should be called with the object represented by the previous node in
-    the chain as the first parameter. If no previous object is provided, it will
-    assume it is the root node in the chain and treat the target as the previous
-    object.
-
-    @param {Object} [prev] The previous object in the chain.
-  */
-  activate: function(prev) {
-    var object   = this.get('object'),
-        property = this.get('property');
-
-    // If no parameter is passed, assume we are the root in the chain
-    // and look up property relative to the target, since dependent key
-    // paths are always relative.
-    if (!prev) { prev = this.get('target'); }
-
-    // If this node has not yet been associated with an object,
-    // look up the object and associate it.
-    if (!object) {
-      // In the special case of @each, we treat the enumerable as the next
-      // property.
-      if (property === '@each') {
-        object = prev;
-      } else {
-        object = prev.get(property);
-      }
-      this.set('object', object);
-    }
-
-    // If there is still no object, don't associate any KVO
-    // property chains.
-    if (!object) { return; }
-
-    // Register this node with the object, and tell it which key changing should
-    // cause the node to be notified.
-    object.registerDependentKeyWithChain(this.get('nextProperty'), this);
-  },
-
-  /**
-    Removes this segment of the chain from the object it represents. This is usually
-    called when the object represented by the previous segment in the chain changes.
-  */
-  deactivate: function() {
-    var object       = this.get('object'),
-        nextProperty = this.get('nextProperty');
-
-    // If the chain element is not associated with an object,
-    // we don't need to deactivate anything.
-    if (!object) { return; }
-
-    object.removeDependentKeyWithChain(nextProperty, this);
-  },
-
-  /**
-    Invalidates the +toInvalidate+ property of the +target+ object.
-  */
-  notifyPropertyDidChange: function() {
-    var target       = this.get('target'),
-        toInvalidate = this.get('toInvalidate');
-
-    // Tell the target of the chain to invalidate the property
-    // that depends on this element of the chain
-    target.propertyDidChange(toInvalidate);
-  },
-
-  /**
-    Deactivates the current chain, then recreates it with the new
-    values.
-  */
-  rebuildChain: function() {
-    this.deactivate();
-    this.activate();
-  },
-
-  /**
-    Returns a string representation of the chain segment.
-
-    @returns {String}
-  */
-  toString: function() {
-    return "SC._ChainProperty(target: %@, property: %@)".fmt(
-      this.get('target'), this.get('property'));
-  }
-});
-
-SC._PropertyChain.createChain = function(path, target, toInvalidate) {
-  var parts = path.split('.');
-  var len = parts.length - 1,
-      i   = 1;
-
-  var root = SC._PropertyChain.create({
-    property:     parts[0],
-    target:       target,
-    toInvalidate: toInvalidate,
-    nextProperty: parts[1]
-  });
-
-  root.set('length', len--);
-  var tail = root;
-
-  while(len--) {
-    tail = tail.next = SC._PropertyChain.create({
-      property:     parts[i],
-      target:       target,
-      toInvalidate: toInvalidate,
-      nextProperty: parts[++i]
-    });
-
-    tail.set('length', len);
-  }
-
-  return root;
-};
-
 /* >>>>>>>>>> BEGIN source/system/binding.js */
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -9394,21 +8709,22 @@ SC.EMPTY_PLACEHOLDER = '@@EMPTY@@' ;
 
 
 /**
-  @class
+  @namespace
 
   A binding simply connects the properties of two objects so that whenever the
   value of one property changes, the other property will be changed also.  You
   do not usually work with Binding objects directly but instead describe
   bindings in your class definition using something like:
 
-        valueBinding: "MyApp.someController.title"
+  {{{
+    valueBinding: "MyApp.someController.title"
+  }}}
 
   This will create a binding from "MyApp.someController.title" to the "value"
   property of your object instance automatically.  Now the two values will be
   kept in sync.
 
-  Customizing Your Bindings
-  ===
+  h2. Customizing Your Bindings
 
   In addition to synchronizing values, bindings can also perform some basic
   transforms on values.  These transforms can help to make sure the data fed
@@ -9418,7 +8734,9 @@ SC.EMPTY_PLACEHOLDER = '@@EMPTY@@' ;
   To customize a binding, you can use one of the many helper methods defined
   on SC.Binding like so:
 
-        valueBinding: SC.Binding.single("MyApp.someController.title")
+  {{{
+    valueBinding: SC.Binding.single("MyApp.someController.title")
+  }}}
 
   This will create a binding just like the example above, except that now the
   binding will convert the value of MyApp.someController.title to a single
@@ -9427,15 +8745,16 @@ SC.EMPTY_PLACEHOLDER = '@@EMPTY@@' ;
 
   You can also chain helper methods to build custom bindings like so:
 
-        valueBinding: SC.Binding.single("MyApp.someController.title").notEmpty("(EMPTY)")
+  {{{
+    valueBinding: SC.Binding.single("MyApp.someController.title").notEmpty("(EMPTY)")
+  }}}
 
   This will force the value of MyApp.someController.title to be a single value
   and then check to see if the value is "empty" (null, undefined, empty array,
   or an empty string).  If it is empty, the value will be set to the string
   "(EMPTY)".
 
-  One Way Bindings
-  ===
+  h2. One Way Bindings
 
   One especially useful binding customization you can use is the oneWay()
   helper.  This helper tells SproutCore that you are only interested in
@@ -9444,7 +8763,9 @@ SC.EMPTY_PLACEHOLDER = '@@EMPTY@@' ;
   has changed, but your object will not be changing the preference itself, you
   could do:
 
-        bigTitlesBinding: SC.Binding.oneWay("MyApp.preferencesController.bigTitles")
+  {{{
+    bigTitlesBinding: SC.Binding.oneWay("MyApp.preferencesController.bigTitles")
+  }}}
 
   This way if the value of MyApp.preferencesController.bigTitles changes the
   "bigTitles" property of your object will change also.  However, if you
@@ -9458,8 +8779,7 @@ SC.EMPTY_PLACEHOLDER = '@@EMPTY@@' ;
   may be created frequently and you do not intend to change a property; only
   to monitor it for changes. (such as in the example above).
 
-  Adding Custom Transforms
-  ===
+  h2. Adding Custom Transforms
 
   In addition to using the standard helpers provided by SproutCore, you can
   also defined your own custom transform functions which will be used to
@@ -9468,9 +8788,11 @@ SC.EMPTY_PLACEHOLDER = '@@EMPTY@@' ;
   not allow Integers less than ten.  Note that it checks the value of the
   bindings and allows all other values to pass:
 
-        valueBinding: SC.Binding.transform(function(value, binding) {
-          return ((SC.typeOf(value) === SC.T_NUMBER) && (value < 10)) ? 10 : value;
-        }).from("MyApp.someController.value")
+  {{{
+    valueBinding: SC.Binding.transform(function(value, binding) {
+      return ((SC.typeOf(value) === SC.T_NUMBER) && (value < 10)) ? 10 : value;
+    }).from("MyApp.someController.value")
+  }}}
 
   If you would like to instead use this transform on a number of bindings,
   you can also optionally add your own helper method to SC.Binding.  This
@@ -9478,30 +8800,35 @@ SC.EMPTY_PLACEHOLDER = '@@EMPTY@@' ;
   below adds a new helper called notLessThan() which will limit the value to
   be not less than the passed minimum:
 
-      SC.Binding.notLessThan = function(minValue) {
-        return this.transform(function(value, binding) {
-          return ((SC.typeOf(value) === SC.T_NUMBER) && (value < minValue)) ? minValue : value ;
-        }) ;
-      } ;
+  {{{
+    SC.Binding.notLessThan = function(minValue) {
+      return this.transform(function(value, binding) {
+        return ((SC.typeOf(value) === SC.T_NUMBER) && (value < minValue)) ? minValue : value ;
+      }) ;
+    } ;
+  }}}
 
   You could specify this in your core.js file, for example.  Then anywhere in
   your application you can use it to define bindings like so:
 
-        valueBinding: SC.Binding.from("MyApp.someController.value").notLessThan(10)
+  {{{
+    valueBinding: SC.Binding.from("MyApp.someController.value").notLessThan(10)
+  }}}
 
   Also, remember that helpers are chained so you can use your helper along with
   any other helpers.  The example below will create a one way binding that
   does not allow empty values or values less than 10:
 
-        valueBinding: SC.Binding.oneWay("MyApp.someController.value").notEmpty().notLessThan(10)
+  {{{
+    valueBinding: SC.Binding.oneWay("MyApp.someController.value").notEmpty().notLessThan(10)
+  }}}
 
   Note that the built in helper methods all allow you to pass a "from"
   property path so you don't have to use the from() helper to set the path.
   You can do the same thing with your own helper methods if you like, but it
   is not required.
 
-  Creating Custom Binding Templates
-  ===
+  h2. Creating Custom Binding Templates
 
   Another way you can customize bindings is to create a binding template.  A
   template is simply a binding that is already partially or completely
@@ -9513,20 +8840,23 @@ SC.EMPTY_PLACEHOLDER = '@@EMPTY@@' ;
   bindings that allow values greater than 10 throughout your app.  You could
   create a binding template in your core.js like this:
 
-        MyApp.LimitBinding = SC.Binding.oneWay().notEmpty().notLessThan(10);
+  {{{
+    MyApp.LimitBinding = SC.Binding.oneWay().notEmpty().notLessThan(10);
+  }}}
 
   Then anywhere you want to use this binding, just refer to the template like
   so:
 
-        valueBinding: MyApp.LimitBinding.beget("MyApp.someController.value")
+  {{{
+    valueBinding: MyApp.LimitBinding.beget("MyApp.someController.value")
+  }}}
 
   Note that when you use binding templates, it is very important that you
   always start by using beget() to extend the template.  If you do not do
   this, you will end up using the same binding instance throughout your app
   which will lead to erratic behavior.
 
-  How to Manually Activate a Binding
-  ===
+  h2. How to Manually Activate a Binding
 
   All of the examples above show you how to configure a custom binding, but
   the result of these customizations will be a binding template, not a fully
@@ -9545,14 +8875,18 @@ SC.EMPTY_PLACEHOLDER = '@@EMPTY@@' ;
   examples above, during init, SproutCore objects will effectively call
   something like this on your binding:
 
-        binding = this.valueBinding.beget().to("value", this) ;
+  {{{
+    binding = this.valueBinding.beget().to("value", this) ;
+  }}}
 
   This creates a new binding instance based on the template you provide, and
   sets the to path to the "value" property of the new object.  Now that the
   binding is fully configured with a "from" and a "to", it simply needs to be
   connected to become active.  This is done through the connect() method:
 
-        binding.connect() ;
+  {{{
+    binding.connect() ;
+  }}}
 
   Now that the binding is connected, it will observe both the from and to side
   and relay changes.
@@ -9561,25 +8895,30 @@ SC.EMPTY_PLACEHOLDER = '@@EMPTY@@' ;
   understand this anyway), you could manually create an active binding by
   doing the following:
 
-        SC.Binding.from("MyApp.someController.value")
-         .to("MyApp.anotherObject.value")
-         .connect();
+  {{{
+    SC.Binding.from("MyApp.someController.value")
+     .to("MyApp.anotherObject.value")
+     .connect();
+  }}}
 
   You could also use the bind() helper method provided by SC.Object. (This is
   the same method used by SC.Object.init() to setup your bindings):
 
-        MyApp.anotherObject.bind("value", "MyApp.someController.value") ;
+  {{{
+    MyApp.anotherObject.bind("value", "MyApp.someController.value") ;
+  }}}
 
   Both of these code fragments have the same effect as doing the most friendly
   form of binding creation like so:
 
+  {{{
+    MyApp.anotherObject = SC.Object.create({
+      valueBinding: "MyApp.someController.value",
 
-        MyApp.anotherObject = SC.Object.create({
-          valueBinding: "MyApp.someController.value",
+      // OTHER CODE FOR THIS OBJECT...
 
-          // OTHER CODE FOR THIS OBJECT...
-
-        }) ;
+    }) ;
+  }}}
 
   SproutCore's built in binding creation method make it easy to automatically
   create bindings for you.  You should always use the highest-level APIs
@@ -9587,7 +8926,7 @@ SC.EMPTY_PLACEHOLDER = '@@EMPTY@@' ;
 
   @since SproutCore 1.0
 */
-SC.Binding = /** @scope SC.Binding.prototype */{
+SC.Binding = {
 
   /**
     This is the core method you use to create a new binding instance.  The
@@ -9597,7 +8936,7 @@ SC.Binding = /** @scope SC.Binding.prototype */{
     The returned instance will also have its parentBinding property set to the
     receiver.
 
-    @param {String} fromPath optional from path.
+    @param fromPath {String} optional from path.
     @returns {SC.Binding} new binding instance
   */
   beget: function(fromPath) {
@@ -9628,8 +8967,8 @@ SC.Binding = /** @scope SC.Binding.prototype */{
     "*", which will use the root object of the to side be default.  This special
     behavior is used to support the high-level API provided by SC.Object.
 
-    @param {String|Tuple} propertyPath A property path or tuple
-    @param {Object} root optional root object to use when resolving the path.
+    @param propertyPath {String|Tuple} A property path or tuple
+    @param root {Object} optional root object to use when resolving the path.
     @returns {SC.Binding} this
   */
   from: function(propertyPath, root) {
@@ -9652,8 +8991,8 @@ SC.Binding = /** @scope SC.Binding.prototype */{
    attempt to reoslve this property path to an actual object/property tuple
    until you connect the binding.
 
-    @param {String|Tuple} propertyPath A property path or tuple
-    @param {Object} root optional root object to use when resolving the path.
+    @param propertyPath {String|Tuple} A property path or tuple
+    @param root {Object} optional root object to use when resolving the path.
     @returns {SC.Binding} this
   */
   to: function(propertyPath, root) {
@@ -9769,9 +9108,6 @@ SC.Binding = /** @scope SC.Binding.prototype */{
   /**
     Invoked whenever the value of the "from" property changes.  This will mark
     the binding as dirty if the value has changed.
-    
-    @param {Object} target The object that contains the key
-    @param {String} key The name of the property which changed
   */
   fromPropertyDidChange: function(target, key) {
     var v = target ? target.get(key) : null;
@@ -9797,9 +9133,6 @@ SC.Binding = /** @scope SC.Binding.prototype */{
 
     if the value does not match the transformedBindingValue, then it will
     become the new bindingValue.
-    
-    @param {Object} target The object that contains the key
-    @param {String} key The name of the property which changed
   */
   toPropertyDidChange: function(target, key) {
     if (this._oneWay) return; // nothing to do
@@ -9969,18 +9302,6 @@ SC.Binding = /** @scope SC.Binding.prototype */{
           key = this._fromPropertyKey ;
       if (!target || !key) return this ; // nothing to do
 
-      // in debug, let's check for whether target is a valid observable with getPath.
-      // Common cases might have it be a Window or a DOM object.
-      //
-      // If we have a target, it is ready, but if it is invalid, that is WRONG.
-      //
-      
-      if (!target.isObservable) {
-        SC.Logger.warn("Cannot bind '%@' to property '%@' on non-observable '%@'".fmt(this._toPropertyPath, key, target));
-        return this;
-      }
-      
-
       // get the new value
       var v = target.getPath(key) ;
 
@@ -10043,8 +9364,8 @@ SC.Binding = /** @scope SC.Binding.prototype */{
     means that if you change the "to" side directly, the "from" side may have
     a different value.
 
-    @param {String} fromPath optional from path to connect.
-    @param {Boolean} aFlag Optionally pass NO to set the binding back to two-way
+    @param fromPath {String} optional from path to connect.
+    @param aFlag {Boolean} Optionally pass NO to set the binding back to two-way
     @returns {SC.Binding} this
   */
   oneWay: function(fromPath, aFlag) {
@@ -10066,7 +9387,9 @@ SC.Binding = /** @scope SC.Binding.prototype */{
 
     The function you pass must have the following signature:
 
-          function(value) {} ;
+    {{{
+      function(value) {} ;
+    }}}
 
     It must return either the transformed value or an error object.
 
@@ -10074,7 +9397,7 @@ SC.Binding = /** @scope SC.Binding.prototype */{
     extending a binding and want to reset the transforms, you can call
     resetTransform() first.
 
-    @param {Function} transformFunc the transform function.
+    @param transformFunc {Function} the transform function.
     @returns {SC.Binding} this
   */
   transform: function(transformFunc) {
@@ -10114,8 +9437,8 @@ SC.Binding = /** @scope SC.Binding.prototype */{
     Note that this is not a transform function since it will be called at the
     end of the transform chain.
 
-    @param {String} fromPath optional from path to connect.
-    @param {Boolean} aFlag optionally pass NO to allow error objects again.
+    @param fromPath {String} optional from path to connect.
+    @param aFlag {Boolean} optionally pass NO to allow error objects again.
     @returns {SC.Binding} this
   */
   noError: function(fromPath, aFlag) {
@@ -10136,9 +9459,11 @@ SC.Binding = /** @scope SC.Binding.prototype */{
     This will allow single values, nulls, and error values to pass through.  If
     you pass an array, it will be mapped as so:
 
-          [] => null
-          [a] => a
-          [a,b,c] => Multiple Placeholder
+    {{{
+      [] => null
+      [a] => a
+      [a,b,c] => Multiple Placeholder
+    }}}
 
     You can pass in an optional multiple placeholder or it will use the
     default.
@@ -10146,8 +9471,8 @@ SC.Binding = /** @scope SC.Binding.prototype */{
     Note that this transform will only happen on forwarded valued.  Reverse
     values are send unchanged.
 
-    @param {String} fromPath from path or null
-    @param {Object} placeholder optional placeholder value.
+    @param fromPath {String} from path or null
+    @param placeholder {Object} optional placeholder value.
     @returns {SC.Binding} this
   */
   single: function(fromPath, placeholder) {
@@ -10167,8 +9492,8 @@ SC.Binding = /** @scope SC.Binding.prototype */{
     Adds a transform that will return the placeholder value if the value is
     null, undefined, an empty array or an empty string.  See also notNull().
 
-    @param {String} fromPath from path or null
-    @param {Object} placeholder optional placeholder.
+    @param fromPath {String} from path or null
+    @param placeholder {Object} optional placeholder.
     @returns {SC.Binding} this
   */
   notEmpty: function(fromPath, placeholder) {
@@ -10185,8 +9510,8 @@ SC.Binding = /** @scope SC.Binding.prototype */{
     Adds a transform that will return the placeholder value if the value is
     null.  Otherwise it will passthrough untouched.  See also notEmpty().
 
-    @param {String} fromPath from path or null
-    @param {Object} placeholder optional placeholder;
+    @param fromPath {String} from path or null
+    @param placeholder {Object} optional placeholder;
     @returns {SC.Binding} this
   */
   notNull: function(fromPath, placeholder) {
@@ -10201,7 +9526,7 @@ SC.Binding = /** @scope SC.Binding.prototype */{
     Adds a transform that will convert the passed value to an array.  If
     the value is null or undefined, it will be converted to an empty array.
 
-    @param {String} fromPath optional from path
+    @param fromPath {String} optional from path
     @returns {SC.Binding} this
   */
   multiple: function(fromPath) {
@@ -10216,7 +9541,7 @@ SC.Binding = /** @scope SC.Binding.prototype */{
     an array it will return YES if array is not empty.  If the value is a string
     it will return YES if the string is not empty.
 
-    @param {String} fromPath optional from path
+    @param fromPath {String} optional from path
     @returns {SC.Binding} this
   */
   bool: function(fromPath) {
@@ -10241,8 +9566,6 @@ SC.Binding = /** @scope SC.Binding.prototype */{
         isEnabledBinding: SC.Binding.and('MyApp.itemsController.hasSelection', 'MyApp.userController.canDelete')
       })
 
-    @param {String} pathA The first part of the conditional
-    @param {String} pathB The second part of the conditional
   */
   and: function(pathA, pathB) {
 
@@ -10267,8 +9590,6 @@ SC.Binding = /** @scope SC.Binding.prototype */{
 
       'pathA' AND 'pathB' --> value  (value returned is the result of ('pathA' || 'pathB'))
 
-    @param {String} pathA The first part of the conditional
-    @param {String} pathB The second part of the conditional
   */
   or: function(pathA, pathB) {
 
@@ -10289,7 +9610,7 @@ SC.Binding = /** @scope SC.Binding.prototype */{
     Adds a transform to convert the value to the inverse of a bool value.  This
     uses the same transform as bool() but inverts it.
 
-    @param {String} fromPath optional from path
+    @param fromPath {String} optional from path
     @returns {SC.Binding} this
   */
   not: function(fromPath) {
@@ -10302,8 +9623,7 @@ SC.Binding = /** @scope SC.Binding.prototype */{
 
   /**
     Adds a transform that will return YES if the value is null, NO otherwise.
-    
-    @param {String} fromPath optional from path
+
     @returns {SC.Binding} this
   */
   isNull: function(fromPath) {
@@ -10326,7 +9646,9 @@ SC.Binding = /** @scope SC.Binding.prototype */{
 /**
   Shorthand method to define a binding.  This is the same as calling:
 
-        SC.binding(path) = SC.Binding.from(path)
+  {{{
+    SC.binding(path) = SC.Binding.from(path)
+  }}}
 */
 SC.binding = function(path, root) { return SC.Binding.from(path,root); } ;
 
@@ -10335,10 +9657,10 @@ SC.binding = function(path, root) { return SC.Binding.from(path,root); } ;
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-// @global SC
+
 /**
   @class
 
@@ -10355,8 +9677,7 @@ SC.binding = function(path, root) { return SC.Binding.from(path,root); } ;
   the interface. You can easily determine if the value returned by some API is
   an error or not using the helper SC.ok(value).
 
-  Faking Error Objects
-  ---
+  h2. Faking Error Objects
 
   You can actually make any object you want to be treated like an Error object
   by simply implementing two properties: isError and errorValue.  If you
@@ -10373,7 +9694,7 @@ SC.Error = SC.Object.extend(
   /**
     error code.  Used to designate the error type.
 
-    @type Number
+    @property {Number}
   */
   code: -1,
 
@@ -10381,7 +9702,7 @@ SC.Error = SC.Object.extend(
     Human readable description of the error.  This can also be a non-localized
     key.
 
-    @type String
+    @property {String}
   */
   message: '',
 
@@ -10389,7 +9710,7 @@ SC.Error = SC.Object.extend(
     The value the error represents.  This is used when wrapping a value inside
     of an error to represent the validation failure.
 
-    @type Object
+    @property {Object}
   */
   errorValue: null,
 
@@ -10398,7 +9719,7 @@ SC.Error = SC.Object.extend(
     However, sometimes another object will masquarade as an error; this gives
     you a way to get at the underyling error.
 
-    @type SC.Error
+    @property {SC.Error}
   */
   errorObject: function() {
     return this;
@@ -10407,7 +9728,7 @@ SC.Error = SC.Object.extend(
   /**
     Human readable name of the item with the error.
 
-    @type String
+    @property {String}
   */
   label: null,
 
@@ -10419,7 +9740,7 @@ SC.Error = SC.Object.extend(
   /**
     Walk like a duck.
 
-    @type Boolean
+    @property {Boolean}
   */
   isError: YES
 }) ;
@@ -10449,8 +9770,7 @@ SC.Error.desc = function(description, label, value, code) {
   @param code {Number} an error code to use for testing.
   @returns {SC.Error} new error instance.
 */
-
-SC.$error = function(description, label, value, c) {  
+SC.$error = function(description, label, value, c) {
   return SC.Error.desc(description,label, value, c);
 } ;
 
@@ -10488,7 +9808,7 @@ SC.$val = SC.val;
 /**
   Standard error code for errors that do not support multiple values.
 
-  @type Number
+  @property {Number}
 */
 SC.Error.HAS_MULTIPLE_VALUES = -100 ;
 
@@ -10496,7 +9816,7 @@ SC.Error.HAS_MULTIPLE_VALUES = -100 ;
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -10512,25 +9832,25 @@ sc_require('mixins/copyable');
   continuous ranges of items in a parent array.  IndexSet's are used for
   selection, for managing invalidation ranges and other data-propogation.
 
-  Examples
-  ---
+  h2. Examples
 
-        var set = SC.IndexSet.create(ranges) ;
-        set.contains(index);
-        set.add(index, length);
-        set.remove(index, length);
+  {{{
+    var set = SC.IndexSet.create(ranges) ;
+    set.contains(index);
+    set.add(index, length);
+    set.remove(index, length);
 
-        // uses a backing SC.Array object to return each index
-        set.forEach(function(object) { .. })
+    // uses a backing SC.Array object to return each index
+    set.forEach(function(object) { .. })
 
-        // returns the index
-        set.forEachIndex(function(index) { ... });
+    // returns the index
+    set.forEachIndex(function(index) { ... });
 
-        // returns ranges
-        set.forEachRange(function(start, length) { .. });
+    // returns ranges
+    set.forEachRange(function(start, length) { .. });
+  }}}
 
-  Implementation Notes
-  ---
+  h2. Implementation Notes
 
   An IndexSet stores indices on the object.  A positive value great than the
   index tells you the end of an occupied range.  A negative values tells you
@@ -10567,8 +9887,6 @@ SC.IndexSet = SC.mixin({},
   /**
     To create a set, pass either a start and index or another IndexSet.
 
-    @param {Number} start
-    @param {Number} length
     @returns {SC.IndexSet}
   */
   create: function(start, length) {
@@ -10594,21 +9912,21 @@ SC.IndexSet = SC.mixin({},
   /**
     Walk like a duck.
 
-    @type Boolean
+    @property {Boolean}
   */
   isIndexSet: YES,
 
   /**  @private
     Internal setting determines the preferred skip size for hinting sets.
 
-    @type Number
+    @property {Number}
   */
   HINT_SIZE: 256,
 
   /**
     Total number of indexes contained in the set
 
-    @type Number
+    @property {Number}
   */
   length: 0,
 
@@ -10617,14 +9935,14 @@ SC.IndexSet = SC.mixin({},
     is sometimes useful when determining the total range of items covering
     the index set.
 
-    @type Number
+    @property {Number}
   */
   max: 0,
 
   /**
     The first index included in the set or -1.
 
-    @type Number
+    @property {Number}
   */
   min: function() {
     var content = this._content,
@@ -10636,7 +9954,7 @@ SC.IndexSet = SC.mixin({},
   /**
     Returns the first index in the set .
 
-    @type Number
+    @property {Number}
   */
   firstObject: function() {
     return (this.get('length')>0) ? this.get('min') : undefined;
@@ -11247,8 +10565,6 @@ SC.IndexSet = SC.mixin({},
 
   /**
     Add all the ranges in the passed array.
-
-    @param {Enumerable} objects The list of ranges you want to add
   */
   addEach: function(objects) {
     if (this.isFrozen) throw SC.FROZEN_ERROR;
@@ -11267,8 +10583,6 @@ SC.IndexSet = SC.mixin({},
 
   /**
     Removes all the ranges in the passed array.
-
-    @param {Object...} objects The list of objects you want to remove
   */
   removeEach: function(objects) {
     if (this.isFrozen) throw SC.FROZEN_ERROR;
@@ -11319,13 +10633,15 @@ SC.IndexSet = SC.mixin({},
     index.  This can be a more efficient way to iterate in some cases.  The
     callback should have the signature:
 
-          callback(start, length, indexSet, source) { ... }
+    {{{
+      callback(start, length, indexSet, source) { ... }
+    }}}
 
     If you pass a target as a second option, the callback will be called in
     the target context.
 
-    @param {Function} callback The method to run on each iteration
-    @param {Object} target the object to call the callback on
+    @param {Function} callback the iterator callback
+    @param {Object} target the target
     @returns {SC.IndexSet} receiver
   */
   forEachRange: function(callback, target) {
@@ -11503,7 +10819,9 @@ SC.IndexSet = SC.mixin({},
     have a source property on the set for this to work.  The callback you pass
     will be invoked for each object in the set with the following signature:
 
-          function callback(object, index, source, indexSet) { ... }
+    {{{
+      function callback(object, index, source, indexSet) { ... }
+    }}}
 
     If you pass a target, it will be used when the callback is called.
 
@@ -11543,8 +10861,6 @@ SC.IndexSet = SC.mixin({},
     Requires source to work.
 
     @param {Object} object the object to add
-    @param {Boolean} firstOnly Set to true if you can assume that the first
-       match is the only one
     @returns {SC.IndexSet} receiver
   */
   addObject: function(object, firstOnly) {
@@ -11570,8 +10886,6 @@ SC.IndexSet = SC.mixin({},
     then only finds the first index for each object.
 
     @param {SC.Enumerable} objects the objects to add
-    @param {Boolean} firstOnly Set to true if you can assume that the first
-       match is the only one
     @returns {SC.IndexSet} receiver
   */
   addObjects: function(objects, firstOnly) {
@@ -11590,8 +10904,6 @@ SC.IndexSet = SC.mixin({},
     Requires source to work.
 
     @param {Object} object the object to add
-    @param {Boolean} firstOnly Set to true if you can assume that the first
-       match is the only one
     @returns {SC.IndexSet} receiver
   */
   removeObject: function(object, firstOnly) {
@@ -11617,8 +10929,6 @@ SC.IndexSet = SC.mixin({},
     then only finds the first index for each object.
 
     @param {SC.Enumerable} objects the objects to add
-    @param {Boolean} firstOnly Set to true if you can assume that the first
-       match is the only one
     @returns {SC.IndexSet} receiver
   */
   removeObjects: function(objects, firstOnly) {
@@ -11637,7 +10947,7 @@ SC.IndexSet = SC.mixin({},
     Usually observing notifications from IndexSet are not useful, so
     supress them by default.
 
-    @type Boolean
+    @property {Boolean}
   */
   LOG_OBSERVING: NO,
 
@@ -11707,7 +11017,7 @@ SC.IndexSet.EMPTY = SC.IndexSet.create().freeze();
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -11801,10 +11111,10 @@ SC.LOGGER_LEVEL_NONE  = 'none';
   your application to potentially determine a subset of logging messages to
   output and/or record.  The order of levels is:
 
-    -  debug        SC.LOGGER_LEVEL_DEBUG
-    -  info         SC.LOGGER_LEVEL_INFO
-    -  warn         SC.LOGGER_LEVEL_WARN
-    -  error        SC.LOGGER_LEVEL_ERROR
+      *  debug        SC.LOGGER_LEVEL_DEBUG
+      *  info         SC.LOGGER_LEVEL_INFO
+      *  warn         SC.LOGGER_LEVEL_WARN
+      *  error        SC.LOGGER_LEVEL_ERROR
 
   All messages at the level or “above” will be output/recorded.  So, for
   example, if you set the level to 'info', all 'info', 'warn', and 'error'
@@ -11828,10 +11138,10 @@ SC.LOGGER_LEVEL_NONE  = 'none';
 
   As a convenience, this class also adds some shorthand methods to SC:
 
-    -  SC.debug()   ==>   SC.Logger.debug()
-    -  SC.info()    ==>   SC.Logger.info()
-    -  SC.warn()    ==>   SC.Logger.warn()
-    -  SC.error()   ==>   SC.Logger.error()
+    *  SC.debug()   ==>   SC.Logger.debug()
+    *  SC.info()    ==>   SC.Logger.info()
+    *  SC.warn()    ==>   SC.Logger.warn()
+    *  SC.error()   ==>   SC.Logger.error()
 
   …although note that no shorthand versions exist for the less-common
   functions, such as defining groups.
@@ -11847,8 +11157,7 @@ SC.LOGGER_LEVEL_NONE  = 'none';
   @since SproutCore 1.0
   @see <a href="http://getfirebug.com/logging.html">Firebug Logging Reference</a>
 */
-SC.Logger = SC.Object.create(
-	/** @scope SC.Logger.prototype */{
+SC.Logger = SC.Object.create({
 
   // ..........................................................
   // PROPERTIES
@@ -11858,11 +11167,11 @@ SC.Logger = SC.Object.create(
     The current log level determining what is output to the reporter object
     (usually your browser’s console).  Valid values are:
 
-      -  SC.LOGGER_LEVEL_DEBUG
-      -  SC.LOGGER_LEVEL_INFO
-      -  SC.LOGGER_LEVEL_WARN
-      -  SC.LOGGER_LEVEL_ERROR
-      -  SC.LOGGER_LEVEL_NONE
+      *  SC.LOGGER_LEVEL_DEBUG
+      *  SC.LOGGER_LEVEL_INFO
+      *  SC.LOGGER_LEVEL_WARN
+      *  SC.LOGGER_LEVEL_ERROR
+      *  SC.LOGGER_LEVEL_NONE
 
     If you do not specify this value, it will default to SC.LOGGER_LEVEL_DEBUG
     when running in development mode and SC.LOGGER_LEVEL_INFO when running in
@@ -11878,11 +11187,11 @@ SC.Logger = SC.Object.create(
     (usually your browser’s console).  Valid values are the same as with
     'logOutputLevel':
 
-      -  SC.LOGGER_LEVEL_DEBUG
-      -  SC.LOGGER_LEVEL_INFO
-      -  SC.LOGGER_LEVEL_WARN
-      -  SC.LOGGER_LEVEL_ERROR
-      -  SC.LOGGER_LEVEL_NONE
+      *  SC.LOGGER_LEVEL_DEBUG
+      *  SC.LOGGER_LEVEL_INFO
+      *  SC.LOGGER_LEVEL_WARN
+      *  SC.LOGGER_LEVEL_ERROR
+      *  SC.LOGGER_LEVEL_NONE
 
     If you do not specify this value, it will default to SC.LOGGER_LEVEL_NONE.
 
@@ -11906,7 +11215,7 @@ SC.Logger = SC.Object.create(
     like “type of entry: message” are avoided; if you need to parse this
     structure, you can determine which type of entry you’re looking at by
     checking for the 'message' and 'indentation' fields.
-<pre>
+
     Log entry:
     {
       type:               {Constant}     (SC.LOGGER_LEVEL_DEBUG, etc.)
@@ -11914,7 +11223,7 @@ SC.Logger = SC.Object.create(
       originalArguments:  {Arguments}    // optional
       timestamp:          {Date}
     }
-    
+
     Group entry (either beginning or end of):
     {
       type:         {Constant}     SC.LOGGER_LEVEL_DEBUG, etc.
@@ -11923,7 +11232,6 @@ SC.Logger = SC.Object.create(
       title:        {String}       Optional for new groups, and never present for end-of-group
       timestamp:    {Date}
     }
-</pre>
 
     @property {Array}
   */
@@ -12016,11 +11324,11 @@ SC.Logger = SC.Object.create(
     arguments, it is assumed to be a format string.  Thus, you can (and
     should) use it like:
 
-        SC.Logger.debug("%@:  My debug message", this);       // good
+      SC.Logger.debug("%@:  My debug message", this);       // good
 
     …and not:
 
-        SC.Logger.debug("%@:  My debug message".fmt(this));        // bad
+      SC.Logger.debug("%@:  My debug message".fmt(this));        // bad
 
     The former method can be more efficient because if the log levels are set
     in such a way that the debug() invocation will be ignored, then the
@@ -12069,11 +11377,11 @@ SC.Logger = SC.Object.create(
     additional arguments, the first argument is assumed to be a format string.
     Thus, you can (and should) use it like:
 
-          SC.Logger.debugGroup("%@:  My debug group", this);       // good
+      SC.Logger.debugGroup("%@:  My debug group", this);       // good
 
     …and not:
 
-          SC.Logger.debugGroup("%@:  My debug group".fmt(this));   // bad
+      SC.Logger.debugGroup("%@:  My debug group".fmt(this));   // bad
 
     The former method can be more efficient because if the log levels are set
     in such a way that the debug() invocation will be ignored, then the
@@ -12111,11 +11419,11 @@ SC.Logger = SC.Object.create(
     arguments, it is assumed to be a format string.  Thus, you can (and
     should) use it like:
 
-          SC.Logger.info("%@:  My info message", this);       // good
+      SC.Logger.info("%@:  My info message", this);       // good
 
     …and not:
 
-          SC.Logger.info("%@:  My info message".fmt(this));   // bad
+      SC.Logger.info("%@:  My info message".fmt(this));   // bad
 
     The former method can be more efficient because if the log levels are set
     in such a way that the info() invocation will be ignored, then the
@@ -12164,11 +11472,11 @@ SC.Logger = SC.Object.create(
     additional arguments, the first argument is assumed to be a format string.
     Thus, you can (and should) use it like:
 
-          SC.Logger.infoGroup("%@:  My info group", this);       // good
+      SC.Logger.infoGroup("%@:  My info group", this);       // good
 
     …and not:
 
-          SC.Logger.infoGroup("%@:  My info group".fmt(this));   // bad
+      SC.Logger.infoGroup("%@:  My info group".fmt(this));   // bad
 
     The former method can be more efficient because if the log levels are set
     in such a way that the info() invocation will be ignored, then the
@@ -12206,11 +11514,11 @@ SC.Logger = SC.Object.create(
     arguments, it is assumed to be a format string.  Thus, you can (and
     should) use it like:
 
-          SC.Logger.warn("%@:  My warning message", this);       // good
+      SC.Logger.warn("%@:  My warning message", this);       // good
 
     …and not:
 
-          SC.Logger.warn("%@:  My warning message".fmt(this));   // bad
+      SC.Logger.warn("%@:  My warning message".fmt(this));   // bad
 
     The former method can be more efficient because if the log levels are set
     in such a way that the warn() invocation will be ignored, then the
@@ -12260,11 +11568,11 @@ SC.Logger = SC.Object.create(
     additional arguments, the first argument is assumed to be a format string.
     Thus, you can (and should) use it like:
 
-          SC.Logger.warnGroup("%@:  My warn group", this);       // good
+      SC.Logger.warnGroup("%@:  My warn group", this);       // good
 
     …and not:
 
-          SC.Logger.warnGroup("%@:  My warn group".fmt(this));   // bad
+      SC.Logger.warnGroup("%@:  My warn group".fmt(this));   // bad
 
     The former method can be more efficient because if the log levels are set
     in such a way that the warn() invocation will be ignored, then the
@@ -12301,11 +11609,11 @@ SC.Logger = SC.Object.create(
     arguments, it is assumed to be a format string.  Thus, you can (and
     should) use it like:
 
-          SC.Logger.error("%@:  My error message", this);       // good
+      SC.Logger.error("%@:  My error message", this);       // good
 
     …and not:
 
-          SC.Logger.warn("%@:  My error message".fmt(this));    // bad
+      SC.Logger.warn("%@:  My error message".fmt(this));    // bad
 
     The former method can be more efficient because if the log levels are set
     in such a way that the warn() invocation will be ignored, then the
@@ -12354,11 +11662,11 @@ SC.Logger = SC.Object.create(
     additional arguments, the first argument is assumed to be a format string.
     Thus, you can (and should) use it like:
 
-          SC.Logger.errorGroup("%@:  My error group", this);       // good
+      SC.Logger.errorGroup("%@:  My error group", this);       // good
 
     …and not:
 
-          SC.Logger.errorGroup("%@:  My error group".fmt(this));   // bad
+      SC.Logger.errorGroup("%@:  My error group".fmt(this));   // bad
 
     The former method can be more efficient because if the log levels are set
     in such a way that the error() invocation will be ignored, then the
@@ -13293,7 +12601,7 @@ SC.error = SC.Logger.error;
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -13313,17 +12621,19 @@ sc_require('private/observer_set');
   your run loop is reached.  This improves the performance of your
   application.
 
-  Example:
+  h2. Example
 
   This is how you could write your mouseup handler in jQuery:
 
-        $('#okButton').on('click', function() {
-          SC.RunLoop.begin();
+  {{{
+    $('#okButton').on('click', function() {
+      SC.RunLoop.begin();
 
-          // handle click event...
+      // handle click event...
 
-          SC.RunLoop.end(); // allows bindings to trigger...
-        });
+      SC.RunLoop.end(); // allows bindings to trigger...
+    });
+  }}}
 
   @extends SC.Object
   @since SproutCore 1.0
@@ -13351,8 +12661,7 @@ SC.RunLoop = SC.Object.extend(/** @scope SC.RunLoop.prototype */ {
   /**
     YES when a run loop is in progress
 
-    @property
-    @type Boolean
+    @property {Boolean}
   */
   isRunLoopInProgress: function() {
     return this._runLoopInProgress;
@@ -13509,7 +12818,7 @@ SC.RunLoop = SC.Object.extend(/** @scope SC.RunLoop.prototype */ {
   The current run loop.  This is created automatically the first time you
   call begin().
 
-  @type SC.RunLoop
+  @property {SC.RunLoop}
 */
 SC.RunLoop.currentRunLoop = null;
 
@@ -13517,7 +12826,7 @@ SC.RunLoop.currentRunLoop = null;
   The default RunLoop class.  If you choose to extend the RunLoop, you can
   set this property to make sure your class is used instead.
 
-  @type Class
+  @property {Class}
 */
 SC.RunLoop.runLoopClass = SC.RunLoop;
 

@@ -25,10 +25,6 @@ sc_require("handlebars");
 
 SC.Handlebars = {};
 
-SC.Handlebars.Compiler = function() {};
-SC.Handlebars.Compiler.prototype = SC.beget(Handlebars.Compiler.prototype);
-SC.Handlebars.Compiler.prototype.compiler = SC.Handlebars.Compiler;
-
 SC.Handlebars.JavaScriptCompiler = function() {};
 SC.Handlebars.JavaScriptCompiler.prototype = SC.beget(Handlebars.JavaScriptCompiler.prototype);
 SC.Handlebars.JavaScriptCompiler.prototype.compiler = SC.Handlebars.JavaScriptCompiler;
@@ -41,90 +37,8 @@ SC.Handlebars.JavaScriptCompiler.prototype.nameLookup = function(parent, name, t
   }
 };
 
-SC.Handlebars.Compiler.prototype.mustache = function(mustache) {
-  if (mustache.params.length || mustache.hash) {
-    return Handlebars.Compiler.prototype.mustache.call(this, mustache);
-  } else {
-    var id = new Handlebars.AST.IdNode(['bind']);
-    mustache = new Handlebars.AST.MustacheNode([id].concat([mustache.id]), mustache.hash, !mustache.escaped);
-    return Handlebars.Compiler.prototype.mustache.call(this, mustache);
-  }
-};
-
 SC.Handlebars.compile = function(string) {
   var ast = Handlebars.parse(string);
-  var environment = new SC.Handlebars.Compiler().compile(ast, {data: true, stringParams: true});
-  var ret = new SC.Handlebars.JavaScriptCompiler().compile(environment, {data: true, stringParams: true});
-  ret.rawTemplate = string;
-  return ret;
-};
-
-/**
-  Registers a helper in Handlebars that will be called if no property with the
-  given name can be found on the current context object, and no helper with
-  that name is registered.
-
-  This throws an exception with a more helpful error message so the user can
-  track down where the problem is happening.
-*/
-Handlebars.registerHelper('helperMissing', function(path, options) {
-  var error;
-
-  error = "%@ Handlebars error: Could not find property '%@' on object %@.";
-  throw error.fmt(options.data.view, path, this);
-});
-
-/**
-  Determines the classes to add based on an array of bindings (provided as strings),
-  as well as adding observers to make sure the classes are up-to-date.
-
-  @param {SC.View} view The view at add the classes to
-  @param {String} classBindings A string, space-separated, of class bindings to use
-  @param {String|Number} id Optional id to scope the observers/jQuery element to
-  @returns {Array} An array of class names to add
-*/
-SC.Handlebars.bindClasses = function(view, classBindings, id) {
-  if (!view._classObservers) view._classObservers = {};
-  id = id || '_default';
-  var classObservers = view._classObservers[id],
-      ret = [];
-
-  // Teardown any existing observers on the view.
-  if (classObservers) {
-    for (var prop in classObservers) {
-      if (classObservers.hasOwnProperty(prop)) {
-        view.removeObserver(prop, classObservers[prop]);
-      }
-    }
-  }
-
-  classObservers = view._classObservers[id] = {};
-
-  // For each property passed, loop through and setup
-  // an observer.
-  classBindings.split(' ').forEach(function(property) {
-    // Normalize property path to be suitable for use
-    // as a class name. For exaple, content.foo.barBaz
-    // becomes bar-baz.
-
-    var dasherizedProperty = property.split('.').get('lastObject').dasherize();
-
-    // Set up an observer on the view. If the bound property
-    // changes, toggle the class name
-    var observer = (classObservers[property] = function() {
-      var shouldDisplay = view.getPath(property);
-      var elem = id !== '_default' ? view.$("[data-handlebars-id='" + id + "']") : view.$();
-
-      if (elem.length === 0) {
-        view.removeObserver(property, observer);
-      } else {
-        elem.toggleClass(dasherizedProperty, shouldDisplay);
-      }
-    });
-
-    view.addObserver(property, observer);
-    if (view.getPath(property)) ret.push(dasherizedProperty);
-  });
-
-  return ret;
+  var environment = new Handlebars.Compiler().compile(ast);
+  return new SC.Handlebars.JavaScriptCompiler().compile(environment, true);
 };

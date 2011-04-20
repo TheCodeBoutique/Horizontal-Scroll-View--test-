@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -108,17 +108,16 @@ SC.TabView = SC.View.extend(
     var childViews  = [], view, containerView, layout,
         tabLocation = this.get('tabLocation'),
         tabHeight   = this.get('tabHeight');
-
-    if (tabLocation === SC.TOP_LOCATION) {
-      layout = { top: tabHeight/2+1, left: 0, right: 0, bottom: 0, border: 1 };
-    } else if (tabLocation === SC.TOP_TOOLBAR_LOCATION) {
-      layout = { top: tabHeight+1, left: 0, right: 0, bottom: 0, border: 1 };
-    } else {
-      layout = { top: 0, left: 0, right: 0, bottom: tabHeight-1, border: 1 };
-    }
-
-    containerView = this.containerView.extend({
+    
+    layout = (tabLocation === SC.TOP_LOCATION) ?
+             { top: tabHeight/2+1, left: 0, right: 0, bottom: 0 } :
+             (tabLocation === SC.TOP_TOOLBAR_LOCATION) ?
+             { top: tabHeight+1, left: 0, right: 0, bottom: 0 } :
+             { top: 0, left: 0, right: 0, bottom: tabHeight-1 } ;
+    
+    containerView = this.containerView.extend(SC.Border, {
       layout: layout,
+      borderStyle: SC.BORDER_BLACK,
       //adding the role
       ariaRole: 'tabpanel'
     });

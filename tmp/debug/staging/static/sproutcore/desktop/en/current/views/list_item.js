@@ -1,10 +1,9 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            portions copyright @2009 Apple Inc.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-
 
 SC.LIST_ITEM_ACTION_CANCEL = 'sc-list-item-cancel-action';
 SC.LIST_ITEM_ACTION_REFRESH = 'sc-list-item-cancel-refresh';
@@ -23,7 +22,7 @@ SC.LIST_ITEM_ACTION_EJECT = 'sc-list-item-cancel-eject';
 
   @extends SC.View
   @extends SC.Control
-  @extends SC.InlineEditable
+  @extends SC.Editable
   @extends SC.StaticLayout
   @since SproutCore 1.0
 */
@@ -158,7 +157,13 @@ SC.ListItemView = SC.View.extend(
     Otherwise space will be allocated for it.
   */
   contentIsBranchKey: null,
-  
+
+
+  /**
+    YES if the item view is currently editing.
+  */
+  isEditing: NO,
+
   /**
     Indent to use when rendering a list item with an outline level > 0.  The
     left edge of the list item will be indented by this amount for each
@@ -200,9 +205,8 @@ SC.ListItemView = SC.View.extend(
     var content = this.get('content');
     return content && (content.get ? content.get('isEditable')!==NO : NO);
   }.property('content').cacheable(),
-  
-  inlineEditorDelegate: SC.InlineTextFieldDelegate,
-  
+
+
   /**
     Finds and retrieves the element containing the label.  This is used
     for inline editing.  The default implementation returns a CoreQuery
@@ -498,19 +502,22 @@ SC.ListItemView = SC.View.extend(
    return NO;
   },
 
-  /*
-  * @method
-  *
-  * Edits the label portion of the list item. If scrollIfNeeded is YES, will
-  * scroll to the item before editing it.
-  *
-  * @params {Boolean} if the parent scroll view should be scrolled to this item
-  * before editing begins
-  * @returns {Boolean} YES if successful
-  */
-  beginEditing: function(original, scrollIfNeeded) {
-    var el        = this.$label(),
-        parent    = this.get('parentView');
+  beginEditing: function() {
+    if (this.get('isEditing')) return YES ;
+    //if (!this.get('contentIsEditable')) return NO ;
+    return this._beginEditing(YES);
+  },
+
+  _beginEditing: function(scrollIfNeeded) {
+    var content   = this.get('content'),
+        del       = this.get('displayDelegate'),
+        labelKey  = this.getDelegateProperty('contentValueKey', del),
+        parent    = this.get('parentView'),
+        pf        = parent ? parent.get('frame') : null,
+        el        = this.$label(),
+        validator = this.get('validator'),
+        f, v, offset, oldLineHeight, fontSize, top, lineHeight, escapeHTML,
+        lineHeightShift, targetLineHeight, ret ;
 
     // if possible, find a nearby scroll view and scroll into view.
     // HACK: if we scrolled, then wait for a loop and get the item view again
@@ -520,44 +527,28 @@ SC.ListItemView = SC.View.extend(
       var collectionView = this.get('owner'), idx = this.get('contentIndex');
       this.invokeLast(function() {
         var item = collectionView.itemViewForContentIndex(idx);
-        if (item && item.beginEditing) item.beginEditing(NO);
+        if (item && item._beginEditing) item._beginEditing(NO);
       });
       return YES; // let the scroll happen then begin editing...
     }
 
-    else if (!parent || !el || el.get('length')===0) return NO ;
-
-    else return original();
-  }.enhance(),
-
-  /*
-  * @method
-  *
-  * Configures the editor to overlay the label properly.
-  */
-  inlineEditorWillBeginEditing: function(editor, editable, value) {
-    var content   = this.get('content'),
-        del       = this.get('displayDelegate'),
-        labelKey  = this.getDelegateProperty('contentValueKey', del),
-        parent    = this.get('parentView'),
-        el        = this.$label(),
-        validator = this.get('validator'),
-        f, v, offset, fontSize, top, lineHeight, escapeHTML,
-        lineHeightShift, targetLineHeight, ret ;
-
-    v = (labelKey && content) ? (content.get ? content.get(labelKey) : content[labelKey]) : content;
+    // nothing to do...
+    if (!parent || !el || el.get('length')===0) return NO ;
+    v = (labelKey && content && content.get) ? content.get(labelKey) : null ;
 
     f = this.computeFrameWithParentFrame(null);
+    offset = SC.viewportOffset(el[0]);
 
     // if the label has a large line height, try to adjust it to something
     // more reasonable so that it looks right when we show the popup editor.
-    lineHeight = this._oldLineHeight = el.css('lineHeight');
+    oldLineHeight = el.css('lineHeight');
     fontSize = el.css('fontSize');
     top = this.$().css('top');
 
     if (top) top = parseInt(top.substring(0,top.length-2),0);
     else top =0;
 
+    lineHeight = oldLineHeight;
     lineHeightShift = 0;
 
     if (fontSize && lineHeight) {
@@ -568,26 +559,44 @@ SC.ListItemView = SC.View.extend(
       } else oldLineHeight = null ;
     }
 
-    el = el[0];
-    offset = SC.offset(el);
-
     f.x = offset.x;
     f.y = offset.y+top + lineHeightShift ;
-    f.height = el.offsetHeight ;
-    f.width = el.offsetWidth ;
+    f.height = el[0].offsetHeight ;
+    f.width = el[0].offsetWidth ;
 
     escapeHTML = this.get('escapeHTML');
 
-    editor.set({
-      value: v,
-      exampleFrame: f,
+    ret = SC.InlineTextFieldView.beginEditing({
+      frame: f,
       exampleElement: el,
+      delegate: this,
+      value: v,
       multiline: NO,
       isCollection: YES,
       validator: validator,
-      escapeHTML: escapeHTML
+      escapeHTML: escapeHTML,
+      pane: this.get('pane'),
+      layout: this.get('layout')
     }) ;
+
+    // restore old line height for original item if the old line height
+    // was saved.
+    if (oldLineHeight) el.css({ lineHeight: oldLineHeight }) ;
+
+    // Done!  If this failed, then set editing back to no.
+    return ret ;
   },
+
+  commitEditing: function() {
+   if (!this.get('isEditing')) return YES ;
+   return SC.InlineTextFieldView.commitEditing();
+  },
+
+  discardEditing: function() {
+   if (!this.get('isEditing')) return YES ;
+   return SC.InlineTextFieldView.discardEditing();
+  },
+
 
   /** @private
     Allow editing.
@@ -599,43 +608,33 @@ SC.ListItemView = SC.View.extend(
   /** @private
    Hide the label view while the inline editor covers it.
   */
-  inlineEditorDidBeginEditing: function(original, inlineEditor, value, editable) {
-    original(inlineEditor, value, editable);
+  inlineEditorDidBeginEditing: function(inlineEditor) {
+   var el = this.$label() ;
+   this._oldOpacity = el.css('opacity');
+   el.css('opacity', 0.0) ;
+  },
 
-    var el = this.$label() ;
-    this._oldOpacity = el.css('opacity');
-    el.css('opacity', 0.0) ;
-
-    // restore old line height for original item if the old line height 
-    // was saved.
-    if (this._oldLineHeight) el.css({ lineHeight: this._oldLineHeight }) ;
-  }.enhance(),
+  inlineEditorShouldEndEditing: function(inlineEditor, finalValue) {
+   return YES ;
+  },
 
   /** @private
    Update the field value and make it visible again.
   */
-  inlineEditorDidCommitEditing: function(editor, finalValue, editable) {
+  inlineEditorDidEndEditing: function(inlineEditor, finalValue) {
+    this.set('isEditing', NO) ;
+
     var content = this.get('content') ;
     var del = this.displayDelegate ;
     var labelKey = this.getDelegateProperty('contentValueKey', del) ;
-
-    if(labelKey && content) {
-      if(content.set) content.set(labelKey, finalValue);
-      else content[labelKey] = finalValue;
+    if (labelKey && content && content.set) {
+     content.set(labelKey, finalValue) ;
     }
 
-    else this.set('content', finalValue);
+    this.$label().css("opacity", this._oldOpacity);
 
     this.displayDidChange();
-
-    this._endEditing();
   },
-
-  _endEditing: function(original) {
-    this.$label().css('opacity', this._oldOpacity);
-
-    original();
-  }.enhance(),
 
   /** @private
     Fills the passed html-array with strings that can be joined to form the

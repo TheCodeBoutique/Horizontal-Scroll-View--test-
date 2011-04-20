@@ -1,10 +1,9 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2009 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
-
 
 /**
   @class
@@ -30,8 +29,6 @@ SC.BaseTheme.radioGroupRenderDelegate = SC.RenderDelegate.create({
   name: 'radio-group',
   
   render: function(dataSource, context) {
-    this.addSizeClassName(dataSource, context);
-
     var theme = dataSource.get('theme'),
         name = SC.guidFor(this),
         items = dataSource.get('items'), idx, len = items.length, item;
@@ -39,7 +36,6 @@ SC.BaseTheme.radioGroupRenderDelegate = SC.RenderDelegate.create({
     
     context.addClass(dataSource.get('layoutDirection'));
     context.attr('role', 'radiogroup');
-    context.attr('aria-disabled', dataSource.get('isEnabled') ? 'false' : 'true');
     
     for (idx = 0; idx < len; idx++) {
       item = items[idx];
@@ -62,14 +58,11 @@ SC.BaseTheme.radioGroupRenderDelegate = SC.RenderDelegate.create({
   },
   
   update: function(dataSource, jquery) {
-    this.updateSizeClassName(dataSource, jquery);
-
     var theme = dataSource.get('theme'),
         name = SC.guidFor(this),
         items = dataSource.get('items'), idx, len = items.length, item;
     
     jquery.addClass(dataSource.get('layoutDirection'));
-    jquery.attr('aria-disabled', dataSource.get('isEnabled') ? 'false' : 'true');
     
     if (dataSource.get('renderState').radioCount !== len) {
       // just regenerate if the count has changed. It would be better

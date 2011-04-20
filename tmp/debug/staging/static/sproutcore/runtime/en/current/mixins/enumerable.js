@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore Costello - Property Observing Library
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -11,7 +11,7 @@ sc_require('system/enumerator');
 /*globals Prototype */
 
 /**
-  @class
+  @namespace
 
   This mixin defines the common interface implemented by enumerable objects
   in SproutCore.  Most of these methods follow the standard Array iteration
@@ -22,8 +22,7 @@ sc_require('system/enumerator');
   can use any of these methods on simple arrays.  If Array already implements
   one of these methods, the mixin will not override them.
 
-  Writing Your Own Enumerable
-  -----
+  h3. Writing Your Own Enumerable
 
   To make your own custom class enumerable, you need two items:
 
@@ -34,12 +33,11 @@ sc_require('system/enumerator');
 
   2. If you must implement nextObject().  See documentation.
 
-  Once you have these two methods implemented, apply the SC.Enumerable mixin
+  Once you have these two methods implement, apply the SC.Enumerable mixin
   to your class and you will be able to enumerate the contents of your object
   like any other collection.
 
-  Using SproutCore Enumeration with Other Libraries
-  -----
+  h3. Using SproutCore Enumeration with Other Libraries
 
   Many other libraries provide some kind of iterator or enumeration like
   facility.  This is often where the most common API conflicts occur.
@@ -49,12 +47,12 @@ sc_require('system/enumerator');
 
   @since SproutCore 1.0
 */
-SC.Enumerable = /** @scope SC.Enumerable.prototype */{
+SC.Enumerable = {
 
   /**
     Walk like a duck.
 
-    @type Boolean
+    @property {Boolean}
   */
   isEnumerable: YES,
 
@@ -84,9 +82,9 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     The default impementation of this method simply looks up the index.
     This works great on any Array-like objects.
 
-    @param {Number} index the current index of the iteration
-    @param {Object} previousObject the value returned by the last call to nextObject.
-    @param {Object} context a context object you can use to maintain state.
+    @param index {Number} the current index of the iteration
+    @param previousObject {Object} the value returned by the last call to nextObject.
+    @param context {Object} a context object you can use to maintain state.
     @returns {Object} the next object in the iteration or undefined
   */
   nextObject: function(index, previousObject, context) {
@@ -144,7 +142,9 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     The callback method you provide should have the following signature (all
     parameters are optional):
 
-          function(item, index, enumerable) ;
+    {{{
+      function(item, index, enumerable) ;
+    }}}
 
     - *item* is the current item in the iteration.
     - *index* is the current index in the iteration
@@ -154,8 +154,8 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     object that will be set as "this" on the context.  This is a good way
     to give your iterator function access to the current object.
 
-    @param {Function} callback the callback to execute
-    @param {Object} target the target object to use
+    @params callback {Function} the callback to execute
+    @params target {Object} the target object to use
     @returns {Object} this
   */
   forEach: function(callback, target) {
@@ -217,7 +217,9 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     The callback method you provide should have the following signature (all
     parameters are optional):
 
-        function(item, index, enumerable) ;
+    {{{
+      function(item, index, enumerable) ;
+    }}}
 
     - *item* is the current item in the iteration.
     - *index* is the current index in the iteration
@@ -229,8 +231,8 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     object that will be set as "this" on the context.  This is a good way
     to give your iterator function access to the current object.
 
-    @param {Function} callback the callback to execute
-    @param {Object} target the target object to use
+    @params callback {Function} the callback to execute
+    @params target {Object} the target object to use
     @returns {Array} The mapped array.
   */
   map: function(callback, target) {
@@ -255,7 +257,7 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     Similar to map, this specialized function returns the value of the named
     property on all items in the enumeration.
 
-    @param {String} key name of the property
+    @params key {String} name of the property
     @returns {Array} The mapped array.
   */
   mapProperty: function(key) {
@@ -272,7 +274,9 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     The callback method you provide should have the following signature (all
     parameters are optional):
 
-          function(item, index, enumerable) ;
+    {{{
+      function(item, index, enumerable) ;
+    }}}
 
     - *item* is the current item in the iteration.
     - *index* is the current index in the iteration
@@ -284,8 +288,8 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     object that will be set as "this" on the context.  This is a good way
     to give your iterator function access to the current object.
 
-    @param {Function} callback the callback to execute
-    @param {Object} target the target object to use
+    @params callback {Function} the callback to execute
+    @params target {Object} the target object to use
     @returns {Array} A filtered array.
   */
   filter: function(callback, target) {
@@ -346,8 +350,8 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     can pass an optional second argument with the target value.  Otherwise
     this will match any property that evaluates to true.
 
-    @param {String} key the property to test
-    @param {String} value optional value to test against.
+    @params key {String} the property to test
+    @param value {String} optional value to test against.
     @returns {Array} filtered array
   */
   filterProperty: function(key, value) {
@@ -375,7 +379,9 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     The callback method you provide should have the following signature (all
     parameters are optional):
 
-          function(item, index, enumerable) ;
+    {{{
+      function(item, index, enumerable) ;
+    }}}
 
     - *item* is the current item in the iteration.
     - *index* is the current index in the iteration
@@ -387,8 +393,8 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     object that will be set as "this" on the context.  This is a good way
     to give your iterator function access to the current object.
 
-    @param {Function} callback the callback to execute
-    @param {Object} target the target object to use
+    @params callback {Function} the callback to execute
+    @params target {Object} the target object to use
     @returns {Object} Found item or null.
   */
   find: function(callback, target) {
@@ -414,8 +420,8 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
 
     This method works much like the more generic find() method.
 
-    @param {String} key the property to test
-    @param {String} value optional value to test against.
+    @params key {String} the property to test
+    @param value {String} optional value to test against.
     @returns {Object} found item or null
   */
   findProperty: function(key, value) {
@@ -441,7 +447,9 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     The callback method you provide should have the following signature (all
     parameters are optional):
 
-          function(item, index, enumerable) ;
+    {{{
+      function(item, index, enumerable) ;
+    }}}
 
     - *item* is the current item in the iteration.
     - *index* is the current index in the iteration
@@ -453,12 +461,14 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     object that will be set as "this" on the context.  This is a good way
     to give your iterator function access to the current object.
 
-    Example Usage:
+    h4. Example Usage
 
-          if (people.every(isEngineer)) { Paychecks.addBigBonus(); }
+    {{{
+      if (people.every(isEngineer)) { Paychecks.addBigBonus(); }
+    }}}
 
-    @param {Function} callback the callback to execute
-    @param {Object} target the target object to use
+    @params callback {Function} the callback to execute
+    @params target {Object} the target object to use
     @returns {Boolean}
   */
   every: function(callback, target) {
@@ -483,8 +493,8 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     Returns YES if the passed property resolves to true for all items in the
     enumerable.  This method is often simpler/faster than using a callback.
 
-    @param {String} key the property to test
-    @param {String} value optional value to test against.
+    @params key {String} the property to test
+    @param value {String} optional value to test against.
     @returns {Array} filtered array
   */
   everyProperty: function(key, value) {
@@ -511,7 +521,9 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     The callback method you provide should have the following signature (all
     parameters are optional):
 
-          function(item, index, enumerable) ;
+    {{{
+      function(item, index, enumerable) ;
+    }}}
 
     - *item* is the current item in the iteration.
     - *index* is the current index in the iteration
@@ -523,12 +535,14 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     object that will be set as "this" on the context.  This is a good way
     to give your iterator function access to the current object.
 
-    Usage Example:
+    h4. Usage Example
 
-          if (people.some(isManager)) { Paychecks.addBiggerBonus(); }
+    {{{
+      if (people.some(isManager)) { Paychecks.addBiggerBonus(); }
+    }}}
 
-    @param {Function} callback the callback to execute
-    @param {Object} target the target object to use
+    @params callback {Function} the callback to execute
+    @params target {Object} the target object to use
     @returns {Array} A filtered array.
   */
   some: function(callback, target) {
@@ -553,8 +567,8 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     Returns YES if the passed property resolves to true for any item in the
     enumerable.  This method is often simpler/faster than using a callback.
 
-    @param {String} key the property to test
-    @param {String} value optional value to test against.
+    @params key {String} the property to test
+    @param value {String} optional value to test against.
     @returns {Boolean} YES
   */
   someProperty: function(key, value) {
@@ -581,7 +595,9 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     The callback method you provide should have the following signature (all
     parameters are optional):
 
-          function(previousValue, item, index, enumerable) ;
+    {{{
+      function(previousValue, item, index, enumerable) ;
+    }}}
 
     - *previousValue* is the value returned by the last call to the iterator.
     - *item* is the current item in the iteration.
@@ -598,10 +614,10 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     pass a target object to set as this for the callback.  It's part of the
     spec. Sorry.
 
-    @param {Function} callback the callback to execute
-    @param {Object} initialValue initial value for the reduce
-    @param {String} reducerProperty internal use only.  May not be available.
-    @returns {Object} The reduced value.
+    @params callback {Function} the callback to execute
+    @params initialValue {Object} initial value for the reduce
+    @params reducerProperty {String} internal use only.  May not be available.
+    @returns {Array} A filtered array.
   */
   reduce: function(callback, initialValue, reducerProperty) {
     if (typeof callback !== "function") throw new TypeError() ;
@@ -641,8 +657,8 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     implements it.  This method corresponds to the implementation in
     Prototype 1.6.
 
-    @param {String} methodName the name of the method
-    @param {Object...} args optional arguments to pass as well.
+    @param methodName {String} the name of the method
+    @param args {Object...} optional arguments to pass as well.
     @returns {Array} return values from calling invoke.
   */
   invoke: function(methodName) {
@@ -679,9 +695,9 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     a useful way to attempt to apply changes to a collection of objects unless
     or until one fails.
 
-    @param {Object} targetValue the target return value
-    @param {String} methodName the name of the method
-    @param {Object...} args optional arguments to pass as well.
+    @param targetValue {Object} the target return value
+    @param methodName {String} the name of the method
+    @param args {Object...} optional arguments to pass as well.
     @returns {Array} return values from calling invoke.
   */
   invokeWhile: function(targetValue, methodName) {
@@ -729,7 +745,7 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     Converts an enumerable into a matrix, with inner arrays grouped based
     on a particular property of the elements of the enumerable.
 
-    @param {String} key the property to test
+    @params key {String} the property to test
     @returns {Array} matrix of arrays
   */
   groupBy: function(key){
@@ -737,14 +753,14 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
         ret = [],
         last = null,
         context = SC.Enumerator._popContext(),
-        grouped = [],
+        grouped = [], 
         keyValues = [],
         idx, next, cur;
-
+    
     for(idx=0;idx<len;idx++) {
       next = this.nextObject(idx, last, context) ;
       cur = next ? (next.get ? next.get(key) : next[key]) : null;
-      if(SC.none(grouped[cur])) {
+      if(SC.none(grouped[cur])) { 
         grouped[cur] = []; keyValues.push(cur);
       }
       grouped[cur].push(next);
@@ -752,9 +768,9 @@ SC.Enumerable = /** @scope SC.Enumerable.prototype */{
     }
     last = null;
     context = SC.Enumerator._pushContext(context);
-
+    
     for(idx=0,len=keyValues.length; idx < len; idx++){
-      ret.push(grouped[keyValues[idx]]);
+      ret.push(grouped[keyValues[idx]]);        
     }
     return ret ;
   }
@@ -777,8 +793,7 @@ SC._buildReducerFor = function(reducerKey, reducerProperty) {
   }.property('[]') ;
 };
 
-/** @class */
-SC.Reducers = /** @scope SC.Reducers.prototype */ {
+SC.Reducers = /** @lends SC.Enumerable */ {
   /**
     This property will trigger anytime the enumerable's content changes.
     You can observe this property to be notified of changes to the enumerables
@@ -806,249 +821,10 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
     @returns {Object} receiver
   */
   enumerableContentDidChange: function(start, length, delta, addedObjects, removedObjects) {
-    this._setupContentObservers(addedObjects, removedObjects);
+    this._setupEnumerableObservers(addedObjects, removedObjects);
     this.notifyPropertyChange('[]') ;
-    this._notifyEnumerableObservers(addedObjects, removedObjects, start);
-  },
 
-  /**
-    For all registered property chains on this object, removed them from objects
-    being removed from the enumerable, and clone them onto newly added objects.
-
-    @param {Object[]} addedObjects the objects being added to the enumerable
-    @param {Object[]} removedObjects the objected being removed from the enumerable
-    @returns {Object} receiver
-  */
-  setupPropertyChainsForEnumerableContent: function(addedObjects, removedObjects) {
-    var chains = this._kvo_enumerable_property_chains;
-
-    if (chains) {
-      chains.forEach(function(chain) {
-        var idx, len = removedObjects.get('length'),
-            chainGuid = SC.guidFor(chain),
-            clonedChain, item, kvoChainList = '_kvo_enumerable_property_clones';
-
-        chain.notifyPropertyDidChange();
-
-        for (idx = 0; idx < len; idx++) {
-          item = removedObjects[idx];
-          clonedChain = item[kvoChainList][chainGuid];
-          clonedChain.deactivate();
-          delete item[kvoChainList][chainGuid];
-        }
-
-        len = addedObjects.get('length');
-        for (idx = 0; idx < len; idx++) {
-          this._clonePropertyChainToItem(chain, addedObjects[idx]);
-        }
-      }, this);
-    }
     return this ;
-  },
-
-  /**
-    Register a property chain to propagate to enumerable content.
-
-    This will clone the property chain to each item in the enumerable,
-    then save it so that it is automatically set up and torn down when
-    the enumerable content changes.
-
-    @param {String} property the property being listened for on this object
-    @param {SC._PropertyChain} chain the chain to clone to items
-  */
-  registerDependentKeyWithChain: function(property, chain) {
-    // Get the set of all existing property chains that should
-    // be propagated to enumerable contents. If that set doesn't
-    // exist yet, _kvo_for() will create it.
-    var kvoChainList = '_kvo_enumerable_property_chains',
-        chains, item, clone, cloneList;
-
-    chains = this._kvo_for(kvoChainList, SC.CoreSet);
-
-    // Save a reference to the chain on this object. If new objects
-    // are added to the enumerable, we will clone this chain and add
-    // it to the new object.
-    chains.add(chain);
-
-    this.forEach(function(item) {
-      this._clonePropertyChainToItem(chain, item);
-    }, this);
-  },
-
-  /**
-    Clones an SC._PropertyChain to a content item.
-
-    @param {SC._PropertyChain} chain
-    @param {Object} item
-  */
-  _clonePropertyChainToItem: function(chain, item) {
-    var clone        = SC.clone(chain),
-        kvoCloneList = '_kvo_enumerable_property_clones',
-        cloneList;
-
-    clone.object = item;
-
-    cloneList = item[kvoCloneList] = item[kvoCloneList] || {};
-    cloneList[SC.guidFor(chain)] = clone;
-
-    clone.activate(item);
-  },
-
-  /**
-    Removes a dependent key from the enumerable, and tears it down on
-    all content objects.
-
-    @param {String} property
-    @param {SC._PropertyChain} chain
-  */
-  removeDependentKeyWithChain: function(property, chain) {
-    var kvoChainList = '_kvo_enumerable_property_chains',
-        kvoCloneList = '_kvo_enumerable_property_clones',
-        chains, item, clone, cloneList;
-
-    this.forEach(function(item) {
-      item.removeDependentKeyWithChain(property, chain);
-
-      cloneList = item[kvoCloneList];
-      clone = cloneList[SC.guidFor(chain)];
-
-      clone.deactivate(item);
-    }, this);
-  },
-
-  /**
-    Called when the contents of the enumerable mutates.
-
-    Implementers of classes that mixin SC.Enumerable should ensure that they
-    call enumerableContentDidChange(), which invokes this method automatically.
-
-    @param {Array} addedObjects the array of objects that were added to the enumerable
-    @param {Array} removedObjects the array of objects that were removed from the enumerable
-    @param {Number} index the index at which the mutation occurred
-  */
-  _notifyEnumerableObservers: function(addedObjects, removedObjects, index) {
-    var observers, members, member, memberLoc, membersLength;
-    var target, method, context;
-
-    observers = this._kvo_enumerable_observers;
-
-    if (observers) {
-      members = SC.clone(observers.getMembers());
-      membersLength = members.length;
-
-      for(memberLoc=0; memberLoc < membersLength; memberLoc++) {
-        member = members[memberLoc];
-
-        target = member[0];
-        method = member[1];
-        context = member[2];
-
-        method.call(target, addedObjects, removedObjects, index, this, context);
-      }
-    }
-  },
-
-  /**
-    Adds an enumerable observer to the enumerable.
-
-    Enumerable observers are called whenever the enumerable's content
-    mutates. For example, adding an object via pushObject(), or replacing
-    objects via replace(), will cause all enumerable observers to be fired.
-
-    Observer methods that you register should have the following signature:
-
-        enumerableDidChange: function(addedObjects, removedObjects, index, source)
-
-    addedObjects will contain an array of the objects added and removedObjects
-    will contain an array of the objects that were removed. The index parameter
-    contains the index at which the mutation occurred.
-
-    The fourth parameter, source, is the enumerable that mutated. This is useful
-    if you register the same observer method on multiple enumerables.
-
-    If you pass a context parameter to addEnumerableObserver(), it will be
-    included when the observer is fired:
-
-        function(addedObjects, removedObjects, sender, context);
-
-    @param {Object} target the target object to invoke
-    @param {String|Function} method the method to invoke
-    @param {Object} context optional context
-
-    @returns {SC.Object} self
-  */
-  addEnumerableObserver: function(target, method, context) {
-    var observers;
-
-    // Normalize parameters. If a function is passed as
-    // target, make it the method.
-    if (method === undefined) {
-      method = target;
-      target = this;
-    }
-
-    // Call the observer in the context of the enumerable
-    // if no explicit target is given.
-    if (!target) { target = this; }
-
-    // If the method is provided as a string, look it up on
-    // the target.
-    if (typeof method === "string") {
-      method = target[method];
-    }
-
-    if (!method) {
-      throw "You must pass a method to addEnumerableObserver()";
-    }
-
-    observers = this._kvo_for('_kvo_enumerable_observers', SC.ObserverSet);
-    observers.add(target, method, context);
-
-    return this;
-  },
-
-  /**
-    Removes an enumerable observer. Expects the same target and method that
-    were used to register the observer.
-
-    @param {Object} target the target object to invoke
-    @param {String|Function} method the method to invoke
-
-    @returns {SC.Object} self
-  */
-  removeEnumerableObserver: function(target, method) {
-    var observers;
-
-    // Normalize parameters. If a function is passed as
-    // target, make it the method.
-    if (method === undefined) {
-      method = target;
-      target = this;
-    }
-
-    // Call the observer in the context of the enumerable
-    // if no explicit target is given.
-    if (!target) { target = this; }
-
-    // If the method is provided as a string, look it up on
-    // the target.
-    if (typeof method === "string") {
-      method = target[method];
-    }
-
-    if (!method) {
-      throw "You must pass a method to removeEnumerableObserver()";
-    }
-
-    observers = this._kvo_enumerable_observers;
-
-    if (observers) {
-      observers.remove(target, method);
-    } else {
-      throw "%@: Can't remove observers if no observer has been added.";
-    }
-
-    return this;
   },
 
   /**
@@ -1057,7 +833,6 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
     Clones a segment of an observer chain and applies it
     to an element of this Enumerable.
 
-    @param {Object} item The element
     @param {SC._ChainObserver} chainObserver the chain segment to begin from
   */
   _resumeChainObservingForItemWithChainObserver: function(item, chainObserver) {
@@ -1078,7 +853,7 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
 
     // Maintain a list of observers on the item so we can remove them
     // if it is removed from the enumerable.
-    item._kvo_for(SC.keyFor('_kvo_content_observers', key)).push(observer);
+    item._kvo_for(SC.keyFor('_kvo_enumerable_observers', key)).push(observer);
   },
 
   /**
@@ -1091,43 +866,31 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
     @param {Array} addedObjects the array of objects that have been added
     @param {Array} removedObjects the array of objects that have been removed
   */
-  _setupContentObservers: function(addedObjects, removedObjects) {
+  _setupEnumerableObservers: function(addedObjects, removedObjects) {
     if (!addedObjects) { addedObjects = this; }
     if (!removedObjects) { removedObjects = []; }
 
-    // Check the last values passed and skip this step if they are
-    // the same.
-    //
-    // TODO: This is obviously a suboptimal workaround to the fact that
-    // enumerableContentDidChange can get called twice when implementing
-    // SC.ArrayController. We should revisit how enumerableContentDidChange
-    // works in that context. --TD
-    var lastAdded = this._lastAdded;
-    var lastRemoved = this._lastRemoved;
-
-    if(lastAdded === addedObjects) { addedObjects = []; }
-    if(lastRemoved === removedObjects) { removedObjects = []; }
-
-    this._lastAdded = addedObjects;
-    this._lastRemoved = removedObjects;
-
-    var observedKeys = this._kvo_for('_kvo_content_observed_keys', SC.CoreSet);
+    var observedKeys = this._kvo_for('_kvo_enumerable_observed_keys', SC.CoreSet);
     var kvoKey;
 
     // Only setup and teardown enumerable observers if we have keys to observe
     if (observedKeys.get('length') > 0) {
+      // Loop through removed objects and remove any enumerable observers that
+      // belong to them.
+      removedObjects.forEach(function(item) {
+        item._kvo_for('_kvo_enumerable_observers').forEach(function(observer) {
+          // Remove the observer if it is pointing at this enumerable.
+          // If the observer belongs to another enumerable, just ignore it.
+          if (observer.object === this) {
+            item.removeObserver(observer.key, observer, observer.propertyDidChange);
+          }
+        });
+      });
 
       // added and resume the chain observer.
       observedKeys.forEach(function(key) {
-        kvoKey = SC.keyFor('_kvo_content_observers', key);
+        kvoKey = SC.keyFor('_kvo_enumerable_observers', key);
 
-        // Loop through removed objects and remove any enumerable observers that
-        // belong to them.
-        removedObjects.forEach(function(item) {
-          item._kvo_for(kvoKey).forEach(function(observer) {
-            observer.destroyChain();
-          }, this);
-        }, this);
         var lastObserver;
 
         // Get all original ChainObservers associated with the key
@@ -1155,61 +918,28 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
   /**
     @private
 
-    Adds a content observer. Content observers are able to
+    Adds an enumerable observer. Enumerable observers are able to
     propagate chain observers to each member item in the enumerable,
     so that the observer is fired whenever a single item changes.
 
     You should never call this method directly. Instead, you should
-    call addObserver() with the special '@each' property in the path.
+    call addObserver() with the special '[]' property in the path.
 
     For example, if you wanted to observe changes to each item's isDone
     property, you could call:
 
-        arrayController.addObserver('@each.isDone');
-
-    @param {SC._ChainObserver} chainObserver the chain observer to propagate
+        arrayController.addObserver('[].isDone');
   */
-  _addContentObserver: function(chainObserver) {
-    var key = chainObserver.next.property;
-
+  addEnumerableObserver: function(key, target, action) {
     // Add the key to a set so we know what we are observing
-    this._kvo_for('_kvo_content_observed_keys', SC.CoreSet).push(key);
+    this._kvo_for('_kvo_enumerable_observed_keys', SC.CoreSet).push(key);
 
     // Add the passed ChainObserver to an ObserverSet for that key
-    var kvoKey = SC.keyFor('_kvo_content_observers', key);
-    this._kvo_for(kvoKey).push(chainObserver);
+    var kvoKey = SC.keyFor('_kvo_enumerable_observers', key);
+    this._kvo_for(kvoKey).push(target);
 
     // set up chained observers on the initial content
-    this._setupContentObservers(this);
-  },
-
-  /**
-    @private
-
-    Removes a content observer. Pass the same chain observer
-    that was used to add the content observer.
-
-    @param {SC._ChainObserver} chainObserver the chain observer to propagate
-  */
-
-  _removeContentObserver: function(chainObserver) {
-    var observers, kvoKey;
-    var observedKeys = this._kvo_content_observed_keys;
-    var key = chainObserver.next.property;
-
-    if (observedKeys.contains(key)) {
-
-      kvoKey = SC.keyFor('_kvo_content_observers', key);
-      observers = this._kvo_for(kvoKey);
-
-      observers.removeObject(chainObserver);
-
-      this._setupContentObservers([], this);
-
-      if (observers.length === 0) {
-        this._kvo_for('_kvo_content_observed_keys').remove(key);
-      }
-    }
+    this._setupEnumerableObservers(this);
   },
 
   /**
@@ -1225,19 +955,24 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
     property.  You can call this at the top of your unknownProperty handler
     like so:
 
+    {{{
       unknownProperty: function(key, value) {
         var ret = this.handleReduceProperty(key, value) ;
         if (ret === undefined) {
           // process like normal
         }
       }
+    }}}
 
-    @param {String} key the reduce property key
+    @param {String} key
+      the reduce property key
 
-    @param {Object} value a value or undefined.
+    @param {Object} value
+      a value or undefined.
 
-    @param {Boolean} generateProperty only set to false if you do not want
-      an optimized computed property handler generated for this.  Not common.
+    @param {Boolean} generateProperty
+      only set to false if you do not want an optimized computed property
+      handler generated for this.  Not common.
 
     @returns {Object} the reduced property or undefined
   */
@@ -1284,13 +1019,6 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
 
   /**
     Reducer for @max reduced property.
-
-    @param {Object} previousValue The previous value in the enumerable
-    @param {Object} item The current value in the enumerable
-    @param {Number} index The index of the current item in the enumerable
-    @param {String} reducerProperty (Optional) The property in the enumerable being reduced
-
-    @returns {Object} reduced value
   */
   reduceMax: function(previousValue, item, index, e, reducerProperty) {
     if (reducerProperty && item) {
@@ -1301,16 +1029,7 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
   },
 
   /**
-    Reduces an enumberable to the max of the items in the enumerable. If
-    reducerProperty is passed, it will reduce that property. Otherwise, it will
-    reduce the item itself.
-
-    @param {Object} previousValue The previous value in the enumerable
-    @param {Object} item The current value in the enumerable
-    @param {Number} index The index of the current item in the enumerable
-    @param {String} reducerProperty (Optional) The property in the enumerable being reduced
-
-    @returns {Object} reduced value
+    Reducer for @maxObject reduced property.
   */
   reduceMaxObject: function(previousItem, item, index, e, reducerProperty) {
 
@@ -1331,16 +1050,7 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
   },
 
   /**
-    Reduces an enumberable to the min of the items in the enumerable. If
-    reducerProperty is passed, it will reduce that property. Otherwise, it will
-    reduce the item itself.
-
-    @param {Object} previousValue The previous value in the enumerable
-    @param {Object} item The current value in the enumerable
-    @param {Number} index The index of the current item in the enumerable
-    @param {String} reducerProperty (Optional) The property in the enumerable being reduced
-
-    @returns {Object} reduced value
+    Reducer for @min reduced property.
   */
   reduceMin: function(previousValue, item, index, e, reducerProperty) {
     if (reducerProperty && item) {
@@ -1351,16 +1061,7 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
   },
 
   /**
-    Reduces an enumberable to the max of the items in the enumerable. If
-    reducerProperty is passed, it will reduce that property. Otherwise, it will
-    reduce the item itself.
-
-    @param {Object} previousValue The previous value in the enumerable
-    @param {Object} item The current value in the enumerable
-    @param {Number} index The index of the current item in the enumerable
-    @param {String} reducerProperty (Optional) The property in the enumerable being reduced
-
-    @returns {Object} reduced value
+    Reducer for @maxObject reduced property.
   */
   reduceMinObject: function(previousItem, item, index, e, reducerProperty) {
 
@@ -1381,16 +1082,7 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
   },
 
   /**
-    Reduces an enumberable to the average of the items in the enumerable. If
-    reducerProperty is passed, it will reduce that property. Otherwise, it will
-    reduce the item itself.
-
-    @param {Object} previousValue The previous value in the enumerable
-    @param {Object} item The current value in the enumerable
-    @param {Number} index The index of the current item in the enumerable
-    @param {String} reducerProperty (Optional) The property in the enumerable being reduced
-
-    @returns {Object} reduced value
+    Reducer for @average reduced property.
   */
   reduceAverage: function(previousValue, item, index, e, reducerProperty) {
     if (reducerProperty && item) {
@@ -1403,16 +1095,7 @@ SC.Reducers = /** @scope SC.Reducers.prototype */ {
   },
 
   /**
-    Reduces an enumberable to the sum of the items in the enumerable. If
-    reducerProperty is passed, it will reduce that property. Otherwise, it will
-    reduce the item itself.
-
-    @param {Object} previousValue The previous value in the enumerable
-    @param {Object} item The current value in the enumerable
-    @param {Number} index The index of the current item in the enumerable
-    @param {String} reducerProperty (Optional) The property in the enumerable being reduced
-
-    @returns {Object} reduced value
+    Reducer for @sum reduced property.
   */
   reduceSum: function(previousValue, item, index, e, reducerProperty) {
     if (reducerProperty && item) {
@@ -1475,23 +1158,23 @@ Array.prototype.isEnumerable = YES ;
     groupBy: function(key) {
       var len = this.length,
           ret = [],
-          grouped = [],
+          grouped = [], 
           keyValues = [],
           idx, next, cur;
-
+      
       for(idx=0;idx<len;idx++) {
         next = this[idx] ;
         cur = next ? (next.get ? next.get(key) : next[key]) : null;
         if(SC.none(grouped[cur])){ grouped[cur] = []; keyValues.push(cur); }
         grouped[cur].push(next);
       }
-
+      
       for(idx=0,len=keyValues.length; idx < len; idx++){
-        ret.push(grouped[keyValues[idx]]);
+        ret.push(grouped[keyValues[idx]]);        
       }
       return ret ;
     },
-
+    
     find: function(callback, target) {
       if (typeof callback !== "function") throw new TypeError() ;
       var len = this.length ;

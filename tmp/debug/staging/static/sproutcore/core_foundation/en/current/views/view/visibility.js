@@ -4,11 +4,6 @@ SC.View.reopen(
   /** @scope SC.View.prototype */ {
 
   /**
-    Set to YES to indicate the view has visibility support added.
-  */
-  hasVisibility: YES,
-
-  /**
     YES only if the view and all of its parent views are currently visible
     in the window.  This property is used to optimize certain behaviors in
     the view.  For example, updates to the view layer are not performed
@@ -89,7 +84,7 @@ SC.View.reopen(
     // now.
     //
     // For example, say we're isVisible=NO, but we have not yet added the
-    // 'sc-hidden' class to the layer because of the "don't update the layer if
+    // 'hidden' class to the layer because of the "don't update the layer if
     // we're not visible in the window" check.  If any of our parent views
     // became visible, our layer would incorrectly be shown!
     this.updateLayerIfNeeded(YES);

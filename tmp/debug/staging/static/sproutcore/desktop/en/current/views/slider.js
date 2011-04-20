@@ -1,7 +1,7 @@
 // ==========================================================================
 // Project:   SproutCore - JavaScript Application Framework
 // Copyright: ©2006-2011 Strobe Inc. and contributors.
-//            Portions ©2008-2011 Apple Inc. All rights reserved.
+//            Portions ©2008-2010 Apple Inc. All rights reserved.
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
@@ -82,15 +82,7 @@ SC.SliderView = SC.View.extend(SC.Control,
   // INTERNAL PROPERTIES
   // 
   
-  displayProperties: 'displayValue ariaValue minimum maximum step frame'.w(),
-
-  /**
-   @property
-   The raw, unchanged value to be provided to screen readers and the like.
-  */
-  ariaValue: function() {
-    return this.get('value');
-  }.property('value').cacheable(),
+  displayProperties: 'displayValue minimum maximum step frame'.w(),
 
   // The name of the render delegate which is creating and maintaining
   // the DOM associated with instances of this view
